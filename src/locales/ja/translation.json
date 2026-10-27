@@ -1,0 +1,538 @@
+{
+  "settings": {
+    "language": {
+      "uiLabel": "インターフェース言語",
+      "uiDescription": "ReTone のインターフェースで使用する言語を選択"
+    }
+  },
+  "tray": {
+    "quit": "ReTone を終了",
+    "tooltip": "ReTone - 選択したテキストを書き換え",
+    "openSettings": "設定を開く",
+    "hideSettings": "設定を隠す"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "ReTone を終了",
+    "file": "ファイル",
+    "closeWindow": "ウィンドウを閉じる"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "リンクを開けません",
+      "message": "ブラウザでリンクを開けませんでした:\n{{url}}\n\nエラー: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ReTone の読み込みに失敗しました",
+      "message": "ReTone の UI を読み込めませんでした。",
+      "detail": {
+        "window": "ウィンドウ: {{windowName}}",
+        "error": "エラー {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "アプリを再インストールするか、--log-level=debug オプションで起動してください。"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ReTone 起動エラー",
+      "message": "アプリケーションの起動に失敗しました:\n\n{{error}}\n\nこの問題を報告してください。"
+    },
+    "globeHotkey": {
+      "title": "Globe ホットキーが使用できません",
+      "message": "ReTone は Globe キーのホットキーを有効にできませんでした。",
+      "details": {
+        "unknown": "Globe リスナーの起動中に不明なエラーが発生しました。",
+        "devHint": "`npm run compile:globe` を実行し、アプリを再ビルドしてリスナーバイナリを再生成してください。",
+        "reinstallHint": "ReTone を再インストールするか、問題が解決しない場合はサポートにお問い合わせください。"
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "ホットキー設定にはコールバック関数が必要です",
+      "globeOnlyMac": "Globe キーは macOS でのみ利用できます。",
+      "fnCombinationUnsupported": "Globe/Fn キーは単独でのみ使用できます。",
+      "mouseButtonOnlyMac": "マウスボタンのホットキーは現在 macOS でのみサポートされています。",
+      "alreadyRegistered": "\"{{hotkey}}\" は別のアプリケーションで既に登録されています。",
+      "osReserved": "\"{{hotkey}}\" はデスクトップ環境で予約されている可能性があります。",
+      "keyNotInKeymap": "GNOME は現在のキーボードレイアウトでは \"{{hotkey}}\" を使用できません。別のキーを選んでください。",
+      "keyReservedByGnome": "GNOME はすでに \"{{hotkey}}\" を独自のショートカットに使用しています。別のキーを選んでください。",
+      "rightModifierNeedsListener": "\"{{hotkey}}\" はこのデスクトップでは使用できません。ショートカットには通常のキーが必要です。Control+Alt+Space のようにキーを追加してください。",
+      "registrationFailed": "\"{{hotkey}}\" を登録できませんでした。別のアプリケーションで使用されている可能性があります。",
+      "windowsKeyListenerMissing": "\"{{hotkey}}\" には Windows のキーリスナーが必要ですが、このインストールにはありません。通常のキーを使うショートカットを選んでください。",
+      "trySuggestions": "お試しください: {{suggestions}}",
+      "slotConflict": "このホットキーは既に{{slot}}で使用されています。"
+    }
+  },
+  "systemSettings": {
+    "microphone": "システム設定を開いてマイクの権限を設定してください。",
+    "sound": "システムのサウンド設定を開いてください（例: pavucontrol）。",
+    "accessibility": "このプラットフォームではアクセシビリティ設定を利用できません。",
+    "systemAudio": "システムオーディオの設定はこのプラットフォームでは利用できません。",
+    "screenRecording": "このプラットフォームでは画面収録の設定を利用できません。",
+    "loginItems": "ログイン項目の設定はこのプラットフォームでは利用できません。"
+  },
+  "windows": {
+    "pttUnavailable": "ReTone のキーリスナーを利用できません。"
+  },
+  "common": {
+    "retry": "再試行",
+    "reset": "リセット",
+    "refresh": "更新",
+    "download": "ダウンロード",
+    "cancel": "キャンセル",
+    "recommended": "推奨",
+    "active": "有効",
+    "signInRequired": "サインインが必要です",
+    "apiKey": "API キー",
+    "loading": "読み込み中...",
+    "availableModels": "利用可能なモデル"
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "テスト中…",
+        "connected": "接続済み",
+        "connectionFailed": "接続を確認できませんでした。",
+        "unverified": "確認できませんでした：{{reason}}",
+        "errors": {
+          "endpointRequired": "テストの前にエンドポイント URL を入力してください。",
+          "invalidUrl": "エンドポイントは有効な HTTP または HTTPS の URL である必要があります。",
+          "httpsRequired": "公開エンドポイントにはHTTPSが必要です。HTTPはプライベートアドレスでのみ使用できます。",
+          "unsupportedProvider": "このプロバイダーでは接続テストを利用できません。",
+          "apiKeyRequired": "テストの前に API キーを追加してください。",
+          "credentialsRejected": "プロバイダーがこの認証情報を拒否しました。",
+          "endpointNotFound": "このエンドポイントは OpenAI 互換のモデル一覧を公開していません。",
+          "transcriptionEndpointNotFound": "このアドレスでは文字起こしを受け付けていません。",
+          "modelNotFound": "選択したモデルはこのプロバイダーでは利用できません。",
+          "providerStatus": "プロバイダーがステータス {{status}} を返しました。",
+          "timeout": "接続テストがタイムアウトしました。",
+          "network": "プロバイダーに接続できませんでした。"
+        }
+      }
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "クラウド",
+      "local": "ローカル",
+      "localDescription": "デバイス上で動作。完全なプライバシー保護、オフライン対応。",
+      "cloudDescription": "API 経由の高度なモデル。高速・高機能、インターネット接続が必要。"
+    },
+    "custom": {
+      "endpointWithProtocol": "プロトコルを含む完全なベース URL を入力してください（例: https://server/v1）。",
+      "httpsRequired": "HTTPS が必要です（ローカルネットワークのみ HTTP を許可）。",
+      "endpointInvalid": "カスタムエンドポイントが無効か未設定です。設定 → AIモデルでエンドポイントURLを確認してください。",
+      "endpointUnauthorized": "エンドポイントがリクエストを拒否しました（401/403）。API キーを追加するか、サーバーの認証設定を調整してください。",
+      "endpointTitle": "エンドポイント URL",
+      "endpointExamples": "例:",
+      "apiKeyOptional": "API キー（任意）",
+      "apiKeyHelp": "任意。Bearer トークンとして認証に使用されます。OpenAI API キーとは別のものです。",
+      "applyAndRefresh": "適用して更新",
+      "queryPrefix": "問い合わせ先:",
+      "querySuffix": "で利用可能なモデルを取得します。",
+      "modelsReloadHint": "URL フィールドからフォーカスを外すか「適用して更新」をクリックすると、モデルが再読み込みされます。",
+      "enterEndpoint": "上にエンドポイント URL を入力してモデルを読み込んでください。",
+      "fetchingModels": "エンドポイントからモデル一覧を取得中...",
+      "noModels": "モデルが見つかりません。エンドポイント URL を確認してください。",
+      "providerName": "カスタム",
+      "ownerLabel": "提供元: {{owner}}",
+      "unableToLoadModels": "エンドポイントからモデルを読み込めませんでした。",
+      "searchPlaceholder": "モデルを検索…",
+      "selectedGroup": "選択中",
+      "otherGroup": "その他",
+      "noSearchResults": "「{{query}}」に一致するモデルはありません",
+      "selectModelHint": "モデルが未選択です — 下のリストから選択してください。",
+      "keyRequiredHint": "推論には API キーが必要です — このプロバイダーを使用するには追加してください。"
+    },
+    "effort": {
+      "title": "推論の深さ",
+      "description": "モデルが回答する前にどれだけ考えるかを設定します。",
+      "descriptionWithDefault": "モデルが回答する前にどれだけ考えるかを設定します。自動ではプロバイダーの既定値（{{value}}）を使用します。",
+      "auto": "自動",
+      "options": {
+        "none": "なし",
+        "minimal": "最小",
+        "low": "低",
+        "medium": "中",
+        "high": "高",
+        "xhigh": "非常に高い",
+        "max": "最大"
+      }
+    },
+    "getApiKey": "API キーを取得 ->",
+    "selectModel": "モデルを選択",
+    "availableModels": "利用可能なモデル",
+    "disableThinking": {
+      "label": "思考出力を無効にする",
+      "help": "推論トークンをスキップして出力をクリーンに保ちます。クリーンアップに推奨。一部のサーバーはこのヒントを無視します。"
+    },
+    "keepModelLoaded": {
+      "label": "モデルを読み込んだままにする",
+      "help": "5分間使われなくてもアンロードせずメモリに保持するため、次のリクエストでコールドスタートが発生しません。ローカルモデルを使うすべての機能に適用されます。"
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "技術情報",
+        "awsRequestId": "AWS リクエスト ID",
+        "copy": "技術情報をコピー",
+        "copyCommand": "復旧コマンドをコピー"
+      }
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "モデルを削除",
+      "description": "このモデルを削除してもよろしいですか？再度使用するにはダウンロードし直す必要があります。"
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "文字起こしプロバイダーがリクエストを制限しました。しばらく待ってからもう一度お試しください。",
+        "providerKeyMissing": "文字起こしプロバイダーのAPIキーが設定されていません。設定 → 音声テキスト変換 から追加してください。",
+        "cleanupTruncated": "AI モデルの出力が上限に達し、ディクテーションのクリーンアップが完了しませんでした。",
+        "cleanupEmptyReply": "AI モデルが空の応答を返したため、クリーンアップされたテキストがありません。"
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "ホットキー未登録"
+      },
+      "errors": {
+        "failedToRegister": "ホットキーの登録に失敗しました。もう一度お試しください。"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "ダウンロードがタイムアウトしました。インターネット接続を確認してもう一度お試しください。",
+        "notFound": "ダウンロードサーバーに接続できませんでした。インターネット接続を確認してください。",
+        "corrupted": "ダウンロードが不完全または破損しています。もう一度お試しください。",
+        "rateLimited": "ダウンロードサーバーがレート制限中です。数分待ってからもう一度お試しください。",
+        "server": "サーバーエラー（{{error}}）。後でもう一度お試しください。",
+        "generic": "ダウンロードに失敗しました: {{error}}",
+        "extractionFailed": "モデルのダウンロードは完了しましたが、インストールに失敗しました。ダウンロードをクリックして再ダウンロードなしでインストールを再試行してください。",
+        "tlsError": "証明書エラー — ネットワークのSSL検査がダウンロードをブロックしている可能性があります。別のネットワークからお試しください。",
+        "unknown": "不明なエラー"
+      },
+      "downloadFailed": {
+        "title": "ダウンロードに失敗しました"
+      },
+      "installationFailed": {
+        "title": "インストールに失敗しました"
+      },
+      "downloadInProgress": {
+        "title": "ダウンロード中",
+        "description": "現在のダウンロードが完了するか、先にキャンセルしてください。"
+      },
+      "modelDeleted": {
+        "title": "モデルを削除しました",
+        "description": "モデルを削除しました！"
+      },
+      "deleteFailed": {
+        "title": "削除に失敗しました",
+        "description": "モデルの削除に失敗しました: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "ダウンロードをキャンセルしました",
+        "description": "ダウンロードがキャンセルされました。"
+      }
+    }
+  },
+  "errorBoundary": {
+    "description": "予期しないエラーが発生しました。再読み込みしてもう一度お試しください。",
+    "reload": "再読み込み",
+    "title": "問題が発生しました"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "キーの組み合わせを押してホットキーを設定",
+    "clickToChange": "クリックして変更",
+    "clickToChangeLower": "クリックして変更",
+    "clickToSet": "クリックしてホットキーを設定",
+    "fnCaptureHint": "組み合わせるキーを押すか、離して Globe に設定",
+    "fnHeldHint": "+ キーまたは離して Globe に設定",
+    "globe": "Globe",
+    "hotkeyLabel": "ホットキー",
+    "keyHint": "+ キー",
+    "listening": "入力待ち...",
+    "pressAnyKey": "任意のキーまたは Ctrl+Shift+K を押してください",
+    "pressAnyKeyMac": "任意のキーまたは ⌘⇧K を押してください",
+    "recording": "記録中",
+    "tryShortcut": "Ctrl+Shift+K をお試しください",
+    "tryShortcutMac": "⌘⇧K をお試しください",
+    "remove": "ホットキーを削除",
+    "addAnother": "ホットキーをもう1つ追加",
+    "duplicate": "すでに追加されています",
+    "singleModifierNeedsRightSide": "{{key}} だけではショートカットにできません。{{alternative}} を押すか、2つ目のキーを追加してください。"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "言語が見つかりません",
+    "searchPlaceholder": "言語を検索"
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "自前のキー",
+        "local": "ローカル",
+        "selfHosted": "セルフホスト",
+        "providersDesc": "自分の API キーで、お好みの LLM プロバイダーに接続します。",
+        "localDesc": "端末上のモデル。完全プライベート。"
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "自動",
+        "dark": "ダーク",
+        "description": "ReTone の外観を設定",
+        "light": "ライト",
+        "theme": "テーマ",
+        "themeDescription": "ライト、ダーク、またはシステムに合わせる",
+        "title": "外観"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "次のコマンドを実行してログアウト/ログインしてください：sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "キーボード入力デバイスへのアクセス権が必要です。"
+      },
+      "startup": {
+        "launchAtLogin": "ログイン時に起動",
+        "launchAtLoginDescription": "ログイン時に ReTone をバックグラウンドで起動します",
+        "title": "起動設定",
+        "description": "ReTone の起動時の動作を制御",
+        "startMinimized": "最小化で起動",
+        "startMinimizedDescription": "コントロールパネルウィンドウを表示せずに起動",
+        "needsApproval": {
+          "title": "システム設定での許可が必要です",
+          "description": "macOS は ReTone をログイン項目として登録しましたが、「ログイン項目」での許可を待っています。",
+          "action": "ログイン項目を開く"
+        }
+      }
+    }
+  },
+  "models": {
+    "learnMore": "詳細を見る",
+    "noneAvailable": "利用可能なモデルがありません",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "強力な推論モデル",
+        "openai_gpt_5_mini": "高速で費用対効果が高い",
+        "openai_gpt_5_nano": "超高速、低レイテンシー",
+        "openai_gpt_4_1": "強力なベースライン、100 万トークンコンテキスト",
+        "openai_gpt_4_1_mini": "小型 GPT-4.1 モデル",
+        "openai_gpt_4_1_nano": "最低レイテンシーの GPT-4.1",
+        "anthropic_claude_fable_5_1": "Anthropic の最も高性能なモデル、Mythos クラス",
+        "anthropic_claude_fable_5": "前世代の Mythos クラスのフラッグシップ",
+        "anthropic_claude_opus_5_5": "複雑な推論向けの最新 Opus モデル、100 万トークンコンテキスト",
+        "anthropic_claude_sonnet_5_5": "最新の Sonnet：日常業務向けの高速かつ高性能なモデル、100 万トークンコンテキスト",
+        "anthropic_claude_haiku_5_5": "最速かつ最も低コストな Claude モデル、100 万トークンコンテキスト",
+        "anthropic_claude_sonnet_5": "低コストで高速かつ高性能なアシスタントモデル",
+        "anthropic_claude_sonnet_4_6": "バランスの取れた性能",
+        "anthropic_claude_sonnet_4_5": "前世代の Sonnet モデル",
+        "anthropic_claude_haiku_4_5": "高速でフロンティアに近い知能",
+        "gemini_gemini_3_5_flash": "最新の高速で高性能な Gemini モデル",
+        "gemini_gemini_3_5_flash_lite": "最速かつ最も低コストの 3.5 モデル",
+        "gemini_gemini_3_1_pro_preview": "複雑な推論向けの次世代フラッグシップモデル",
+        "gemini_gemini_3_1_flash_lite": "フロンティア級の性能を低コストで",
+        "gemini_gemini_3_flash_preview": "超高速・高性能の次世代モデル",
+        "gemini_gemini_2_5_flash_lite": "最低レイテンシーとコスト",
+        "gemini_gemma_4_31b_it": "Google 最大の Gemma 4、31B デンス、256K コンテキスト",
+        "gemini_gemma_4_26b_a4b_it": "Google の Gemma 4 MoE、4B アクティブパラメータ、256K コンテキスト",
+        "groq_openai_gpt_oss_120b": "OpenAI のオープンソースフラッグシップ、500 T/秒",
+        "groq_qwen_qwen3_8_27b": "高速 Qwen モデル、450 T/秒、131K コンテキスト",
+        "groq_openai_gpt_oss_20b": "高速オープンソースモデル、1000 T/秒",
+        "openai_gpt_6_astra": "コーディングと研究のための OpenAI の最も高性能なモデル",
+        "openai_gpt_5_6_sol": "複雑なコーディングと研究のためのフラッグシップ GPT-5.6",
+        "openai_gpt_5_6_terra": "日常業務向けのバランス型 GPT-5.6",
+        "openai_gpt_5_6_luna": "最速かつ最も低コストの GPT-5.6",
+        "openai_gpt_5_5": "複雑な推論のためのフロンティアモデル",
+        "anthropic_claude_opus_5": "前世代の Opus フラッグシップ、100 万トークンコンテキスト",
+        "anthropic_claude_opus_4_8": "誠実さと信頼性を重視した強力な Opus モデル",
+        "anthropic_claude_opus_4_7": "高性能な Opus モデル",
+        "anthropic_claude_opus_4_6": "前世代の Opus、100 万トークンコンテキスト",
+        "anthropic_claude_opus_4_5": "旧世代の Opus モデル"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "強力なハイブリッドモデル",
+        "qwen_qwen3_5_4b_q4_k_m": "汎用向けバランス型 Qwen3.5",
+        "qwen_qwen3_5_2b_q4_k_m": "軽量タスク向けコンパクト Qwen3.5",
+        "qwen_qwen3_8b_q4_k_m": "思考モード対応の最新 Qwen3",
+        "qwen_qwen3_8b_q5_k_m": "思考モード対応の高品質 Qwen3",
+        "qwen_qwen3_4b_q4_k_m": "推論機能を持つコンパクトな Qwen3",
+        "qwen_qwen3_1_7b_q8_0": "小型ながら高性能な Qwen3 モデル",
+        "qwen_qwen3_32b_q4_k_m": "深い推論を備えた最も強力なローカル Qwen3",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "小型モデル、基本的なタスクに最適",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "汎用のバランスモデル",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "高品質な大型モデル（Q4_K_M）",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "高品質推論の大型モデル（Q5_K_M）",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "高速で効率的な指示モデル",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "より高品質な指示モデル",
+        "mistral_nemo_12b_instruct_q4_k_m": "Mistral の 12B モデル、優れた多言語性能",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "エッジデバイス向け超小型モデル",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "小型ながら高性能な多言語モデル",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "優れた性能を持つ強力なモデル",
+        "openai_oss_gpt_oss_20b_mxfp4": "一般消費者向けハードウェア用 OpenAI オープンウェイトモデル",
+        "gemma_gemma_3_4b_it_q4_k_m": "Google のオープンウェイトモデル、速度と品質の優れたバランス",
+        "gemma_gemma_4_31b_it_q4_k_m": "Google 最大の Gemma 4、最高品質",
+        "gemma_gemma_4_31b_it_qat_q4_0": "Google 公式の QAT ビルド、品質を保ちながら軽量",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "Google の MoE Gemma 4、4B アクティブパラメータで高速",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "Google 公式の QAT MoE ビルド、品質を保ちながら軽量",
+        "gemma_gemma_4_e4b_it_q4_k_m": "Google の最新マルチモーダルモデル、高度な推論",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "Google 公式の QAT ビルド、高度な推論をより小さく",
+        "gemma_gemma_4_e2b_it_q4_k_m": "Google のコンパクトな Gemma 4、高速で効率的",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "Google 公式のコンパクトな QAT ビルド、品質を維持",
+        "gemma_gemma_3_12b_it_q4_k_m": "Google の中型モデル、強力な推論",
+        "gemma_gemma_3_1b_it_q4_k_m": "超高速 Google モデル、短い口述のクリーンアップに最適",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AIの高効率オンデバイスモデル、優れた指示追従性",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AIのMoE、わずか1.5Bのアクティブパラメータで高品質",
+        "liquidai_lfm2_2_6b_q4_k_m": "より高品質なクリーンアップ向けのバランス型LFM2",
+        "liquidai_lfm2_5_350m_q8_0": "高速な口述クリーンアップ向けの超軽量モデル",
+        "liquidai_lfm2_5_230m_q8_0": "小型モデル、控えめなハードウェアでも即座にクリーンアップ"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "このコンピューターでは長すぎて {{model}} が読み取れません。約 {{needed}} トークンのコンテキストが必要ですが、メモリに収まるのは {{max}} までです。クラウドモデルを使うか、選択範囲を短くして実行してください。",
+      "contextTooLargeGeneric": "このコンピューターでは長すぎて {{model}} が読み取れません。クラウドモデルを使うか、選択範囲を短くして実行してください。",
+      "localServerUnavailable": "このコンピューターでは {{model}} を起動できませんでした。もう一度試すか、クラウドモデルに切り替えてください。",
+      "localModelBusy": "ローカルモデルはまだ別のリクエストを処理しています。完了を待ってから、もう一度お試しください。"
+    }
+  },
+  "apiKeyInput": {
+    "placeholder": "API キーを入力"
+  },
+  "gpu": {
+    "reasoningBanner": "GPU で AI 処理を高速化",
+    "enableButton": "GPU を有効化",
+    "active": "GPU アクセラレーション有効",
+    "ready": "GPUアクセラレーション準備完了",
+    "activating": "GPU を有効化中...",
+    "activationFailed": "GPU アクセラレーションを利用できません",
+    "reasoningActivationFailedDescription": "ReTone は CPU 処理に切り替えました。",
+    "retryActivation": "GPU アクセラレーションを再試行",
+    "remove": "削除",
+    "dismiss": "後で",
+    "cancel": "キャンセル"
+  },
+  "providerErrors": {
+    "authFailed": "{{provider}} がAPIキーを拒否しました。",
+    "accessDenied": "{{provider}} がアクセスを拒否しました。お使いのキーがこのモデルに対応していない可能性があります。",
+    "quotaExhausted": "{{provider}} アカウントのクレジットが不足しています。",
+    "rateLimited": "{{provider}} がリクエストを制限しました。しばらく待ってからもう一度お試しください。",
+    "modelNotFound": "{{provider}} はモデル「{{model}}」を認識できません。",
+    "modelNotFoundNoModel": "{{provider}} は選択されたモデルを認識できません。",
+    "payloadTooLarge": "この録音は {{provider}} には大きすぎます。",
+    "requestTooLarge": "このリクエストは {{provider}} には大きすぎます。",
+    "badRequest": "{{provider}} はこのリクエストを処理できませんでした。",
+    "unavailable": "{{provider}} で現在問題が発生しています。しばらくしてから再度お試しください。",
+    "timeout": "{{provider}} からの応答に時間がかかりすぎました。",
+    "unreachable": "{{provider}} に接続できませんでした。接続を確認してください。",
+    "noResponse": "{{provider}} から応答がありませんでした。APIキーと接続を確認してください。",
+    "unknown": "{{provider}} から予期しないエラーが返されました。",
+    "keyMissing": "{{provider}} のAPIキーが設定されていません。設定 → 言語モデル から追加してください。",
+    "selfHosted": {
+      "authFailed": "サーバーがAPIキーを拒否しました。",
+      "accessDenied": "サーバーがアクセスを拒否しました。キーがこのモデルに対応していない可能性があります。",
+      "quotaExhausted": "サーバーがアカウントのクレジット不足を報告しています。",
+      "rateLimited": "サーバーがリクエストを制限しました。しばらく待ってからもう一度お試しください。",
+      "modelNotFound": "サーバーはモデル「{{model}}」を認識できません。",
+      "modelNotFoundNoModel": "サーバーは選択されたモデルを認識できません。",
+      "payloadTooLarge": "この録音はサーバーには大きすぎます。",
+      "requestTooLarge": "このリクエストはサーバーには大きすぎます。",
+      "badRequest": "サーバーはこのリクエストを処理できませんでした。",
+      "unavailable": "サーバーで現在問題が発生しています。しばらくしてから再度お試しください。",
+      "timeout": "サーバーからの応答に時間がかかりすぎました。",
+      "unreachable": "サーバーに接続できませんでした。サーバーが起動しているか確認してください。",
+      "noResponse": "サーバーから応答がありませんでした。APIキーとサーバーが起動しているかを確認してください。",
+      "unknown": "サーバーから予期しないエラーが返されました。"
+    },
+    "details": {
+      "requestId": "リクエストID"
+    }
+  },
+  "toneRewrite": {
+    "title": "選択範囲を書き換え",
+    "titleWholeField": "フィールド全体を書き換え",
+    "close": "閉じる",
+    "rewriting": "書き換え中…",
+    "loadingModel": "モデルを読み込み中…",
+    "preview": {
+      "label": "書き換えのプレビュー"
+    },
+    "copiedToClipboard": "書き換えたテキストをクリップボードにコピーしました。",
+    "tones": {
+      "professional": "ビジネス",
+      "casual": "カジュアル",
+      "friendly": "親しみやすく",
+      "concise": "簡潔に",
+      "fixGrammar": "文法を修正",
+      "banglishToEnglish": "Banglish → 英語",
+      "banglishToBangla": "Banglish → ベンガル語"
+    },
+    "errors": {
+      "nothingSelected": "書き換える内容がありません。まずテキスト欄でテキストを選択してください。",
+      "noText": "テキストが見つかりません。",
+      "tooLarge": "選択範囲が長すぎて書き換えられません（最大 {{max}} 文字）。",
+      "targetChanged": "アクティブなウィンドウが変わりました。もう一度お試しください。",
+      "modifiersHeld": "ショートカットのキーを離してから、もう一度お試しください。",
+      "accessibility": "ReTone が選択範囲を読み取れませんでした。アクセシビリティの許可を確認してください。",
+      "unavailable": "このアプリでは選択したテキストを読み取れませんでした。",
+      "notConfigured": "設定 → ReTone でテキスト書き換え用のモデルを選んでください。",
+      "emptyOutput": "モデルがテキストを返しませんでした。もう一度試すか、別のモデルを選んでください。",
+      "rewriteFailed": "書き換えに失敗しました。設定 → ReTone でテキスト書き換えのモデルを確認してください。",
+      "pasteFailed": "書き換えたテキストを貼り付けられませんでした。",
+      "selectionChanged": "書き換えの完了前に選択範囲が変わったため、置き換えませんでした。"
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "テキスト書き換えモデル",
+      "description": "選択したテキストを選んだトーンで書き換えるモデルです。ローカルモデルならテキストはこのデバイスから出ません。",
+      "speedHint": "Qwen3.5 4B などの小さいローカルモデルの方が、書き換えがかなり速くなります。"
+    },
+    "hotkey": {
+      "title": "ショートカット",
+      "description": "任意のアプリでテキストを選択し、ショートカットを押してトーンを選ぶと、選択部分がその場で書き換わります。"
+    },
+    "picker": {
+      "title": "ピッカー",
+      "description": "書き換え中のピッカーの動作。",
+      "livePreview": "ライブプレビュー",
+      "livePreviewDescription": "書き換え中のテキストを生成しながら表示し、完了したら選択範囲を置き換えます。",
+      "wholeField": "何も選択されていないときはフィールド全体を書き換え",
+      "wholeFieldDescription": "選択がない場合、フォーカス中のフィールドのテキストを選択してすべて書き換えます。オフのときは、先にテキストを選択するよう表示します。"
+    },
+    "options": {
+      "title": "オプション",
+      "description": "ピッカーに表示するオプションを選び、ドラッグで並べ替えます。数字キーはこの順に選択します。",
+      "atLeastOne": "少なくとも1つのオプションはオンのままです。",
+      "maxEnabled": "ピッカーに表示できるのは最大{{max}}個です。別のオプションをオンにするには、どれかをオフにしてください。",
+      "add": "オプションを追加",
+      "newOption": "新しいオプション",
+      "edit": "{{name}}を編集",
+      "dragHandle": "{{name}}を並べ替え（ドラッグまたはAlt+↑/↓）",
+      "customBadge": "カスタム",
+      "editedBadge": "編集済み",
+      "name": "名前",
+      "namePlaceholder": "例：フランス語に翻訳",
+      "prompt": "プロンプト",
+      "promptPlaceholder": "選択したテキストの書き換え方をモデルに指示します。例：「テキストをフランス語に翻訳してください。」",
+      "promptHint": "ReToneはプロンプトの後に独自のルールを追加し、返答が書き換えたテキストだけになるようにします。",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "delete": "削除",
+      "reset": "デフォルトに戻す",
+      "deleteConfirmTitle": "「{{name}}」を削除しますか？",
+      "deleteConfirmDescription": "ピッカーから削除されます。この操作は元に戻せません。"
+    },
+    "title": "ReTone",
+    "description": "任意のアプリでテキストを選択し、ホットキーを押してトーンを選びます。書き換えた文章が選択範囲を置き換えます。",
+    "accessibility": {
+      "title": "アクセシビリティの許可が必要です",
+      "description": "ReTone は選択したテキストを読み取り、書き換えた文章を貼り付けるためにアクセシビリティの許可が必要です。",
+      "action": "アクセシビリティ設定を開く"
+    }
+  }
+}

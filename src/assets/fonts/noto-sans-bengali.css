@@ -1,0 +1,15 @@
+/* Noto Sans Bengali — locally bundled (variable weight 100–900, Bengali subset).
+   SIL Open Font License 1.1, see NotoSansBengali-OFL.txt. Latin text keeps
+   Noto Sans; this face only covers Bengali script. */
+
+@font-face {
+  font-family: "Noto Sans Bengali";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("./NotoSansBengali-normal-bengali.woff2") format("woff2");
+  unicode-range:
+    U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0, U+1CD2, U+1CD5-1CD6, U+1CD8, U+1CE1, U+1CEA,
+    U+1CED, U+1CF2, U+1CF5-1CF7, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}

@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+  pull_request:
+  workflow_dispatch:
+  # release.yml runs this same pipeline for a tag and publishes its DMG.
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  # Ad-hoc signing only: no certificate on CI, and never pick one up.
+  APPLE_SIGNING_IDENTITY: "-"
+
+jobs:
+  build:
+    name: macOS arm64
+    runs-on: macos-14
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+          components: rustfmt, clippy
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: aarch64-apple-darwin
+
+      - name: Install dependencies
+        run: npm ci
+
+      # JavaScript gates. `if: !cancelled()` keeps the later checks running
+      # after an earlier one fails, so one run reports every problem.
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        if: ${{ !cancelled() }}
+        run: npm run lint
+      - name: Check translations
+        if: ${{ !cancelled() }}
+        run: npm run i18n:check
+      - name: JavaScript tests
+        if: ${{ !cancelled() }}
+        run: npm test
+
+      # Rust gates. A fresh clone has no resources/llama-bundle; src-tauri's
+      # build.rs writes a placeholder so the bundle-resource glob resolves.
+      - name: cargo fmt
+        if: ${{ !cancelled() }}
+        run: cargo fmt --all -- --check
+      - name: cargo clippy
+        if: ${{ !cancelled() }}
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: cargo test
+        if: ${{ !cancelled() }}
+        run: cargo test --workspace
+
+      - name: Cache llama-server download
+        uses: actions/cache@v4
+        with:
+          path: resources/bin
+          key: llama-server-darwin-arm64-${{ hashFiles('scripts/download-llama-server.js') }}
+
+      # beforeBuildCommand downloads llama-server (pinned b9763), stages and
+      # signs it into resources/llama-bundle, then builds the renderer.
+      - name: Build app and DMG
+        run: npm run build:mac
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Verify the bundle
+        run: |
+          set -euo pipefail
+          app="target/aarch64-apple-darwin/release/bundle/macos/ReTone.app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          codesign -dv --verbose=4 "$app" 2>&1 | tee /dev/stderr | grep -q "Identifier=com.arefin.retone"
+          server="$app/Contents/Resources/bin/llama-server-darwin-arm64"
+          test -x "$server"
+          codesign --verify --strict "$server"
+          codesign -dv "$server" 2>&1 | grep -q "flags=0x10002(adhoc,runtime)"
+          "$server" --version
+          test -f "$app/Contents/Resources/Assets.car"
+          test -f "$app/Contents/Resources/THIRD_PARTY_NOTICES.md"
+          test -x "$app/Contents/MacOS/retone"
+          /usr/libexec/PlistBuddy -c "Print :NSAccessibilityUsageDescription" "$app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIconName" "$app/Contents/Info.plist" | grep -qx retone
+
+      # postbuild:mac copied the versioned DMG to dist/ReTone.dmg.
+      - name: Verify the DMG
+        id: dmg
+        run: |
+          set -euo pipefail
+          hdiutil verify dist/ReTone.dmg
+          echo "path=dist/ReTone.dmg" >> "$GITHUB_OUTPUT"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v7
+        with:
+          name: retone-macos-arm64
+          path: ${{ steps.dmg.outputs.path }}
+          if-no-files-found: error
+          retention-days: 14

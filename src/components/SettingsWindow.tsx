@@ -1,0 +1,278 @@
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { AlertTriangle, Monitor, Moon, Sun } from "./icons";
+import { SectionHeader, SettingsPanel, SettingsPanelRow, SettingsRow } from "./ui/SettingsSection";
+import { Toggle } from "./ui/toggle";
+import { Button } from "./ui/button";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertDialog } from "./ui/dialog";
+import { HotkeyListInput } from "./ui/HotkeyListInput";
+import LanguageSelector, { type LanguageOption } from "./ui/LanguageSelector";
+import ReToneSection from "./settings/ReToneSection";
+import { useSettingsStore } from "../stores/settingsStore";
+import { useDialogs } from "../hooks/useDialogs";
+import { useHotkeyModeInfo } from "../hooks/useHotkeyModeInfo";
+import { validateHotkeyForSlot } from "../utils/hotkeyValidation";
+import { getCachedPlatform } from "../utils/platform";
+import logger from "../utils/logger";
+
+const UI_LANGUAGE_OPTIONS: LanguageOption[] = [
+  { value: "en", label: "English", flag: "🇺🇸" },
+  { value: "ar", label: "العربية", flag: "🇦🇪" },
+  { value: "bn", label: "বাংলা", flag: "🇧🇩" },
+  { value: "es", label: "Español", flag: "🇪🇸" },
+  { value: "fr", label: "Français", flag: "🇫🇷" },
+  { value: "de", label: "Deutsch", flag: "🇩🇪" },
+  { value: "pt", label: "Português", flag: "🇵🇹" },
+  { value: "it", label: "Italiano", flag: "🇮🇹" },
+  { value: "ru", label: "Русский", flag: "🇷🇺" },
+  { value: "ja", label: "日本語", flag: "🇯🇵" },
+  { value: "zh-CN", label: "简体中文", flag: "🇨🇳" },
+  { value: "zh-TW", label: "繁體中文", flag: "🇹🇼" },
+];
+
+// The app's only window: ReTone's settings plus a few app-wide preferences.
+export default function SettingsWindow() {
+  const { t } = useTranslation();
+  const toneRewriteKey = useSettingsStore((s) => s.toneRewriteKey);
+  const setToneRewriteKey = useSettingsStore((s) => s.setToneRewriteKey);
+  const theme = useSettingsStore((s) => s.theme);
+  const setTheme = useSettingsStore((s) => s.setTheme);
+  const uiLanguage = useSettingsStore((s) => s.uiLanguage);
+  const setUiLanguage = useSettingsStore((s) => s.setUiLanguage);
+  const { alertDialog, showAlertDialog, hideAlertDialog } = useDialogs();
+  const { isUsingNativeShortcut } = useHotkeyModeInfo("settings");
+  const platform = getCachedPlatform();
+
+  // The setter resolves to a failure when main-process registration fails;
+  // surface it and return the result so HotkeyListInput rolls the row back.
+  const [isHotkeyCommitting, setIsHotkeyCommitting] = useState(false);
+  const commitHotkey = useCallback(
+    async (key: string) => {
+      setIsHotkeyCommitting(true);
+      try {
+        const result = await setToneRewriteKey(key);
+        if (!result.success) {
+          showAlertDialog({
+            title: t("hooks.hotkeyRegistration.titles.notRegistered"),
+            description: result.message || t("hooks.hotkeyRegistration.errors.failedToRegister"),
+          });
+        }
+        return result.success;
+      } finally {
+        setIsHotkeyCommitting(false);
+      }
+    },
+    [setToneRewriteKey, showAlertDialog, t]
+  );
+  const validateHotkey = useCallback((hotkey: string) => validateHotkeyForSlot(hotkey, {}, t), [t]);
+
+  const [accessibilityTrusted, setAccessibilityTrusted] = useState(true);
+  useEffect(() => {
+    if (platform !== "darwin") return;
+    const check = () =>
+      window.retoneAPI
+        ?.checkAccessibilityPermission?.(true)
+        .then((trusted) => setAccessibilityTrusted(trusted !== false))
+        .catch(() => {});
+    void check();
+    window.addEventListener("focus", check);
+    return () => window.removeEventListener("focus", check);
+  }, [platform]);
+
+  const [autoStartEnabled, setAutoStartEnabled] = useState(false);
+  const [autoStartNeedsApproval, setAutoStartNeedsApproval] = useState(false);
+  const [autoStartLoading, setAutoStartLoading] = useState(true);
+  const [startMinimized, setStartMinimizedState] = useState(false);
+
+  const readAutoStartState = useCallback(async () => {
+    if (!window.retoneAPI?.getAutoStartEnabled) return;
+    try {
+      const state = await window.retoneAPI.getAutoStartEnabled();
+      setAutoStartEnabled(state.enabled);
+      setAutoStartNeedsApproval(state.requiresApproval);
+    } catch (error) {
+      logger.error("Failed to get auto-start status", error, "settings");
+    }
+  }, []);
+
+  useEffect(() => {
+    readAutoStartState().finally(() => setAutoStartLoading(false));
+    window.retoneAPI
+      ?.getStartMinimized?.()
+      .then((value) => setStartMinimizedState(value === true))
+      .catch(() => {});
+  }, [readAutoStartState]);
+
+  const handleAutoStartChange = async (enabled: boolean) => {
+    if (!window.retoneAPI?.setAutoStartEnabled) return;
+    try {
+      setAutoStartLoading(true);
+      const result = await window.retoneAPI.setAutoStartEnabled(enabled);
+      // Read the state back rather than assuming: on Windows the OS can have the
+      // item disabled out from under us, and on macOS it can need approval first.
+      if (result.success) await readAutoStartState();
+    } catch (error) {
+      logger.error("Failed to set auto-start", error, "settings");
+    } finally {
+      setAutoStartLoading(false);
+    }
+  };
+
+  const handleStartMinimizedChange = (enabled: boolean) => {
+    setStartMinimizedState(enabled);
+    void window.retoneAPI?.setStartMinimized?.(enabled);
+  };
+
+  const themeOptions = [
+    { value: "light", icon: Sun, label: t("settingsPage.general.appearance.light") },
+    { value: "dark", icon: Moon, label: t("settingsPage.general.appearance.dark") },
+    { value: "auto", icon: Monitor, label: t("settingsPage.general.appearance.auto") },
+  ] as const;
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <main className="mx-auto max-w-2xl space-y-8 px-6 py-8">
+        <header>
+          <h1 className="text-xl font-semibold">{t("reTone.title")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("reTone.description")}</p>
+        </header>
+
+        {platform === "darwin" && !accessibilityTrusted && (
+          <Alert variant="warning">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>{t("reTone.accessibility.title")}</AlertTitle>
+            <AlertDescription className="space-y-2">
+              <p>{t("reTone.accessibility.description")}</p>
+              <Button
+                onClick={() => void window.retoneAPI?.openAccessibilitySettings?.()}
+                variant="outline"
+                size="sm"
+              >
+                {t("reTone.accessibility.action")}
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <ReToneSection
+          hotkeyInput={
+            <HotkeyListInput
+              value={toneRewriteKey}
+              onChange={(list) => commitHotkey(list)}
+              onClear={() => commitHotkey("")}
+              validate={validateHotkey}
+              disabled={isHotkeyCommitting}
+              maxHotkeys={isUsingNativeShortcut ? 1 : undefined}
+            />
+          }
+        />
+
+        <div>
+          <SectionHeader
+            title={t("settingsPage.general.appearance.title")}
+            description={t("settingsPage.general.appearance.description")}
+          />
+          <SettingsPanel>
+            <SettingsPanelRow>
+              <SettingsRow
+                label={t("settingsPage.general.appearance.theme")}
+                description={t("settingsPage.general.appearance.themeDescription")}
+              >
+                <div className="inline-flex items-center gap-px p-0.5 bg-muted/60 dark:bg-surface-2 rounded-md">
+                  {themeOptions.map((option) => {
+                    const Icon = option.icon;
+                    const isSelected = theme === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setTheme(option.value)}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-[5px] text-xs font-medium transition-colors duration-100 ${
+                          isSelected
+                            ? "bg-background dark:bg-surface-raised text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <Icon className={`w-3 h-3 ${isSelected ? "text-primary" : ""}`} />
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </SettingsRow>
+            </SettingsPanelRow>
+            <SettingsPanelRow>
+              <SettingsRow
+                label={t("settings.language.uiLabel")}
+                description={t("settings.language.uiDescription")}
+              >
+                <LanguageSelector
+                  value={uiLanguage}
+                  onChange={setUiLanguage}
+                  options={UI_LANGUAGE_OPTIONS}
+                  className="min-w-32"
+                />
+              </SettingsRow>
+            </SettingsPanelRow>
+          </SettingsPanel>
+        </div>
+
+        <div>
+          <SectionHeader
+            title={t("settingsPage.general.startup.title")}
+            description={t("settingsPage.general.startup.description")}
+          />
+          <SettingsPanel>
+            <SettingsPanelRow>
+              <SettingsRow
+                label={t("settingsPage.general.startup.launchAtLogin")}
+                description={t("settingsPage.general.startup.launchAtLoginDescription")}
+              >
+                <Toggle
+                  checked={autoStartEnabled}
+                  onChange={(checked: boolean) => void handleAutoStartChange(checked)}
+                  disabled={autoStartLoading}
+                />
+              </SettingsRow>
+            </SettingsPanelRow>
+            {autoStartNeedsApproval && (
+              <SettingsPanelRow>
+                <Alert variant="warning">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>{t("settingsPage.general.startup.needsApproval.title")}</AlertTitle>
+                  <AlertDescription className="space-y-2">
+                    <p>{t("settingsPage.general.startup.needsApproval.description")}</p>
+                    <Button
+                      onClick={() => void window.retoneAPI?.openLoginItemsSettings?.()}
+                      variant="outline"
+                      size="sm"
+                    >
+                      {t("settingsPage.general.startup.needsApproval.action")}
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              </SettingsPanelRow>
+            )}
+            <SettingsPanelRow>
+              <SettingsRow
+                label={t("settingsPage.general.startup.startMinimized")}
+                description={t("settingsPage.general.startup.startMinimizedDescription")}
+              >
+                <Toggle checked={startMinimized} onChange={handleStartMinimizedChange} />
+              </SettingsRow>
+            </SettingsPanelRow>
+          </SettingsPanel>
+        </div>
+      </main>
+
+      <AlertDialog
+        open={alertDialog.open}
+        onOpenChange={(open) => !open && hideAlertDialog()}
+        title={alertDialog.title}
+        description={alertDialog.description}
+        onOk={() => {}}
+      />
+    </div>
+  );
+}

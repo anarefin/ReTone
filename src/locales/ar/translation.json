@@ -1,0 +1,538 @@
+{
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "قام مزود التفريغ بتقييد معدل الطلب. انتظر لحظة وحاول مرة أخرى.",
+        "providerKeyMissing": "لم يتم تعيين مفتاح API لمزود التفريغ الخاص بك. أضفه في الإعدادات ← تحويل الكلام إلى نص (Speech to Text).",
+        "cleanupTruncated": "نفدت مساحة الإخراج لدى نموذج الذكاء الاصطناعي قبل أن يُكمل تنقيح إملائك.",
+        "cleanupEmptyReply": "أرجع نموذج الذكاء الاصطناعي ردًا فارغًا بدلًا من الإملاء المنقَّح."
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "لم يتم تسجيل الاختصار"
+      },
+      "errors": {
+        "failedToRegister": "فشل تسجيل الاختصار. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "انتهت مهلة التنزيل. تحقق من اتصالك بالإنترنت وحاول مرة أخرى.",
+        "notFound": "تعذر الوصول إلى خادم التنزيل. تحقق من اتصالك بالإنترنت.",
+        "corrupted": "كان التنزيل غير مكتمل أو تالفًا. يرجى المحاولة مرة أخرى.",
+        "rateLimited": "يقوم خادم التنزيل بتقييد المعدل. يرجى الانتظار بضع دقائق والمحاولة مرة أخرى.",
+        "server": "خطأ في الخادم ({{error}}). يرجى المحاولة مرة أخرى لاحقًا.",
+        "generic": "فشل التنزيل: {{error}}",
+        "extractionFailed": "تم تنزيل النموذج ولكن فشل التثبيت. انقر فوق تنزيل لإعادة محاولة التثبيت دون إعادة التنزيل.",
+        "tlsError": "خطأ في الشهادة — قد تستخدم شبكتك فحص SSL الذي يحظر التنزيلات. حاول التنزيل من شبكة مختلفة.",
+        "unknown": "خطأ غير معروف"
+      },
+      "downloadFailed": {
+        "title": "فشل التنزيل"
+      },
+      "installationFailed": {
+        "title": "فشل التثبيت"
+      },
+      "downloadInProgress": {
+        "title": "التنزيل قيد التقدم",
+        "description": "يرجى الانتظار حتى يكتمل التنزيل الحالي أو قم بإلغائه أولًا."
+      },
+      "modelDeleted": {
+        "title": "تم حذف النموذج",
+        "description": "تم حذف النموذج بنجاح!"
+      },
+      "deleteFailed": {
+        "title": "فشل الحذف",
+        "description": "فشل حذف النموذج: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "تم إلغاء التنزيل",
+        "description": "تم إلغاء التنزيل."
+      }
+    }
+  },
+  "models": {
+    "learnMore": "اعرف المزيد",
+    "noneAvailable": "لا توجد نماذج متاحة",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "نموذج استنتاج قوي",
+        "openai_gpt_5_mini": "سريع وفعال من حيث التكلفة",
+        "openai_gpt_5_nano": "فائق السرعة، زمن انتقال منخفض",
+        "openai_gpt_4_1": "أساس قوي، سياق 1 مليون",
+        "openai_gpt_4_1_mini": "نموذج GPT-4.1 أصغر",
+        "openai_gpt_4_1_nano": "GPT-4.1 بأقل زمن انتقال",
+        "anthropic_claude_fable_5_1": "نموذج Anthropic الأكثر قدرة، فئة Mythos",
+        "anthropic_claude_fable_5": "الرائد السابق من فئة Mythos",
+        "anthropic_claude_opus_5_5": "أحدث نموذج Opus للاستنتاج المعقد، سياق 1 مليون",
+        "anthropic_claude_sonnet_5_5": "أحدث Sonnet: سريع وقادر للعمل اليومي، سياق 1 مليون",
+        "anthropic_claude_haiku_5_5": "أسرع نموذج Claude وأقلّه تكلفة، سياق 1 مليون",
+        "anthropic_claude_sonnet_5": "نموذج مساعد سريع وقادر بتكلفة أقل",
+        "anthropic_claude_sonnet_4_6": "أداء متوازن",
+        "anthropic_claude_sonnet_4_5": "جيل Sonnet السابق",
+        "anthropic_claude_haiku_4_5": "سريع بذكاء يقترب من مستوى النماذج الرائدة",
+        "gemini_gemini_3_5_flash": "أحدث نموذج Gemini سريع وعالي القدرة",
+        "gemini_gemini_3_5_flash_lite": "نموذج 3.5 الأسرع والأكثر فعالية من حيث التكلفة",
+        "gemini_gemini_3_1_pro_preview": "نموذج رائد من الجيل التالي للاستنتاج المعقد",
+        "gemini_gemini_3_1_flash_lite": "أداء من الدرجة الأولى بتكلفة منخفضة",
+        "gemini_gemini_3_flash_preview": "نموذج من الجيل التالي فائق السرعة وعالي القدرة",
+        "gemini_gemini_2_5_flash_lite": "أقل زمن انتقال وتكلفة",
+        "gemini_gemma_4_31b_it": "أكبر نموذج Gemma 4 من Google، نموذج كثيف بحجم 31B، سياق 256K",
+        "gemini_gemma_4_26b_a4b_it": "نموذج Gemma 4 MoE من Google، بمعلمات نشطة 4B، سياق 256K",
+        "groq_openai_gpt_oss_120b": "نموذج OpenAI مفتوح المصدر الرائد، 500 رمز/ثانية",
+        "groq_qwen_qwen3_8_27b": "نموذج Qwen سريع، 450 رمز/ثانية، سياق 131K",
+        "groq_openai_gpt_oss_20b": "نموذج سريع مفتوح المصدر، 1000 رمز/ثانية",
+        "openai_gpt_6_astra": "نموذج OpenAI الأكثر قدرة للبرمجة والبحث",
+        "openai_gpt_5_6_sol": "GPT-5.6 الرائد للبرمجة والبحوث المعقدة",
+        "openai_gpt_5_6_terra": "GPT-5.6 متوازن للعمل اليومي",
+        "openai_gpt_5_6_luna": "GPT-5.6 الأسرع والأقل تكلفة",
+        "openai_gpt_5_5": "نموذج رائد للاستنتاج المعقد",
+        "anthropic_claude_opus_5": "نموذج Opus الرائد السابق، سياق 1 مليون",
+        "anthropic_claude_opus_4_8": "نموذج Opus قوي مضبوط من أجل الصدق والموثوقية",
+        "anthropic_claude_opus_4_7": "نموذج Opus قوي",
+        "anthropic_claude_opus_4_6": "جيل Opus السابق، سياق 1 مليون",
+        "anthropic_claude_opus_4_5": "نموذج Opus أقدم"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "نموذج هجين قوي",
+        "qwen_qwen3_5_4b_q4_k_m": "نموذج Qwen3.5 متوازن للاستخدام العام",
+        "qwen_qwen3_5_2b_q4_k_m": "نموذج Qwen3.5 صغير للمهام السريعة",
+        "qwen_qwen3_8b_q4_k_m": "أحدث إصدار من Qwen3 مع دعم وضع التفكير",
+        "qwen_qwen3_8b_q5_k_m": "نموذج Qwen3 بجودة أعلى مع وضع التفكير",
+        "qwen_qwen3_4b_q4_k_m": "نموذج Qwen3 مدمج مع قدرات استنتاج",
+        "qwen_qwen3_1_7b_q8_0": "نموذج Qwen3 صغير ولكنه قادر",
+        "qwen_qwen3_32b_q4_k_m": "أقوى نموذج Qwen3 محلي باستنتاج عميق",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "نموذج صغير، جيد للمهام الأساسية",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "نموذج متوازن للاستخدام العام",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "نموذج كبير بجودة عالية (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "نموذج كبير، استنتاج عالي الجودة (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "نموذج تعليمات سريع وفعال",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "نموذج تعليمات بجودة أعلى",
+        "mistral_nemo_12b_instruct_q4_k_m": "نموذج Mistral بحجم 12B، أداء قوي متعدد اللغات",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "نموذج صغير جدًا لأجهزة الحافة",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "نموذج صغير ولكنه قادر ومتعدد اللغات",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "نموذج قوي بأداء رائع",
+        "openai_oss_gpt_oss_20b_mxfp4": "نموذج مفتوح الوزن من OpenAI لأجهزة المستهلكين",
+        "gemma_gemma_3_4b_it_q4_k_m": "نموذج مفتوح الوزن من Google، توازن رائع بين السرعة والجودة",
+        "gemma_gemma_4_31b_it_q4_k_m": "أكبر نموذج Gemma 4 من Google، أفضل جودة",
+        "gemma_gemma_4_31b_it_qat_q4_0": "إصدار QAT الرسمي من Google، أصغر حجمًا مع الحفاظ على الجودة",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "نموذج MoE Gemma 4 من Google، سريع مع معلمات نشطة 4B",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "إصدار QAT MoE الرسمي من Google، أصغر حجمًا مع الحفاظ على الجودة",
+        "gemma_gemma_4_e4b_it_q4_k_m": "أحدث نموذج متعدد الوسائط من Google، استنتاج قوي",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "إصدار QAT الرسمي من Google، استنتاج قوي، حجم أصغر",
+        "gemma_gemma_4_e2b_it_q4_k_m": "نموذج Gemma 4 المدمج من Google، سريع وفعال",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "إصدار QAT المدمج الرسمي من Google، مع الحفاظ على الجودة",
+        "gemma_gemma_3_12b_it_q4_k_m": "نموذج متوسط المدى من Google، استنتاج قوي",
+        "gemma_gemma_3_1b_it_q4_k_m": "نموذج Google فائق السرعة، الأفضل لتنظيف الإملاء القصير",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "نموذج فعال على الجهاز من Liquid AI، اتباع ممتاز للتعليمات",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "نموذج MoE من Liquid AI، جودة عالية مع معلمات نشطة 1.5B فقط",
+        "liquidai_lfm2_2_6b_q4_k_m": "نموذج LFM2 متوازن لتنظيف بجودة أعلى",
+        "liquidai_lfm2_5_350m_q8_0": "نموذج خفيف للغاية للتنظيف السريع للإملاء",
+        "liquidai_lfm2_5_230m_q8_0": "نموذج صغير جدًا، تنظيف فوري على الأجهزة المتواضعة"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "هذا أطول من أن يقرأه {{model}} على هذا الكمبيوتر. عدد الرموز المطلوبة من السياق: نحو {{needed}}، لكن ما يتسع في الذاكرة: {{max}} فقط. جرّب نموذجًا سحابيًا، أو نفّذ الإجراء على تحديد أقصر.",
+      "contextTooLargeGeneric": "هذا أطول من أن يقرأه {{model}} على هذا الكمبيوتر. جرّب نموذجًا سحابيًا، أو نفّذ الإجراء على تحديد أقصر.",
+      "localServerUnavailable": "تعذّر تشغيل {{model}} على هذا الكمبيوتر. حاول مرة أخرى، أو بدّل إلى نموذج سحابي.",
+      "localModelBusy": "لا يزال النموذج المحلي يعالج طلبًا آخر. انتظر حتى ينتهي، ثم حاول مرة أخرى."
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "سحابي (Cloud)",
+      "local": "محلي (Local)",
+      "localDescription": "يعمل على جهازك. خصوصية تامة، يعمل بدون إنترنت.",
+      "cloudDescription": "نماذج متقدمة عبر API. سريعة وقادرة، وتتطلب اتصالًا بالإنترنت."
+    },
+    "custom": {
+      "endpointWithProtocol": "أدخل عنوان URL أساسي كامل يتضمن البروتوكول (على سبيل المثال، https://server/v1).",
+      "httpsRequired": "يتطلب HTTPS (يُسمح بـ HTTP للشبكة المحلية فقط).",
+      "endpointInvalid": "نقطة النهاية المخصصة غير صالحة أو غير مهيأة. تحقق من عنوان URL لنقطة النهاية في الإعدادات ← نماذج الذكاء الاصطناعي (AI Models).",
+      "endpointUnauthorized": "رفضت نقطة النهاية الطلب (401/403). أضف مفتاح API أو اضبط إعدادات مصادقة الخادم.",
+      "endpointTitle": "عنوان URL لنقطة النهاية",
+      "endpointExamples": "أمثلة:",
+      "apiKeyOptional": "مفتاح API (اختياري)",
+      "apiKeyHelp": "اختياري. يتم إرساله كرمز Bearer للمصادقة. هذا منفصل عن مفتاح OpenAI API الخاص بك.",
+      "applyAndRefresh": "تطبيق وتحديث",
+      "queryPrefix": "سنستعلم من",
+      "querySuffix": "عن النماذج المتاحة.",
+      "modelsReloadHint": "سيتم إعادة تحميل النماذج عند النقر بعيدًا عن حقل عنوان URL أو النقر فوق \"تطبيق وتحديث\".",
+      "enterEndpoint": "أدخل عنوان URL لنقطة النهاية أعلاه لتحميل النماذج.",
+      "fetchingModels": "جاري جلب قائمة النماذج من نقطة النهاية...",
+      "noModels": "لم يتم إرجاع أي نماذج. تحقق من عنوان URL لنقطة النهاية.",
+      "providerName": "مخصص",
+      "ownerLabel": "المالك: {{owner}}",
+      "unableToLoadModels": "تعذر تحميل النماذج من نقطة النهاية.",
+      "searchPlaceholder": "البحث عن النماذج...",
+      "selectedGroup": "المحدد",
+      "otherGroup": "أخرى",
+      "noSearchResults": "لا توجد نماذج تتطابق مع \"{{query}}\"",
+      "selectModelHint": "لم يتم تحديد أي نموذج بعد — اختر واحدًا من القائمة أدناه.",
+      "keyRequiredHint": "مفتاح API مطلوب للاستدلال — أضف واحدًا لاستخدام هذا المزود."
+    },
+    "effort": {
+      "title": "مستوى الاستدلال",
+      "description": "مقدار تفكير النموذج قبل أن يجيب.",
+      "descriptionWithDefault": "مقدار تفكير النموذج قبل أن يجيب. يستخدم الوضع التلقائي الإعداد الافتراضي للمزوّد ({{value}}).",
+      "auto": "تلقائي",
+      "options": {
+        "none": "بلا",
+        "minimal": "أدنى",
+        "low": "منخفض",
+        "medium": "متوسط",
+        "high": "مرتفع",
+        "xhigh": "مرتفع جدًا",
+        "max": "أقصى"
+      }
+    },
+    "getApiKey": "احصل على مفتاح API الخاص بك ←",
+    "selectModel": "تحديد النموذج",
+    "availableModels": "النماذج المتاحة",
+    "disableThinking": {
+      "label": "تعطيل مخرجات التفكير",
+      "help": "يتخطى رموز الاستنتاج للحصول على مخرجات أنظف. موصى به للتنظيف. تتجاهل بعض الخوادم هذا التلميح."
+    },
+    "keepModelLoaded": {
+      "label": "إبقاء النموذج محمّلاً",
+      "help": "يبقى في الذاكرة بدلًا من إزالته بعد 5 دقائق من عدم النشاط، فيتجنّب الطلب التالي البدء البارد. ينطبق على كل الميزات التي تستخدم نموذجًا محليًا."
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "التفاصيل التقنية",
+        "awsRequestId": "معرّف طلب AWS",
+        "copy": "نسخ التفاصيل التقنية",
+        "copyCommand": "نسخ أمر الاسترداد"
+      }
+    }
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "جاري الاختبار...",
+        "connected": "متصل",
+        "connectionFailed": "تعذر التحقق من الاتصال.",
+        "unverified": "تعذر التحقق: {{reason}}",
+        "errors": {
+          "endpointRequired": "أدخل عنوان URL لنقطة النهاية قبل الاختبار.",
+          "invalidUrl": "يجب أن تكون نقطة النهاية عنوان URL صالحًا لـ HTTP أو HTTPS.",
+          "httpsRequired": "يجب أن تستخدم نقاط النهاية العامة HTTPS. يُسمح بـ HTTP فقط على العناوين الخاصة.",
+          "unsupportedProvider": "اختبار الاتصال غير متوفر لهذا المزود.",
+          "apiKeyRequired": "أضف مفتاح API قبل الاختبار.",
+          "credentialsRejected": "رفض المزود بيانات الاعتماد هذه.",
+          "endpointNotFound": "لا توفر نقطة النهاية قائمة نماذج متوافقة مع OpenAI.",
+          "transcriptionEndpointNotFound": "لا يستقبل هذا العنوان طلبات التفريغ الصوتي.",
+          "modelNotFound": "النموذج المحدد غير متوفر من هذا المزود.",
+          "providerStatus": "أعاد المزود رمز الحالة {{status}}.",
+          "timeout": "انتهت مهلة اختبار الاتصال.",
+          "network": "تعذر الوصول إلى المزود."
+        }
+      }
+    }
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "إحضار مفتاحك الخاص",
+        "local": "محلي",
+        "selfHosted": "مستضاف ذاتيًا",
+        "providersDesc": "استخدم مفتاح API الخاص بك للاتصال بمزود LLM المفضل لديك.",
+        "localDesc": "نماذج على الجهاز. خاصة بالكامل."
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "تلقائي",
+        "dark": "داكن",
+        "description": "تحكم في مظهر ReTone",
+        "light": "فاتح",
+        "theme": "السمة",
+        "themeDescription": "اختر المظهر الفاتح أو الداكن أو مطابقة إعدادات النظام",
+        "title": "المظهر"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "قم بتشغيل هذا الأمر وتسجيل الخروج/الدخول: sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "يحتاج المستخدم الخاص بك إلى الوصول إلى أجهزة إدخال لوحة المفاتيح."
+      },
+      "startup": {
+        "launchAtLogin": "بدء التشغيل عند تسجيل الدخول",
+        "launchAtLoginDescription": "تشغيل ReTone في الخلفية عند تسجيل الدخول",
+        "title": "بدء التشغيل",
+        "description": "تحكم في كيفية تصرف ReTone عند تشغيله",
+        "startMinimized": "البدء مصغرًا",
+        "startMinimizedDescription": "التشغيل دون إظهار نافذة لوحة التحكم",
+        "needsApproval": {
+          "title": "الموافقة مطلوبة في إعدادات النظام",
+          "description": "سجل macOS ReTone كعنصر تسجيل دخول ولكنه ينتظر منك السماح له ضمن عناصر تسجيل الدخول.",
+          "action": "فتح عناصر تسجيل الدخول"
+        }
+      }
+    }
+  },
+  "settings": {
+    "language": {
+      "uiLabel": "لغة الواجهة",
+      "uiDescription": "اختر اللغة المستخدمة في واجهة ReTone"
+    }
+  },
+  "tray": {
+    "quit": "إنهاء ReTone",
+    "tooltip": "ReTone - إعادة صياغة النص المحدد",
+    "openSettings": "فتح الإعدادات",
+    "hideSettings": "إخفاء الإعدادات"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "إنهاء ReTone",
+    "file": "ملف",
+    "closeWindow": "إغلاق النافذة"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "تعذر فتح الرابط",
+      "message": "فشل فتح الرابط في متصفحك:\n{{url}}\n\nخطأ: {{error}}"
+    },
+    "loadFailure": {
+      "title": "فشل تحميل ReTone",
+      "message": "تعذر على ReTone تحميل واجهة المستخدم الخاصة به.",
+      "detail": {
+        "window": "النافذة: {{windowName}}",
+        "error": "خطأ {{errorCode}}: {{errorDescription}}",
+        "url": "الرابط: {{url}}",
+        "hint": "حاول إعادة تثبيت التطبيق أو تشغيله باستخدام --log-level=debug."
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "خطأ في بدء تشغيل ReTone",
+      "message": "فشل في بدء تشغيل التطبيق:\n\n{{error}}\n\nيرجى الإبلاغ عن هذه المشكلة."
+    },
+    "globeHotkey": {
+      "title": "مفتاح اختصار Globe غير متوفر",
+      "message": "لم يتمكن ReTone من تفعيل مفتاح اختصار Globe.",
+      "details": {
+        "unknown": "حدث خطأ غير معروف أثناء بدء مستمع Globe.",
+        "devHint": "شغّل `npm run compile:globe` وأعد بناء التطبيق لإعادة إنشاء ملف المستمع الثنائي.",
+        "reinstallHint": "حاول إعادة تثبيت ReTone أو اتصل بالدعم إذا استمرت المشكلة."
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "دالة الاستدعاء مطلوبة لإعداد اختصار لوحة المفاتيح",
+      "globeOnlyMac": "مفتاح Globe متوفر فقط على نظام macOS.",
+      "fnCombinationUnsupported": "يمكن استخدام مفتاح Globe/Fn بمفرده فقط.",
+      "mouseButtonOnlyMac": "اختصارات أزرار الماوس مدعومة حاليًا على نظام macOS فقط.",
+      "alreadyRegistered": "\"{{hotkey}}\" مسجل بالفعل بواسطة تطبيق آخر.",
+      "osReserved": "قد يكون \"{{hotkey}}\" محجوزًا بواسطة بيئة سطح المكتب لديك.",
+      "keyNotInKeymap": "لا يمكن لـ GNOME استخدام \"{{hotkey}}\" مع تخطيط لوحة المفاتيح الحالي. اختر مفتاحًا آخر.",
+      "keyReservedByGnome": "يستخدم GNOME بالفعل \"{{hotkey}}\" لأحد اختصاراته الخاصة. اختر مفتاحًا آخر.",
+      "rightModifierNeedsListener": "لا يمكن استخدام \"{{hotkey}}\" على سطح المكتب هذا، إذ تحتاج اختصاراته إلى مفتاح عادي. أضف مفتاحًا، مثل Control+Alt+Space.",
+      "registrationFailed": "تعذر تسجيل \"{{hotkey}}\". قد يكون قيد الاستخدام بواسطة تطبيق آخر.",
+      "windowsKeyListenerMissing": "يحتاج \"{{hotkey}}\" إلى مستمع مفاتيح Windows، وهو غير موجود في هذا التثبيت. اختر اختصارًا يتضمن مفتاحًا عاديًا.",
+      "trySuggestions": "جرّب: {{suggestions}}",
+      "slotConflict": "هذا الاختصار مستخدم بالفعل لـ {{slot}}."
+    }
+  },
+  "systemSettings": {
+    "microphone": "يرجى فتح إعدادات النظام لديك لضبط أذونات الميكروفون.",
+    "sound": "يرجى فتح إعدادات صوت النظام لديك (على سبيل المثال، pavucontrol).",
+    "accessibility": "إعدادات إمكانية الوصول غير متوفرة على هذه المنصة.",
+    "systemAudio": "إعدادات صوت النظام غير متوفرة على هذه المنصة.",
+    "screenRecording": "إعدادات تسجيل الشاشة غير متوفرة على هذه المنصة.",
+    "loginItems": "إعدادات عناصر تسجيل الدخول غير متوفرة على هذه المنصة."
+  },
+  "windows": {
+    "pttUnavailable": "مستمع مفاتيح ReTone غير متوفر."
+  },
+  "common": {
+    "retry": "إعادة المحاولة",
+    "reset": "إعادة تعيين",
+    "refresh": "تحديث",
+    "download": "تنزيل",
+    "cancel": "إلغاء",
+    "recommended": "موصى به",
+    "active": "نشط",
+    "signInRequired": "تسجيل الدخول مطلوب",
+    "apiKey": "مفتاح API",
+    "loading": "جاري التحميل...",
+    "availableModels": "النماذج المتاحة"
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "حذف النموذج",
+      "description": "هل أنت متأكد من أنك تريد حذف هذا النموذج؟ ستحتاج إلى إعادة تنزيله إذا أردت استخدامه مرة أخرى."
+    }
+  },
+  "errorBoundary": {
+    "description": "حدث خطأ غير متوقع. يرجى إعادة التحميل للمحاولة مرة أخرى.",
+    "reload": "إعادة التحميل",
+    "title": "حدث خطأ ما"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "اضغط على مجموعة مفاتيح لتعيين اختصار",
+    "clickToChange": "انقر للتغيير",
+    "clickToChangeLower": "انقر للتغيير",
+    "clickToSet": "انقر لتعيين اختصار",
+    "fnCaptureHint": "اضغط على مفتاح للدمج، أو حرره لمفتاح Globe",
+    "fnHeldHint": "+ مفتاح أو حرره لمفتاح Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "اختصار لوحة المفاتيح",
+    "keyHint": "+ مفتاح",
+    "listening": "جاري الاستماع...",
+    "pressAnyKey": "اضغط على أي مفتاح أو Ctrl+Shift+K",
+    "pressAnyKeyMac": "اضغط على أي مفتاح أو ⌘⇧K",
+    "recording": "جاري التسجيل",
+    "tryShortcut": "جرّب Ctrl+Shift+K",
+    "tryShortcutMac": "جرّب ⌘⇧K",
+    "remove": "إزالة الاختصار",
+    "addAnother": "إضافة اختصار آخر",
+    "duplicate": "تمت إضافته بالفعل",
+    "singleModifierNeedsRightSide": "لا يمكن أن يكون {{key}} بمفرده اختصارًا. اضغط على {{alternative}} بدلًا من ذلك، أو أضف مفتاحًا ثانيًا."
+  },
+  "languageSelector": {
+    "noLanguagesFound": "لم يتم العثور على لغات",
+    "searchPlaceholder": "البحث في اللغات"
+  },
+  "apiKeyInput": {
+    "placeholder": "الصق مفتاح API الخاص بك"
+  },
+  "gpu": {
+    "reasoningBanner": "اجعل معالجة الذكاء الاصطناعي أسرع باستخدام تسريع GPU",
+    "enableButton": "تفعيل GPU",
+    "active": "تسريع GPU نشط",
+    "ready": "تسريع GPU جاهز",
+    "activating": "جاري تفعيل GPU...",
+    "activationFailed": "تسريع GPU غير متاح",
+    "reasoningActivationFailedDescription": "انتقل ReTone إلى استخدام وحدة المعالجة المركزية (CPU) للمعالجة.",
+    "retryActivation": "إعادة محاولة تفعيل GPU",
+    "remove": "إزالة",
+    "dismiss": "ليس الآن",
+    "cancel": "إلغاء"
+  },
+  "providerErrors": {
+    "authFailed": "رفض {{provider}} مفتاح API الخاص بك.",
+    "accessDenied": "رفض {{provider}} الوصول. قد لا يشمل مفتاحك هذا النموذج.",
+    "quotaExhausted": "نفذ الرصيد في حساب {{provider}} الخاص بك.",
+    "rateLimited": "قام {{provider}} بتقييد معدل الطلب. انتظر لحظة وحاول مرة أخرى.",
+    "modelNotFound": "لا يتعرّف {{provider}} على النموذج “{{model}}”.",
+    "modelNotFoundNoModel": "لا يتعرّف {{provider}} على النموذج المحدد.",
+    "payloadTooLarge": "هذا التسجيل أكبر من أن يقبله {{provider}}.",
+    "requestTooLarge": "هذا الطلب أكبر من أن يقبله {{provider}}.",
+    "badRequest": "تعذّر على {{provider}} معالجة هذا الطلب.",
+    "unavailable": "يواجه {{provider}} مشكلات الآن. حاول مرة أخرى بعد قليل.",
+    "timeout": "استغرق {{provider}} وقتًا طويلاً للاستجابة.",
+    "unreachable": "تعذّر الوصول إلى {{provider}}. تحقق من اتصالك.",
+    "noResponse": "تعذّر الحصول على رد من {{provider}}. تحقق من مفتاح API واتصالك.",
+    "unknown": "أعاد {{provider}} خطأ غير متوقع.",
+    "keyMissing": "لا يوجد مفتاح API مضبوط لـ {{provider}}. أضفه في الإعدادات ← النماذج اللغوية.",
+    "selfHosted": {
+      "authFailed": "رفض خادمك مفتاح API.",
+      "accessDenied": "رفض خادمك الوصول. قد لا يشمل المفتاح هذا النموذج.",
+      "quotaExhausted": "يفيد خادمك بأن الحساب قد نفذ رصيده.",
+      "rateLimited": "قام خادمك بتقييد معدل الطلب. انتظر لحظة وحاول مرة أخرى.",
+      "modelNotFound": "لا يتعرّف خادمك على النموذج “{{model}}”.",
+      "modelNotFoundNoModel": "لا يتعرّف خادمك على النموذج المحدد.",
+      "payloadTooLarge": "هذا التسجيل أكبر من أن يقبله خادمك.",
+      "requestTooLarge": "هذا الطلب أكبر من أن يقبله خادمك.",
+      "badRequest": "تعذّر على خادمك معالجة هذا الطلب.",
+      "unavailable": "يواجه خادمك مشكلات الآن. حاول مرة أخرى بعد قليل.",
+      "timeout": "استغرق خادمك وقتًا طويلاً للاستجابة.",
+      "unreachable": "تعذّر الوصول إلى خادمك. تحقق من أنه قيد التشغيل.",
+      "noResponse": "تعذّر الحصول على رد من خادمك. تحقق من مفتاح API الخاص به ومن أنه قيد التشغيل.",
+      "unknown": "أعاد خادمك خطأ غير متوقع."
+    },
+    "details": {
+      "requestId": "معرّف الطلب"
+    }
+  },
+  "toneRewrite": {
+    "title": "إعادة صياغة التحديد",
+    "titleWholeField": "إعادة صياغة الحقل بالكامل",
+    "close": "إغلاق",
+    "rewriting": "جارٍ إعادة الصياغة…",
+    "loadingModel": "جارٍ تحميل النموذج…",
+    "preview": {
+      "label": "معاينة إعادة الصياغة"
+    },
+    "copiedToClipboard": "نُسخ النص المُعاد صياغته إلى الحافظة.",
+    "tones": {
+      "professional": "مهني",
+      "casual": "عفوي",
+      "friendly": "ودود",
+      "concise": "موجز",
+      "fixGrammar": "تصحيح القواعد",
+      "banglishToEnglish": "Banglish → الإنجليزية",
+      "banglishToBangla": "Banglish → البنغالية"
+    },
+    "errors": {
+      "nothingSelected": "لا يوجد ما يُعاد صياغته. حدّد نصًا في حقل نصي أولًا.",
+      "noText": "لم يُعثر على نص.",
+      "tooLarge": "التحديد أطول من أن تُعاد صياغته (الحد الأقصى {{max}} حرفًا).",
+      "targetChanged": "تغيّرت النافذة النشطة. حاول مرة أخرى.",
+      "modifiersHeld": "حرّر مفاتيح الاختصار ثم حاول مرة أخرى.",
+      "accessibility": "تعذّر على ReTone قراءة التحديد. تحقّق من إذن تسهيلات الاستخدام.",
+      "unavailable": "تعذّرت قراءة النص المحدد في هذا التطبيق.",
+      "notConfigured": "اختر نموذجًا لإعادة صياغة النص من الإعدادات ← ReTone.",
+      "emptyOutput": "لم يُرجع النموذج أي نص. حاول مرة أخرى أو اختر نموذجًا آخر.",
+      "rewriteFailed": "فشلت إعادة الصياغة. تحقّق من نموذج إعادة صياغة النص في الإعدادات ← ReTone.",
+      "pasteFailed": "تعذّر لصق النص المُعاد صياغته.",
+      "selectionChanged": "تغيّر التحديد قبل اكتمال إعادة الصياغة، لذلك لم يُستبدل شيء."
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "نموذج إعادة صياغة النص",
+      "description": "النموذج الذي يعيد صياغة النص المحدد بالنبرة التي تختارها. يبقي النموذج المحلي نصك على هذا الجهاز.",
+      "speedHint": "النماذج المحلية الأصغر مثل Qwen3.5 4B تعيد الصياغة بسرعة أكبر بشكل ملحوظ."
+    },
+    "hotkey": {
+      "title": "الاختصار",
+      "description": "حدّد نصًا في أي تطبيق، واضغط الاختصار واختر نبرة، فيُعاد صياغة التحديد في مكانه."
+    },
+    "picker": {
+      "title": "أداة الاختيار",
+      "description": "سلوك أداة الاختيار أثناء إعادة الصياغة.",
+      "livePreview": "معاينة مباشرة",
+      "livePreviewDescription": "يعرض النص المُعاد صياغته أثناء كتابته، ثم يستبدل التحديد عند الانتهاء.",
+      "wholeField": "إعادة صياغة الحقل بالكامل عند عدم تحديد شيء",
+      "wholeFieldDescription": "عند عدم وجود تحديد، يُحدَّد نص الحقل النشط وتُعاد صياغته بالكامل. عند الإيقاف، يطلب منك المنتقي تحديد نص أولًا."
+    },
+    "options": {
+      "title": "الخيارات",
+      "description": "اختر الخيارات التي تعرضها القائمة واسحبها لترتيبها. تختارها مفاتيح الأرقام بهذا الترتيب.",
+      "atLeastOne": "يبقى خيار واحد على الأقل مفعّلًا.",
+      "maxEnabled": "تعرض القائمة {{max}} خيارات كحد أقصى. أوقف أحدها لتفعيل خيار آخر.",
+      "add": "إضافة خيار",
+      "newOption": "خيار جديد",
+      "edit": "تعديل {{name}}",
+      "dragHandle": "إعادة ترتيب {{name}} (اسحب أو Alt+أعلى/أسفل)",
+      "customBadge": "مخصص",
+      "editedBadge": "معدّل",
+      "name": "الاسم",
+      "namePlaceholder": "مثلًا: ترجمة إلى الفرنسية",
+      "prompt": "الموجّه",
+      "promptPlaceholder": "أخبر النموذج كيف يعيد كتابة النص المحدد، مثلًا: «ترجم النص إلى الفرنسية.»",
+      "promptHint": "يضيف ReTone قواعده الخاصة بعد موجّهك، لكي يكون الرد هو النص المعاد كتابته فقط.",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "delete": "حذف",
+      "reset": "استعادة الافتراضي",
+      "deleteConfirmTitle": "حذف «{{name}}»؟",
+      "deleteConfirmDescription": "ستتم إزالته من القائمة. لا يمكن التراجع عن ذلك."
+    },
+    "title": "ReTone",
+    "description": "حدّد نصًا في أي تطبيق، واضغط على مفتاح الاختصار واختر نبرة. تحل إعادة الصياغة محل النص المحدد.",
+    "accessibility": {
+      "title": "مطلوب إذن تسهيلات الاستخدام",
+      "description": "يحتاج ReTone إلى إذن تسهيلات الاستخدام لقراءة النص الذي تحدده ولصق إعادة الصياغة.",
+      "action": "فتح إعدادات تسهيلات الاستخدام"
+    }
+  }
+}

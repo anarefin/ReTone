@@ -1,0 +1,29 @@
+[package]
+name = "retone-macos"
+description = "macOS boundary for ReTone: AppKit windows, defaults, AX, CGEvent, pasteboard"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+retone-core = { workspace = true }
+tracing = { workspace = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSString", "NSUserDefaults", "NSDictionary", "NSValue", "NSArray", "NSData", "NSURL", "NSBundle", "NSAppleEventManager", "NSAppleEventDescriptor", "NSError"] }
+objc2-app-kit = { version = "0.3", features = ["NSWindow", "NSResponder", "NSStatusItem", "NSGraphics", "NSWorkspace", "NSRunningApplication", "NSPasteboard", "NSPasteboardItem", "NSPanel", "NSApplication"] }
+objc2-core-foundation = { version = "0.3", default-features = false, features = ["std", "CFString", "CFDictionary", "CFNumber", "CFData", "CFArray", "CFRunLoop", "CFMachPort", "CFPreferences", "CFPropertyList"] }
+objc2-core-graphics = { version = "0.3", default-features = false, features = ["std", "bitflags", "CGEvent", "CGEventSource", "CGEventTypes", "CGRemoteOperation"] }
+dispatch2 = "0.3"
+objc2-service-management = { version = "0.3", default-features = false, features = ["std", "objc2", "objc2-foundation", "SMAppService"] }
+libc = "0.2"
+
+[[test]]
+name = "keyboard_layout"
+harness = false
+
+[lints]
+workspace = true

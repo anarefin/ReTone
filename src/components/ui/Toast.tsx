@@ -1,0 +1,419 @@
+import * as React from "react";
+import { X, Copy, Check } from "../icons";
+import { useTranslation } from "react-i18next";
+import { cn } from "../lib/utils";
+import { ToastContext, type ToastActionConfig, type ToastProps } from "./useToast";
+import { useCopyFeedback } from "../../hooks/useCopyFeedback";
+import { TOAST_ACTION_ICONS } from "./toastActionIcons";
+import { TechnicalErrorDetails } from "./TechnicalErrorDetails";
+
+/** The inline action beside a toast's text; dismissing is left to the caller. */
+export function ToastActionButton({
+  onClick,
+  children,
+}: {
+  onClick: () => void | Promise<void>;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-sm border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-medium whitespace-nowrap text-white/90 transition-colors hover:border-white/35 hover:bg-white/20 hover:text-white"
+    >
+      {children}
+    </button>
+  );
+}
+
+/** A structured action under a standard toast's text: a compact button, or its icon alone. */
+function StandardToastAction({
+  action,
+  onAction,
+}: {
+  action: ToastActionConfig;
+  onAction: (action: ToastActionConfig) => ReturnType<ToastActionConfig["onClick"]>;
+}) {
+  const [result, setResult] = React.useState<boolean | undefined>();
+  const resetTimer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  React.useEffect(() => () => clearTimeout(resetTimer.current), []);
+
+  const handleClick = async () => {
+    let outcome: void | boolean;
+    try {
+      outcome = await onAction(action);
+    } catch {
+      outcome = false;
+    }
+    if (!action.feedback || typeof outcome !== "boolean") return;
+    setResult(outcome);
+    clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setResult(undefined), 1800);
+  };
+
+  const label =
+    result === true
+      ? action.feedback?.successLabel
+      : result === false
+        ? action.feedback?.failureLabel
+        : action.label;
+  if (!action.iconOnly) {
+    return <ToastActionButton onClick={handleClick}>{label}</ToastActionButton>;
+  }
+  const Icon = result === true ? Check : action.icon ? TOAST_ACTION_ICONS[action.icon] : Copy;
+  return (
+    <button
+      type="button"
+      onClick={() => void handleClick()}
+      title={label}
+      className="rounded-sm border border-white/20 bg-white/10 p-1 text-white/70 transition-colors hover:border-white/35 hover:bg-white/20 hover:text-white"
+    >
+      <Icon className="size-3" aria-hidden="true" />
+      <span className="sr-only" aria-live={action.feedback ? "polite" : undefined}>
+        {label}
+      </span>
+    </button>
+  );
+}
+
+interface ToastState extends ToastProps {
+  id: string;
+  isExiting?: boolean;
+  createdAt: number;
+}
+
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [toasts, setToasts] = React.useState<ToastState[]>([]);
+  const timersRef = React.useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  const clearTimer = React.useCallback((id: string) => {
+    const timer = timersRef.current[id];
+    if (timer) {
+      clearTimeout(timer);
+      delete timersRef.current[id];
+    }
+  }, []);
+
+  const startExitAnimation = React.useCallback((id: string) => {
+    setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, isExiting: true } : t)));
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 200);
+  }, []);
+
+  const toast = React.useCallback(
+    (props: Omit<ToastProps, "id">): string => {
+      const id = Math.random().toString(36).substring(2, 11);
+      const duration = props.duration ?? (props.variant === "destructive" ? 6000 : 3500);
+      const newToast: ToastState = {
+        ...props,
+        duration,
+        id,
+        createdAt: Date.now(),
+      };
+      setToasts((prev) => [...prev, newToast]);
+
+      if (duration > 0) {
+        const timer = setTimeout(() => {
+          startExitAnimation(id);
+        }, duration);
+        timersRef.current[id] = timer;
+      }
+
+      return id;
+    },
+    [startExitAnimation]
+  );
+
+  const dismiss = React.useCallback(
+    (id?: string) => {
+      if (id) {
+        clearTimer(id);
+        startExitAnimation(id);
+      } else {
+        const lastToast = toasts[toasts.length - 1];
+        if (lastToast) {
+          clearTimer(lastToast.id);
+          startExitAnimation(lastToast.id);
+        }
+      }
+    },
+    [toasts, clearTimer, startExitAnimation]
+  );
+
+  const pauseTimer = React.useCallback(
+    (id: string) => {
+      clearTimer(id);
+    },
+    [clearTimer]
+  );
+
+  const resumeTimer = React.useCallback(
+    (id: string, remainingTime: number) => {
+      if (remainingTime > 0) {
+        const timer = setTimeout(() => {
+          startExitAnimation(id);
+        }, remainingTime);
+        timersRef.current[id] = timer;
+      }
+    },
+    [startExitAnimation]
+  );
+
+  React.useEffect(() => {
+    const timers = timersRef.current;
+    return () => {
+      for (const id in timers) {
+        clearTimeout(timers[id]);
+      }
+    };
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ toast, dismiss, toastCount: toasts.length }}>
+      {children}
+      <ToastViewport
+        toasts={toasts}
+        onDismiss={dismiss}
+        onPauseTimer={pauseTimer}
+        onResumeTimer={resumeTimer}
+      />
+    </ToastContext.Provider>
+  );
+};
+
+const ToastViewport: React.FC<{
+  toasts: ToastState[];
+  onDismiss: (id: string) => void;
+  onPauseTimer: (id: string) => void;
+  onResumeTimer: (id: string, remainingTime: number) => void;
+}> = ({ toasts, onDismiss, onPauseTimer, onResumeTimer }) => {
+  if (toasts.length === 0) return null;
+
+  return (
+    <div className="fixed z-[100] flex flex-col gap-1.5 pointer-events-none bottom-5 end-5">
+      {toasts.map((toast) => (
+        <Toast
+          key={toast.id}
+          {...toast}
+          onClose={() => {
+            try {
+              toast.onClose?.();
+            } finally {
+              onDismiss(toast.id);
+            }
+          }}
+          onPauseTimer={() => onPauseTimer(toast.id)}
+          onResumeTimer={(remaining) => onResumeTimer(toast.id, remaining)}
+        />
+      ))}
+    </div>
+  );
+};
+
+const variantConfig = {
+  default: {
+    accentClass: "bg-white/20",
+    progressClass: "bg-white/15",
+  },
+  destructive: {
+    accentClass: "bg-red-400",
+    progressClass: "bg-red-400/30",
+  },
+  success: {
+    accentClass: "bg-emerald-400",
+    progressClass: "bg-emerald-400/30",
+  },
+};
+
+const Toast: React.FC<
+  ToastState & {
+    onClose?: () => void;
+    onPauseTimer: () => void;
+    onResumeTimer: (remaining: number) => void;
+  }
+> = ({
+  title,
+  description,
+  secondaryDescription,
+  copyCommand,
+  technicalDetails,
+  action,
+  actions,
+  actionsAlign = "start",
+  variant = "default",
+  duration = 3500,
+  isExiting,
+  createdAt,
+  onClose,
+  onPauseTimer,
+  onResumeTimer,
+}) => {
+  const config = variantConfig[variant];
+  const pausedAtRef = React.useRef<number | null>(null);
+  const remainingDurationRef = React.useRef(duration);
+  const timerStartedAtRef = React.useRef(createdAt);
+  const { copied, copy } = useCopyFeedback(description ?? "", { resetMs: 2000 });
+  const { copied: commandCopied, copy: copyRecoveryCommand } = useCopyFeedback(copyCommand ?? "", {
+    resetMs: 2000,
+  });
+  const { t } = useTranslation();
+  const [timerPaused, setTimerPaused] = React.useState(false);
+  const isDestructive = variant === "destructive";
+
+  const handleStructuredAction = (structuredAction: ToastActionConfig) => {
+    if (structuredAction.dismissOnClick !== false) onClose?.();
+    return structuredAction.onClick();
+  };
+
+  const handleMouseEnter = () => {
+    if (pausedAtRef.current !== null || duration <= 0) return;
+    const now = Date.now();
+    remainingDurationRef.current = Math.max(
+      0,
+      remainingDurationRef.current - (now - timerStartedAtRef.current)
+    );
+    pausedAtRef.current = now;
+    setTimerPaused(true);
+    onPauseTimer();
+  };
+
+  const handleMouseLeave = () => {
+    if (pausedAtRef.current !== null && duration > 0) {
+      const remaining = Math.max(remainingDurationRef.current, 500);
+      timerStartedAtRef.current = Date.now();
+      setTimerPaused(false);
+      onResumeTimer(remaining);
+    }
+    pausedAtRef.current = null;
+  };
+
+  const message = title || description;
+  const detail = title && description ? description : undefined;
+  // Structured actions come with a classified error: its description is a
+  // sentence to read, and Copy details replaces the raw-error copy box.
+  const rowActions = actions?.length ? actions : undefined;
+
+  return (
+    <div
+      className={cn(
+        "group toast-surface pointer-events-auto relative flex w-75",
+        "rounded-[5px]",
+        "transition-[opacity,transform] duration-200 ease-out",
+        isExiting
+          ? "opacity-0 translate-x-2 rtl:-translate-x-2 scale-[0.98]"
+          : "toast-enter opacity-100 translate-x-0 scale-100"
+      )}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className={cn("w-0.5 shrink-0", config.accentClass)} />
+
+      <div className="flex items-start gap-2 flex-1 min-w-0 px-2.5 py-2">
+        <div className="flex-1 min-w-0">
+          {message && (
+            <div className="text-xs font-medium leading-tight text-white/90">{message}</div>
+          )}
+          {secondaryDescription && (
+            <div className="mt-1 text-xs leading-snug text-white/45">{secondaryDescription}</div>
+          )}
+          {detail &&
+            (isDestructive && !rowActions ? (
+              <div
+                className={cn(
+                  "text-xs leading-snug mt-1 px-1.5 py-1 rounded-[3px] font-mono",
+                  "bg-white/4 border border-white/6",
+                  "text-red-300/80"
+                )}
+              >
+                <div className="flex items-start justify-between gap-1.5">
+                  <span className="select-all wrap-break-word min-w-0">{detail}</span>
+                  <button
+                    onClick={() => void copy()}
+                    className={cn(
+                      "shrink-0 p-0.5 rounded-xs mt-px",
+                      "text-white/30 hover:text-white/70",
+                      "hover:bg-white/6",
+                      "transition-colors duration-150"
+                    )}
+                    aria-label="Copy error"
+                  >
+                    {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-xs leading-snug mt-0.5 text-white/45">{detail}</div>
+            ))}
+          {copyCommand && (
+            <div className="mt-1.5 flex items-center gap-1.5 rounded-[3px] border border-white/6 bg-white/4 px-1.5 py-1">
+              <code
+                dir="ltr"
+                className="min-w-0 flex-1 wrap-break-word font-mono text-[11px] text-white/60 select-all"
+              >
+                {copyCommand}
+              </code>
+              <button
+                type="button"
+                onClick={() => void copyRecoveryCommand()}
+                className="shrink-0 rounded-xs p-1 text-white/30 transition-colors hover:bg-white/6 hover:text-white/70"
+                aria-label={t("reasoning.enterprise.technicalDetails.copyCommand")}
+              >
+                {commandCopied ? <Check className="size-3" /> : <Copy className="size-3" />}
+              </button>
+            </div>
+          )}
+          <TechnicalErrorDetails details={technicalDetails} onDark />
+          {rowActions && (
+            <div
+              className={cn(
+                "mt-2 flex items-center gap-1.5",
+                actionsAlign === "end" && "justify-end"
+              )}
+            >
+              {rowActions.map((rowAction, index) => (
+                <StandardToastAction
+                  key={`${rowAction.label}-${index}`}
+                  action={rowAction}
+                  onAction={handleStructuredAction}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {action && <div className="shrink-0 self-center">{action}</div>}
+      </div>
+
+      {onClose && (
+        <button
+          onClick={onClose}
+          className={cn(
+            "absolute -start-2 -top-2 size-6 rounded-full",
+            "flex items-center justify-center",
+            "bg-white/10 backdrop-blur-sm border border-white/10",
+            "text-white/70 hover:text-white hover:bg-white/20",
+            "opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100",
+            "transition-all duration-150",
+            "focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+          )}
+        >
+          <X className="size-3" />
+          <span className="sr-only">Close</span>
+        </button>
+      )}
+
+      {duration > 0 && !isExiting && (
+        <div className="absolute bottom-0 start-0.5 end-0 h-px overflow-hidden">
+          <div
+            className={cn("h-full", config.progressClass)}
+            style={{
+              animation: `toast-progress ${duration}ms linear forwards`,
+              animationPlayState: timerPaused ? "paused" : "running",
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};

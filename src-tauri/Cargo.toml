@@ -1,0 +1,46 @@
+[package]
+name = "retone"
+description = "ReTone: rewrite selected text in any app in a tone you pick"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+default-run = "retone"
+
+[lib]
+name = "retone_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+retone-core = { workspace = true }
+retone-macos = { workspace = true }
+retone-llama = { workspace = true }
+tauri = { version = "2", features = ["macos-private-api", "tray-icon", "image-png"] }
+tauri-plugin-single-instance = "2"
+tauri-plugin-opener = "2"
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["fmt", "registry", "std"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+dirs = "6"
+sys-locale = "0.3"
+url = { workspace = true }
+tray-icon = "0.25"
+libc = "0.2"
+tauri-plugin-http = { version = "2", features = ["rustls-tls-native-roots"] }
+keyring = { version = "3", default-features = false, features = ["apple-native"] }
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "http2", "json", "system-proxy", "charset"] }
+tokio = { version = "1", features = ["sync", "time", "macros", "rt"] }
+tauri-plugin-global-shortcut = "2"
+
+[dev-dependencies]
+tempfile = { workspace = true }
+tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread", "net", "io-util", "time", "test-util"] }
+
+[lints]
+workspace = true

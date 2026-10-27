@@ -1,0 +1,538 @@
+{
+  "settings": {
+    "language": {
+      "uiLabel": "Interface language",
+      "uiDescription": "Choose the language used throughout ReTone's interface"
+    }
+  },
+  "tray": {
+    "quit": "Quit ReTone",
+    "tooltip": "ReTone - Rewrite selected text",
+    "openSettings": "Open Settings",
+    "hideSettings": "Hide Settings"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "Quit ReTone",
+    "file": "File",
+    "closeWindow": "Close Window"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "Unable to Open Link",
+      "message": "Failed to open the link in your browser:\n{{url}}\n\nError: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ReTone failed to load",
+      "message": "ReTone could not load its UI.",
+      "detail": {
+        "window": "Window: {{windowName}}",
+        "error": "Error {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "Try reinstalling the app or launching with --log-level=debug."
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ReTone Startup Error",
+      "message": "Failed to start the application:\n\n{{error}}\n\nPlease report this issue."
+    },
+    "globeHotkey": {
+      "title": "Globe Hotkey Unavailable",
+      "message": "ReTone could not activate the Globe key hotkey.",
+      "details": {
+        "unknown": "Unknown error occurred while starting the Globe listener.",
+        "devHint": "Run `npm run compile:globe` and rebuild the app to regenerate the listener binary.",
+        "reinstallHint": "Try reinstalling ReTone or contact support if the issue persists."
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "Callback function is required for hotkey setup",
+      "globeOnlyMac": "The Globe key is only available on macOS.",
+      "fnCombinationUnsupported": "The Globe/Fn key can only be used by itself.",
+      "mouseButtonOnlyMac": "Mouse button hotkeys are currently supported on macOS only.",
+      "alreadyRegistered": "\"{{hotkey}}\" is already registered by another application.",
+      "osReserved": "\"{{hotkey}}\" may be reserved by your desktop environment.",
+      "keyNotInKeymap": "GNOME can't use \"{{hotkey}}\" with your keyboard layout. Choose another key.",
+      "keyReservedByGnome": "GNOME already uses \"{{hotkey}}\" for one of its own shortcuts. Choose another key.",
+      "rightModifierNeedsListener": "\"{{hotkey}}\" can't be used on this desktop, whose shortcuts need a regular key. Add a key, such as Control+Alt+Space.",
+      "registrationFailed": "Could not register \"{{hotkey}}\". It may be in use by another application.",
+      "windowsKeyListenerMissing": "\"{{hotkey}}\" needs the Windows key listener, which this install is missing. Choose a shortcut with a regular key.",
+      "trySuggestions": "Try: {{suggestions}}",
+      "slotConflict": "This hotkey is already used for {{slot}}."
+    }
+  },
+  "systemSettings": {
+    "microphone": "Please open your system settings to configure microphone permissions.",
+    "sound": "Please open your system sound settings (for example, pavucontrol).",
+    "accessibility": "Accessibility settings are not available on this platform.",
+    "systemAudio": "System audio settings are not available on this platform.",
+    "screenRecording": "Screen recording settings are not available on this platform.",
+    "loginItems": "Login item settings are not available on this platform."
+  },
+  "windows": {
+    "pttUnavailable": "ReTone's key listener isn't available."
+  },
+  "common": {
+    "retry": "Retry",
+    "reset": "Reset",
+    "refresh": "Refresh",
+    "download": "Download",
+    "cancel": "Cancel",
+    "recommended": "Recommended",
+    "active": "Active",
+    "signInRequired": "Sign in Required",
+    "apiKey": "API Key",
+    "loading": "Loading...",
+    "availableModels": "Available Models"
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "Testing…",
+        "connected": "Connected",
+        "connectionFailed": "The connection could not be verified.",
+        "unverified": "Couldn't verify: {{reason}}",
+        "errors": {
+          "endpointRequired": "Enter an endpoint URL before testing.",
+          "invalidUrl": "The endpoint must be a valid HTTP or HTTPS URL.",
+          "httpsRequired": "Public endpoints must use HTTPS. HTTP is only allowed on private addresses.",
+          "unsupportedProvider": "Connection testing is not available for this provider.",
+          "apiKeyRequired": "Add an API key before testing.",
+          "credentialsRejected": "The provider rejected these credentials.",
+          "endpointNotFound": "The endpoint does not expose an OpenAI-compatible model list.",
+          "transcriptionEndpointNotFound": "Nothing takes transcriptions at this address.",
+          "modelNotFound": "The selected model is not available from this provider.",
+          "providerStatus": "The provider returned status {{status}}.",
+          "timeout": "The connection test timed out.",
+          "network": "The provider could not be reached."
+        }
+      }
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "Cloud",
+      "local": "Local",
+      "localDescription": "Runs on your device. Complete privacy, works offline.",
+      "cloudDescription": "Advanced models via API. Fast and capable, requires internet."
+    },
+    "custom": {
+      "endpointWithProtocol": "Enter a full base URL including protocol (for example, https://server/v1).",
+      "httpsRequired": "HTTPS required (HTTP allowed for local network only).",
+      "endpointInvalid": "Custom endpoint is invalid or not configured. Check the endpoint URL in Settings → AI Models.",
+      "endpointUnauthorized": "Endpoint rejected the request (401/403). Add an API key or adjust server auth settings.",
+      "endpointTitle": "Endpoint URL",
+      "endpointExamples": "Examples:",
+      "apiKeyOptional": "API Key (Optional)",
+      "apiKeyHelp": "Optional. Sent as a Bearer token for authentication. This is separate from your OpenAI API key.",
+      "applyAndRefresh": "Apply & Refresh",
+      "queryPrefix": "We'll query",
+      "querySuffix": "for available models.",
+      "modelsReloadHint": "Models will reload when you click away from the URL field or click \"Apply & Refresh\".",
+      "enterEndpoint": "Enter an endpoint URL above to load models.",
+      "fetchingModels": "Fetching model list from endpoint...",
+      "noModels": "No models returned. Check your endpoint URL.",
+      "providerName": "Custom",
+      "ownerLabel": "Owner: {{owner}}",
+      "unableToLoadModels": "Unable to load models from endpoint.",
+      "searchPlaceholder": "Search models…",
+      "selectedGroup": "Selected",
+      "otherGroup": "Other",
+      "noSearchResults": "No models match \"{{query}}\"",
+      "selectModelHint": "No model selected yet — choose one from the list below.",
+      "keyRequiredHint": "An API key is required for inference — add one to use this provider."
+    },
+    "effort": {
+      "title": "Reasoning effort",
+      "description": "How much the model thinks before it answers.",
+      "descriptionWithDefault": "How much the model thinks before it answers. Auto uses the provider's default ({{value}}).",
+      "auto": "Auto",
+      "options": {
+        "none": "None",
+        "minimal": "Minimal",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "xhigh": "Extra high",
+        "max": "Max"
+      }
+    },
+    "getApiKey": "Get your API key ->",
+    "selectModel": "Select Model",
+    "availableModels": "Available Models",
+    "disableThinking": {
+      "label": "Disable thinking output",
+      "help": "Skips reasoning tokens for cleaner output. Recommended for cleanup. Some servers ignore this hint."
+    },
+    "keepModelLoaded": {
+      "label": "Keep model loaded",
+      "help": "Stays in memory instead of unloading after 5 idle minutes, so the next request skips the cold start. Applies to all features using a local model."
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "Technical details",
+        "awsRequestId": "AWS request ID",
+        "copy": "Copy technical details",
+        "copyCommand": "Copy recovery command"
+      }
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "Delete Model",
+      "description": "Are you sure you want to delete this model? You'll need to re-download it if you want to use it again."
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "Your transcription provider rate-limited the request. Wait a moment and try again.",
+        "providerKeyMissing": "No API key is set for your transcription provider. Add it in Settings → Speech to Text.",
+        "cleanupTruncated": "The AI model ran out of room before it finished cleaning up your dictation.",
+        "cleanupEmptyReply": "The AI model returned an empty reply instead of the cleaned-up dictation."
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "Hotkey Not Registered"
+      },
+      "errors": {
+        "failedToRegister": "Failed to register hotkey. Please try again."
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "Download timed out. Check your internet connection and try again.",
+        "notFound": "Could not reach the download server. Check your internet connection.",
+        "corrupted": "Download was incomplete or corrupted. Please try again.",
+        "rateLimited": "Download server is rate limiting. Please wait a few minutes and try again.",
+        "server": "Server error ({{error}}). Please try again later.",
+        "generic": "Download failed: {{error}}",
+        "extractionFailed": "Model downloaded but installation failed. Click download to retry installation without re-downloading.",
+        "tlsError": "Certificate error — your network may use SSL inspection that blocks downloads. Try downloading from a different network.",
+        "unknown": "Unknown error"
+      },
+      "downloadFailed": {
+        "title": "Download Failed"
+      },
+      "installationFailed": {
+        "title": "Installation Failed"
+      },
+      "downloadInProgress": {
+        "title": "Download in Progress",
+        "description": "Please wait for the current download to complete or cancel it first."
+      },
+      "modelDeleted": {
+        "title": "Model Deleted",
+        "description": "Model deleted successfully!"
+      },
+      "deleteFailed": {
+        "title": "Delete Failed",
+        "description": "Failed to delete model: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "Download Cancelled",
+        "description": "The download has been cancelled."
+      }
+    }
+  },
+  "errorBoundary": {
+    "description": "An unexpected error occurred. Please reload to try again.",
+    "reload": "Reload",
+    "title": "Something went wrong"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "Press a key combination to set hotkey",
+    "clickToChange": "Click to change",
+    "clickToChangeLower": "click to change",
+    "clickToSet": "Click to set hotkey",
+    "fnCaptureHint": "Press a key to combine, or release for Globe",
+    "fnHeldHint": "+ key or release for Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "Hotkey",
+    "keyHint": "+ key",
+    "listening": "Listening...",
+    "pressAnyKey": "Press any key or Ctrl+Shift+K",
+    "pressAnyKeyMac": "Press any key or ⌘⇧K",
+    "recording": "Recording",
+    "tryShortcut": "Try Ctrl+Shift+K",
+    "tryShortcutMac": "Try ⌘⇧K",
+    "remove": "Remove hotkey",
+    "addAnother": "Add another hotkey",
+    "duplicate": "Already added",
+    "singleModifierNeedsRightSide": "{{key}} on its own can't be a shortcut. Press {{alternative}} instead, or add a second key."
+  },
+  "languageSelector": {
+    "noLanguagesFound": "No languages found",
+    "searchPlaceholder": "Search languages"
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "Bring your own key",
+        "local": "Local",
+        "selfHosted": "Self-Hosted",
+        "providersDesc": "Use your own API key to connect your preferred LLM provider.",
+        "localDesc": "On-device models. Fully private."
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "Auto",
+        "dark": "Dark",
+        "description": "Control how ReTone looks",
+        "light": "Light",
+        "theme": "Theme",
+        "themeDescription": "Choose light, dark, or match your system",
+        "title": "Appearance"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "Run this command and log out/in: sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "Your user needs access to keyboard input devices."
+      },
+      "startup": {
+        "launchAtLogin": "Launch at login",
+        "launchAtLoginDescription": "Start ReTone in the background when you log in",
+        "title": "Startup",
+        "description": "Control how ReTone behaves when it launches",
+        "startMinimized": "Start minimized",
+        "startMinimizedDescription": "Launch without showing the control panel window",
+        "needsApproval": {
+          "title": "Approval needed in System Settings",
+          "description": "macOS registered ReTone as a login item but is waiting for you to allow it under Login Items.",
+          "action": "Open Login Items"
+        }
+      }
+    }
+  },
+  "models": {
+    "learnMore": "Learn more",
+    "noneAvailable": "No models available",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "Strong reasoning model",
+        "openai_gpt_5_mini": "Fast and cost-efficient",
+        "openai_gpt_5_nano": "Ultra-fast, low latency",
+        "openai_gpt_4_1": "Strong baseline, 1M context",
+        "openai_gpt_4_1_mini": "Smaller GPT-4.1 model",
+        "openai_gpt_4_1_nano": "Lowest latency GPT-4.1",
+        "anthropic_claude_fable_5_1": "Anthropic's most capable model, Mythos-class",
+        "anthropic_claude_fable_5": "Previous Mythos-class flagship",
+        "anthropic_claude_opus_5_5": "Latest Opus model for complex reasoning, 1M context",
+        "anthropic_claude_sonnet_5_5": "Latest Sonnet: fast and capable for everyday work, 1M context",
+        "anthropic_claude_haiku_5_5": "Fastest, lowest-cost Claude model, 1M context",
+        "anthropic_claude_sonnet_5": "Fast, capable assistant model at lower cost",
+        "anthropic_claude_sonnet_4_6": "Balanced performance",
+        "anthropic_claude_sonnet_4_5": "Previous Sonnet generation",
+        "anthropic_claude_haiku_4_5": "Fast with near-frontier intelligence",
+        "gemini_gemini_3_5_flash": "Latest fast, high-capability Gemini model",
+        "gemini_gemini_3_5_flash_lite": "Fastest, most cost-effective 3.5 model",
+        "gemini_gemini_3_1_pro_preview": "Next-gen flagship model for complex reasoning",
+        "gemini_gemini_3_1_flash_lite": "Frontier-class performance at low cost",
+        "gemini_gemini_3_flash_preview": "Ultra-fast, high-capability next-gen model",
+        "gemini_gemini_2_5_flash_lite": "Lowest latency and cost",
+        "gemini_gemma_4_31b_it": "Google's largest Gemma 4, 31B dense, 256K context",
+        "gemini_gemma_4_26b_a4b_it": "Google's Gemma 4 MoE, 4B active params, 256K context",
+        "groq_openai_gpt_oss_120b": "OpenAI's open-source flagship, 500 T/sec",
+        "groq_qwen_qwen3_8_27b": "Fast Qwen model, 450 T/sec, 131K context",
+        "groq_openai_gpt_oss_20b": "Fast open-source model, 1000 T/sec",
+        "openai_gpt_6_astra": "OpenAI's most capable model for coding and research",
+        "openai_gpt_5_6_sol": "Flagship GPT-5.6 for complex coding and research",
+        "openai_gpt_5_6_terra": "Balanced GPT-5.6 for everyday work",
+        "openai_gpt_5_6_luna": "Fastest, lowest-cost GPT-5.6",
+        "openai_gpt_5_5": "Frontier model for complex reasoning",
+        "anthropic_claude_opus_5": "Previous Opus flagship, 1M context",
+        "anthropic_claude_opus_4_8": "Powerful Opus model tuned for honesty and reliability",
+        "anthropic_claude_opus_4_7": "Powerful Opus model",
+        "anthropic_claude_opus_4_6": "Previous Opus generation, 1M context",
+        "anthropic_claude_opus_4_5": "Earlier Opus model"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "Powerful hybrid model",
+        "qwen_qwen3_5_4b_q4_k_m": "Balanced Qwen3.5 for general use",
+        "qwen_qwen3_5_2b_q4_k_m": "Small Qwen3.5 for quick tasks",
+        "qwen_qwen3_8b_q4_k_m": "Latest Qwen3 with thinking mode support",
+        "qwen_qwen3_8b_q5_k_m": "Higher quality Qwen3 with thinking mode",
+        "qwen_qwen3_4b_q4_k_m": "Compact Qwen3 with reasoning capabilities",
+        "qwen_qwen3_1_7b_q8_0": "Small but capable Qwen3 model",
+        "qwen_qwen3_32b_q4_k_m": "Most powerful local Qwen3 with deep reasoning",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "Small model, good for basic tasks",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "Balanced model for general use",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "Large model with high quality (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "Large model, high quality reasoning (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Fast and efficient instruction model",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Higher quality instruction model",
+        "mistral_nemo_12b_instruct_q4_k_m": "Mistral's 12B model, strong multilingual performance",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "Tiny model for edge devices",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "Small but capable multilingual model",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "Powerful model with great performance",
+        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI's open-weight model for consumer hardware",
+        "gemma_gemma_3_4b_it_q4_k_m": "Google's open-weight model, great balance of speed and quality",
+        "gemma_gemma_4_31b_it_q4_k_m": "Google's largest Gemma 4, best quality",
+        "gemma_gemma_4_31b_it_qat_q4_0": "Google's official QAT build, smaller with quality preserved",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "Google's MoE Gemma 4, fast with 4B active params",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "Google's official QAT MoE build, smaller with quality preserved",
+        "gemma_gemma_4_e4b_it_q4_k_m": "Google's latest multimodal, strong reasoning",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "Google's official QAT build, strong reasoning, smaller size",
+        "gemma_gemma_4_e2b_it_q4_k_m": "Google's compact Gemma 4, fast and efficient",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "Google's official compact QAT build, quality preserved",
+        "gemma_gemma_3_12b_it_q4_k_m": "Google's mid-range model, strong reasoning",
+        "gemma_gemma_3_1b_it_q4_k_m": "Ultra-fast Google model, best for short dictation cleanup",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AI's efficient on-device model, excellent instruction following",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AI's MoE, high quality with only 1.5B active params",
+        "liquidai_lfm2_2_6b_q4_k_m": "Balanced LFM2 for higher quality cleanup",
+        "liquidai_lfm2_5_350m_q8_0": "Ultra-light model for fast dictation cleanup",
+        "liquidai_lfm2_5_230m_q8_0": "Tiny model, instant cleanup on modest hardware"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "This is too long for {{model}} to read on this computer. It needs about {{needed}} tokens of context, but only {{max}} fit in memory. Try a cloud model, or run the action on a shorter selection.",
+      "contextTooLargeGeneric": "This is too long for {{model}} to read on this computer. Try a cloud model, or run the action on a shorter selection.",
+      "localServerUnavailable": "{{model}} couldn't be started on this computer. Try again, or switch to a cloud model.",
+      "localModelBusy": "The local model is still working on another request. Wait for it to finish, then try again."
+    }
+  },
+  "apiKeyInput": {
+    "placeholder": "Paste your API key"
+  },
+  "gpu": {
+    "reasoningBanner": "Speed up AI processing with GPU acceleration",
+    "enableButton": "Enable GPU",
+    "active": "GPU acceleration active",
+    "ready": "GPU acceleration ready",
+    "activating": "Activating GPU...",
+    "activationFailed": "GPU acceleration unavailable",
+    "reasoningActivationFailedDescription": "ReTone switched to CPU processing.",
+    "retryActivation": "Retry GPU acceleration",
+    "remove": "Remove",
+    "dismiss": "Not now",
+    "cancel": "Cancel"
+  },
+  "providerErrors": {
+    "authFailed": "{{provider}} rejected your API key.",
+    "accessDenied": "{{provider}} denied access. Your key may not include this model.",
+    "quotaExhausted": "Your {{provider}} account is out of credit.",
+    "rateLimited": "{{provider}} rate-limited the request. Wait a moment and try again.",
+    "modelNotFound": "{{provider}} doesn't recognize the model “{{model}}”.",
+    "modelNotFoundNoModel": "{{provider}} doesn't recognize the selected model.",
+    "payloadTooLarge": "This recording is too large for {{provider}}.",
+    "requestTooLarge": "This request is too large for {{provider}}.",
+    "badRequest": "{{provider}} couldn't process this request.",
+    "unavailable": "{{provider}} is having problems right now. Try again shortly.",
+    "timeout": "{{provider}} took too long to respond.",
+    "unreachable": "Couldn't reach {{provider}}. Check your connection.",
+    "noResponse": "Couldn't get a response from {{provider}}. Check your API key and connection.",
+    "unknown": "{{provider}} returned an unexpected error.",
+    "keyMissing": "No API key is set for {{provider}}. Add it in Settings → Language Models.",
+    "selfHosted": {
+      "authFailed": "Your server rejected the API key.",
+      "accessDenied": "Your server denied access. The key may not include this model.",
+      "quotaExhausted": "Your server says the account is out of credit.",
+      "rateLimited": "Your server rate-limited the request. Wait a moment and try again.",
+      "modelNotFound": "Your server doesn't recognize the model “{{model}}”.",
+      "modelNotFoundNoModel": "Your server doesn't recognize the selected model.",
+      "payloadTooLarge": "This recording is too large for your server.",
+      "requestTooLarge": "This request is too large for your server.",
+      "badRequest": "Your server couldn't process this request.",
+      "unavailable": "Your server is having problems right now. Try again shortly.",
+      "timeout": "Your server took too long to respond.",
+      "unreachable": "Couldn't reach your server. Check that it's running.",
+      "noResponse": "Couldn't get a response from your server. Check its API key and that it's running.",
+      "unknown": "Your server returned an unexpected error."
+    },
+    "details": {
+      "requestId": "Request ID"
+    }
+  },
+  "toneRewrite": {
+    "title": "Rewrite selection",
+    "titleWholeField": "Rewrite whole field",
+    "close": "Close",
+    "rewriting": "Rewriting…",
+    "loadingModel": "Loading model…",
+    "preview": {
+      "label": "Rewrite preview"
+    },
+    "copiedToClipboard": "The rewritten text was copied to your clipboard.",
+    "tones": {
+      "professional": "Professional",
+      "casual": "Casual",
+      "friendly": "Friendly",
+      "concise": "Concise",
+      "fixGrammar": "Fix grammar",
+      "banglishToEnglish": "Banglish → English",
+      "banglishToBangla": "Banglish → Bangla"
+    },
+    "errors": {
+      "nothingSelected": "Nothing to rewrite. Select some text in a text field first.",
+      "noText": "No text found.",
+      "tooLarge": "The selection is too long to rewrite (maximum {{max}} characters).",
+      "targetChanged": "The focused window changed. Try again.",
+      "modifiersHeld": "Release the hotkey's keys and try again.",
+      "accessibility": "ReTone couldn't read the selection. Check its Accessibility permission.",
+      "unavailable": "The selected text couldn't be read in this app.",
+      "notConfigured": "Choose a model for Text Rewrite in Settings → ReTone.",
+      "emptyOutput": "The model returned no text. Try again or pick another model.",
+      "rewriteFailed": "The rewrite failed. Check the Text Rewrite model in Settings → ReTone.",
+      "pasteFailed": "The rewrite couldn't be pasted.",
+      "selectionChanged": "The selection changed before the rewrite was ready, so nothing was replaced."
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "Text Rewrite model",
+      "description": "The model that rewrites selected text in the tone you pick. A local model keeps your text on this device.",
+      "speedHint": "Smaller local models such as Qwen3.5 4B rewrite noticeably faster."
+    },
+    "hotkey": {
+      "title": "Hotkey",
+      "description": "Select text in any app, press the hotkey and pick a tone — the selection is rewritten in place."
+    },
+    "picker": {
+      "title": "Picker",
+      "description": "How the picker behaves while it rewrites.",
+      "livePreview": "Live preview",
+      "livePreviewDescription": "Show the rewritten text as it's written, then replace the selection when it's done.",
+      "wholeField": "Rewrite whole field when nothing is selected",
+      "wholeFieldDescription": "Without a selection, select the focused field's text and rewrite all of it. When off, the picker asks you to select text first."
+    },
+    "options": {
+      "title": "Options",
+      "description": "Choose which options the picker offers and drag them into order. Number keys pick them in this order.",
+      "atLeastOne": "At least one option stays on.",
+      "maxEnabled": "The picker offers up to {{max}} options. Turn one off to turn on another.",
+      "add": "Add option",
+      "newOption": "New option",
+      "edit": "Edit {{name}}",
+      "dragHandle": "Reorder {{name}} (drag, or Alt+Up/Down)",
+      "customBadge": "Custom",
+      "editedBadge": "Edited",
+      "name": "Name",
+      "namePlaceholder": "e.g. Translate to French",
+      "prompt": "Prompt",
+      "promptPlaceholder": "Tell the model how to rewrite the selected text, e.g. “Translate the text into French.”",
+      "promptHint": "ReTone adds its own rules after your prompt, so the reply is only the rewritten text.",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "reset": "Reset to default",
+      "deleteConfirmTitle": "Delete “{{name}}”?",
+      "deleteConfirmDescription": "It will be removed from the picker. This can't be undone."
+    },
+    "title": "ReTone",
+    "description": "Select text in any app, press your hotkey and pick a tone. The rewrite replaces your selection.",
+    "accessibility": {
+      "title": "Accessibility access needed",
+      "description": "ReTone needs Accessibility access to read the text you select and paste the rewrite back.",
+      "action": "Open Accessibility Settings"
+    }
+  }
+}

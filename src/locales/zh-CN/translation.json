@@ -1,0 +1,538 @@
+{
+  "settings": {
+    "language": {
+      "uiLabel": "界面语言",
+      "uiDescription": "选择 ReTone 界面使用的语言"
+    }
+  },
+  "tray": {
+    "quit": "退出 ReTone",
+    "tooltip": "ReTone - 改写所选文本",
+    "openSettings": "打开设置",
+    "hideSettings": "隐藏设置"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "退出 ReTone",
+    "file": "文件",
+    "closeWindow": "关闭窗口"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "无法打开链接",
+      "message": "无法在浏览器中打开该链接：\n{{url}}\n\n错误：{{error}}"
+    },
+    "loadFailure": {
+      "title": "ReTone 加载失败",
+      "message": "ReTone 无法加载其界面。",
+      "detail": {
+        "window": "窗口：{{windowName}}",
+        "error": "错误 {{errorCode}}：{{errorDescription}}",
+        "url": "URL：{{url}}",
+        "hint": "请尝试重新安装应用或使用 --log-level=debug 参数启动。"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ReTone 启动错误",
+      "message": "应用启动失败：\n\n{{error}}\n\n请反馈此问题。"
+    },
+    "globeHotkey": {
+      "title": "Globe 快捷键不可用",
+      "message": "ReTone 无法激活 Globe 键快捷键。",
+      "details": {
+        "unknown": "启动 Globe 监听器时发生未知错误。",
+        "devHint": "运行 `npm run compile:globe` 并重新构建应用以重新生成监听器。",
+        "reinstallHint": "请尝试重新安装 ReTone，如果问题仍然存在请联系技术支持。"
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "设置快捷键需要回调函数",
+      "globeOnlyMac": "Globe 键仅在 macOS 上可用。",
+      "fnCombinationUnsupported": "Globe/Fn 键只能单独使用。",
+      "mouseButtonOnlyMac": "鼠标按键快捷键目前仅在 macOS 上受支持。",
+      "alreadyRegistered": "\"{{hotkey}}\" 已被其他应用注册。",
+      "osReserved": "\"{{hotkey}}\" 可能被系统保留。",
+      "keyNotInKeymap": "GNOME 无法在当前键盘布局下使用 \"{{hotkey}}\"。请选择其他按键。",
+      "keyReservedByGnome": "GNOME 已将 \"{{hotkey}}\" 用于自身的快捷键。请选择其他按键。",
+      "rightModifierNeedsListener": "\"{{hotkey}}\" 无法在此桌面上使用，其快捷键需要包含一个普通按键。请添加一个按键，例如 Control+Alt+Space。",
+      "registrationFailed": "无法注册 \"{{hotkey}}\"，该快捷键可能已被其他应用占用。",
+      "windowsKeyListenerMissing": "\"{{hotkey}}\" 需要 Windows 按键监听器，但此安装中缺少该组件。请选择包含普通按键的快捷键。",
+      "trySuggestions": "建议尝试：{{suggestions}}",
+      "slotConflict": "此快捷键已用于{{slot}}。"
+    }
+  },
+  "systemSettings": {
+    "microphone": "请打开系统设置以配置麦克风权限。",
+    "sound": "请打开系统声音设置（例如 pavucontrol）。",
+    "accessibility": "此平台不支持辅助功能设置。",
+    "systemAudio": "系统音频设置在此平台上不可用。",
+    "screenRecording": "此平台不提供屏幕录制设置。",
+    "loginItems": "此平台不支持登录项设置。"
+  },
+  "windows": {
+    "pttUnavailable": "ReTone 按键监听器不可用。"
+  },
+  "common": {
+    "retry": "重试",
+    "reset": "重置",
+    "refresh": "刷新",
+    "download": "下载",
+    "cancel": "取消",
+    "recommended": "推荐",
+    "active": "已激活",
+    "signInRequired": "需要登录",
+    "apiKey": "API Key",
+    "loading": "加载中...",
+    "availableModels": "可用模型"
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "测试中…",
+        "connected": "已连接",
+        "connectionFailed": "无法验证此连接。",
+        "unverified": "无法验证：{{reason}}",
+        "errors": {
+          "endpointRequired": "测试前请先输入端点 URL。",
+          "invalidUrl": "端点必须是有效的 HTTP 或 HTTPS URL。",
+          "httpsRequired": "公共端点必须使用 HTTPS。HTTP 仅允许用于私有地址。",
+          "unsupportedProvider": "此服务商不支持连接测试。",
+          "apiKeyRequired": "测试前请先添加 API Key。",
+          "credentialsRejected": "服务商拒绝了这些凭据。",
+          "endpointNotFound": "该端点未提供兼容 OpenAI 的模型列表。",
+          "transcriptionEndpointNotFound": "此地址不接受转录请求。",
+          "modelNotFound": "所选模型无法从此服务商获得。",
+          "providerStatus": "服务商返回了状态码 {{status}}。",
+          "timeout": "连接测试超时。",
+          "network": "无法连接到服务商。"
+        }
+      }
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "云端",
+      "local": "本地",
+      "localDescription": "在你的设备上运行，完全隐私，离线可用。",
+      "cloudDescription": "通过 API 使用高级模型，快速且强大，需要联网。"
+    },
+    "custom": {
+      "endpointWithProtocol": "请输入包含协议的完整 URL（例如 https://server/v1）。",
+      "httpsRequired": "需要 HTTPS（仅本地网络允许 HTTP）。",
+      "endpointInvalid": "自定义端点无效或未配置。请在设置 → AI 模型中检查端点 URL。",
+      "endpointUnauthorized": "端点拒绝了请求（401/403）。请添加 API Key 或调整服务器认证设置。",
+      "endpointTitle": "端点 URL",
+      "endpointExamples": "示例：",
+      "apiKeyOptional": "API Key（可选）",
+      "apiKeyHelp": "可选。作为 Bearer token 用于身份验证，与 OpenAI API Key 无关。",
+      "applyAndRefresh": "应用并刷新",
+      "queryPrefix": "我们将查询",
+      "querySuffix": "获取可用模型。",
+      "modelsReloadHint": "当你离开 URL 输入框或点击“应用并刷新”时，模型列表将重新加载。",
+      "enterEndpoint": "请在上方输入端点 URL 以加载模型。",
+      "fetchingModels": "正在从端点获取模型列表...",
+      "noModels": "未返回任何模型，请检查端点 URL。",
+      "providerName": "自定义",
+      "ownerLabel": "所有者：{{owner}}",
+      "unableToLoadModels": "无法从端点加载模型。",
+      "searchPlaceholder": "搜索模型…",
+      "selectedGroup": "已选择",
+      "otherGroup": "其他",
+      "noSearchResults": "没有与“{{query}}”匹配的模型",
+      "selectModelHint": "尚未选择模型 — 请从下方列表中选择一个。",
+      "keyRequiredHint": "推理需要 API 密钥 — 请添加密钥以使用此提供商。"
+    },
+    "effort": {
+      "title": "推理强度",
+      "description": "模型在回答前思考的程度。",
+      "descriptionWithDefault": "模型在回答前思考的程度。“自动”使用服务商的默认设置（{{value}}）。",
+      "auto": "自动",
+      "options": {
+        "none": "无",
+        "minimal": "极低",
+        "low": "低",
+        "medium": "中",
+        "high": "高",
+        "xhigh": "极高",
+        "max": "最大"
+      }
+    },
+    "getApiKey": "获取你的 API Key ->",
+    "selectModel": "选择模型",
+    "availableModels": "可用模型",
+    "disableThinking": {
+      "label": "禁用思考输出",
+      "help": "跳过推理令牌以获得更清晰的输出。推荐用于清理。某些服务器会忽略此提示。"
+    },
+    "keepModelLoaded": {
+      "label": "保持模型加载",
+      "help": "空闲 5 分钟后仍保留在内存中，不会卸载，下一次请求无需冷启动。适用于所有使用本地模型的功能。"
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "技术详情",
+        "awsRequestId": "AWS 请求 ID",
+        "copy": "复制技术详情",
+        "copyCommand": "复制恢复命令"
+      }
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "删除模型",
+      "description": "确定要删除此模型吗？如果需要再次使用，你需要重新下载。"
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "你的转录服务商限制了请求频率。请稍候再试。",
+        "providerKeyMissing": "尚未为您的转录服务商设置 API 密钥。请在“设置 → 语音转文字”中添加。",
+        "cleanupTruncated": "AI 模型的输出长度达到上限，未能完成听写清理。",
+        "cleanupEmptyReply": "AI 模型返回了空响应，没有生成清理后的文本。"
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "快捷键未注册"
+      },
+      "errors": {
+        "failedToRegister": "注册快捷键失败，请重试。"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "下载超时，请检查网络连接后重试。",
+        "notFound": "无法连接到下载服务器，请检查网络连接。",
+        "corrupted": "下载不完整或已损坏，请重试。",
+        "rateLimited": "下载服务器正在限流，请等待几分钟后重试。",
+        "server": "服务器错误（{{error}}），请稍后重试。",
+        "generic": "下载失败：{{error}}",
+        "extractionFailed": "模型已下载但安装失败。点击下载以重新安装，无需重新下载。",
+        "tlsError": "证书错误 — 您的网络可能使用了阻止下载的SSL检查。请尝试从其他网络下载。",
+        "unknown": "未知错误"
+      },
+      "downloadFailed": {
+        "title": "下载失败"
+      },
+      "installationFailed": {
+        "title": "安装失败"
+      },
+      "downloadInProgress": {
+        "title": "下载进行中",
+        "description": "请等待当前下载完成或先取消它。"
+      },
+      "modelDeleted": {
+        "title": "模型已删除",
+        "description": "模型删除成功！"
+      },
+      "deleteFailed": {
+        "title": "删除失败",
+        "description": "删除模型失败：{{error}}"
+      },
+      "downloadCancelled": {
+        "title": "下载已取消",
+        "description": "下载已被取消。"
+      }
+    }
+  },
+  "errorBoundary": {
+    "description": "发生了意外错误，请重新加载后重试。",
+    "reload": "重新加载",
+    "title": "出了点问题"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "按下组合键以设置快捷键",
+    "clickToChange": "点击更改",
+    "clickToChangeLower": "点击更改",
+    "clickToSet": "点击设置快捷键",
+    "fnCaptureHint": "按下一个键进行组合，或松开以使用 Globe",
+    "fnHeldHint": "+ 按键，或松开以使用 Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "快捷键",
+    "keyHint": "+ 按键",
+    "listening": "正在监听...",
+    "pressAnyKey": "按任意键或 Ctrl+Shift+K",
+    "pressAnyKeyMac": "按任意键或 ⌘⇧K",
+    "recording": "录制中",
+    "tryShortcut": "试试 Ctrl+Shift+K",
+    "tryShortcutMac": "试试 ⌘⇧K",
+    "remove": "移除快捷键",
+    "addAnother": "添加其他快捷键",
+    "duplicate": "已添加",
+    "singleModifierNeedsRightSide": "{{key}} 单独不能作为快捷键。请按 {{alternative}}，或再加一个按键。"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "未找到匹配的语言",
+    "searchPlaceholder": "搜索语言"
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "自带密钥",
+        "local": "本地",
+        "selfHosted": "自托管",
+        "providersDesc": "使用你自己的 API Key 连接你首选的 LLM 服务商。",
+        "localDesc": "设备端模型，完全私密。"
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "自动",
+        "dark": "深色",
+        "description": "控制 ReTone 的外观",
+        "light": "浅色",
+        "theme": "主题",
+        "themeDescription": "选择浅色、深色或跟随系统",
+        "title": "外观"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "运行此命令并重新登录：sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "您的用户需要访问键盘输入设备的权限。"
+      },
+      "startup": {
+        "launchAtLogin": "登录时启动",
+        "launchAtLoginDescription": "登录时在后台启动 ReTone",
+        "title": "启动",
+        "description": "控制 ReTone 启动时的行为",
+        "startMinimized": "启动时最小化",
+        "startMinimizedDescription": "启动时不显示控制面板窗口",
+        "needsApproval": {
+          "title": "需要在系统设置中批准",
+          "description": "macOS 已将 ReTone 注册为登录项，但仍在等待你在“登录项”中允许它。",
+          "action": "打开登录项"
+        }
+      }
+    }
+  },
+  "models": {
+    "learnMore": "了解更多",
+    "noneAvailable": "没有可用的模型",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "强大的推理模型",
+        "openai_gpt_5_mini": "快速且经济",
+        "openai_gpt_5_nano": "超快速、低延迟",
+        "openai_gpt_4_1": "稳定基准，1M 上下文",
+        "openai_gpt_4_1_mini": "精简版 GPT-4.1",
+        "openai_gpt_4_1_nano": "最低延迟 GPT-4.1",
+        "anthropic_claude_fable_5_1": "Anthropic 最强大的模型，Mythos 级",
+        "anthropic_claude_fable_5": "上一代 Mythos 级旗舰模型",
+        "anthropic_claude_opus_5_5": "最新 Opus 模型，适合复杂推理，1M 上下文",
+        "anthropic_claude_sonnet_5_5": "最新 Sonnet：快速强大，适合日常工作，1M 上下文",
+        "anthropic_claude_haiku_5_5": "速度最快、成本最低的 Claude 模型，1M 上下文",
+        "anthropic_claude_sonnet_5": "快速且强大的助手模型，成本更低",
+        "anthropic_claude_sonnet_4_6": "均衡性能",
+        "anthropic_claude_sonnet_4_5": "上一代 Sonnet",
+        "anthropic_claude_haiku_4_5": "快速且接近前沿水平",
+        "gemini_gemini_3_5_flash": "最新、快速且高能力的 Gemini 模型",
+        "gemini_gemini_3_5_flash_lite": "最快、最经济的 3.5 模型",
+        "gemini_gemini_3_1_pro_preview": "新一代旗舰模型，擅长复杂推理",
+        "gemini_gemini_3_1_flash_lite": "前沿级性能，成本更低",
+        "gemini_gemini_3_flash_preview": "超快速、高能力的新一代模型",
+        "gemini_gemini_2_5_flash_lite": "最低延迟和成本",
+        "gemini_gemma_4_31b_it": "Google 最大的 Gemma 4，31B 稠密，256K 上下文",
+        "gemini_gemma_4_26b_a4b_it": "Google Gemma 4 MoE，4B 活跃参数，256K 上下文",
+        "groq_openai_gpt_oss_120b": "OpenAI 开源旗舰，500 T/秒",
+        "groq_qwen_qwen3_8_27b": "快速 Qwen 模型，450 T/秒，131K 上下文",
+        "groq_openai_gpt_oss_20b": "快速开源模型，1000 T/秒",
+        "openai_gpt_6_astra": "OpenAI 最强大的模型，适用于编码与研究",
+        "openai_gpt_5_6_sol": "旗舰 GPT-5.6，适用于复杂编码与研究",
+        "openai_gpt_5_6_terra": "均衡的 GPT-5.6，适合日常工作",
+        "openai_gpt_5_6_luna": "速度最快、成本最低的 GPT-5.6",
+        "openai_gpt_5_5": "复杂推理前沿模型",
+        "anthropic_claude_opus_5": "上一代 Opus 旗舰模型，1M 上下文",
+        "anthropic_claude_opus_4_8": "强大的 Opus 模型，注重诚实与可靠",
+        "anthropic_claude_opus_4_7": "强大的 Opus 模型",
+        "anthropic_claude_opus_4_6": "上一代 Opus，1M 上下文",
+        "anthropic_claude_opus_4_5": "更早的 Opus 模型"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "强大的混合模型",
+        "qwen_qwen3_5_4b_q4_k_m": "均衡的 Qwen3.5，通用用途",
+        "qwen_qwen3_5_2b_q4_k_m": "紧凑的 Qwen3.5，快速任务",
+        "qwen_qwen3_8b_q4_k_m": "最新 Qwen3，支持思维模式",
+        "qwen_qwen3_8b_q5_k_m": "更高质量 Qwen3，支持思维模式",
+        "qwen_qwen3_4b_q4_k_m": "紧凑型 Qwen3，具备推理能力",
+        "qwen_qwen3_1_7b_q8_0": "小而强的 Qwen3 模型",
+        "qwen_qwen3_32b_q4_k_m": "最强大的本地 Qwen3，深度推理",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "小型模型，适合基础任务",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "均衡模型，通用场景",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "大型模型，高质量（Q4_K_M）",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "大型模型，高质量推理（Q5_K_M）",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "快速高效的指令模型",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "更高质量的指令模型",
+        "mistral_nemo_12b_instruct_q4_k_m": "Mistral 12B 模型，强大的多语言性能",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "超小模型，适用于边缘设备",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "小而强的多语言模型",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "强大模型，性能出色",
+        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI 开源模型，适用于消费级硬件",
+        "gemma_gemma_3_4b_it_q4_k_m": "谷歌开放权重模型，速度与质量的绝佳平衡",
+        "gemma_gemma_4_31b_it_q4_k_m": "Google 最大的 Gemma 4，最佳质量",
+        "gemma_gemma_4_31b_it_qat_q4_0": "Google 官方 QAT 构建，体积更小且质量不减",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "Google MoE Gemma 4，4B 活跃参数，速度快",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "Google 官方 QAT MoE 构建，体积更小且质量不减",
+        "gemma_gemma_4_e4b_it_q4_k_m": "Google 最新多模态模型，强大推理能力",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "Google 官方 QAT 构建，强大推理能力，体积更小",
+        "gemma_gemma_4_e2b_it_q4_k_m": "Google 紧凑型 Gemma 4，快速高效",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "Google 官方紧凑型 QAT 构建，质量不减",
+        "gemma_gemma_3_12b_it_q4_k_m": "Google 中型模型，强推理能力",
+        "gemma_gemma_3_1b_it_q4_k_m": "超快谷歌模型，最适合短听写清理",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AI 高效端侧模型，指令遵循出色",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AI 的 MoE 模型，仅 1.5B 激活参数即可实现高质量",
+        "liquidai_lfm2_2_6b_q4_k_m": "更高质量清理的均衡 LFM2 模型",
+        "liquidai_lfm2_5_350m_q8_0": "超轻量模型，快速清理听写文本",
+        "liquidai_lfm2_5_230m_q8_0": "微型模型，低配硬件也能即时清理"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "内容过长，{{model}} 无法在这台电脑上读取。大约需要 {{needed}} 个上下文 token，但内存中只能容纳 {{max}} 个。请改用云端模型，或对更短的选区执行该操作。",
+      "contextTooLargeGeneric": "内容过长，{{model}} 无法在这台电脑上读取。请改用云端模型，或对更短的选区执行该操作。",
+      "localServerUnavailable": "无法在这台电脑上启动 {{model}}。请重试，或改用云端模型。",
+      "localModelBusy": "本地模型仍在处理另一个请求。请等待其完成后再试。"
+    }
+  },
+  "apiKeyInput": {
+    "placeholder": "输入你的 API Key"
+  },
+  "gpu": {
+    "reasoningBanner": "使用 GPU 加速 AI 处理",
+    "enableButton": "启用 GPU",
+    "active": "GPU 加速已启用",
+    "ready": "GPU 加速已就绪",
+    "activating": "正在激活 GPU...",
+    "activationFailed": "GPU 加速不可用",
+    "reasoningActivationFailedDescription": "ReTone 已切换为 CPU 处理。",
+    "retryActivation": "重试 GPU 加速",
+    "remove": "移除",
+    "dismiss": "暂不启用",
+    "cancel": "取消"
+  },
+  "providerErrors": {
+    "authFailed": "{{provider}} 拒绝了你的 API 密钥。",
+    "accessDenied": "{{provider}} 拒绝了访问。你的密钥可能不包含此模型。",
+    "quotaExhausted": "你的 {{provider}} 账户额度已用尽。",
+    "rateLimited": "{{provider}} 限制了请求频率。请稍候再试。",
+    "modelNotFound": "{{provider}} 不识别模型“{{model}}”。",
+    "modelNotFoundNoModel": "{{provider}} 不识别所选的模型。",
+    "payloadTooLarge": "此录音对 {{provider}} 来说太大了。",
+    "requestTooLarge": "此请求对 {{provider}} 来说太大了。",
+    "badRequest": "{{provider}} 无法处理此请求。",
+    "unavailable": "{{provider}} 目前遇到了问题。请稍后重试。",
+    "timeout": "{{provider}} 响应超时。",
+    "unreachable": "无法连接到 {{provider}}。请检查你的网络连接。",
+    "noResponse": "未能收到 {{provider}} 的响应。请检查你的 API 密钥和网络连接。",
+    "unknown": "{{provider}} 返回了一个意外错误。",
+    "keyMissing": "尚未为 {{provider}} 设置 API 密钥。请在“设置 → 语言模型”中添加。",
+    "selfHosted": {
+      "authFailed": "你的服务器拒绝了 API 密钥。",
+      "accessDenied": "你的服务器拒绝了访问。该密钥可能不包含此模型。",
+      "quotaExhausted": "你的服务器报告该账户额度已用尽。",
+      "rateLimited": "你的服务器限制了请求频率。请稍候再试。",
+      "modelNotFound": "你的服务器不识别模型“{{model}}”。",
+      "modelNotFoundNoModel": "你的服务器不识别所选的模型。",
+      "payloadTooLarge": "此录音对你的服务器来说太大了。",
+      "requestTooLarge": "此请求对你的服务器来说太大了。",
+      "badRequest": "你的服务器无法处理此请求。",
+      "unavailable": "你的服务器目前遇到了问题。请稍后重试。",
+      "timeout": "你的服务器响应超时。",
+      "unreachable": "无法连接到你的服务器。请检查它是否正在运行。",
+      "noResponse": "未能收到你的服务器的响应。请检查它的 API 密钥以及它是否正在运行。",
+      "unknown": "你的服务器返回了一个意外错误。"
+    },
+    "details": {
+      "requestId": "请求 ID"
+    }
+  },
+  "toneRewrite": {
+    "title": "改写所选内容",
+    "titleWholeField": "改写整个输入框",
+    "close": "关闭",
+    "rewriting": "正在改写…",
+    "loadingModel": "正在加载模型…",
+    "preview": {
+      "label": "改写预览"
+    },
+    "copiedToClipboard": "改写后的文本已复制到剪贴板。",
+    "tones": {
+      "professional": "专业",
+      "casual": "随意",
+      "friendly": "友好",
+      "concise": "简洁",
+      "fixGrammar": "修正语法",
+      "banglishToEnglish": "Banglish → 英语",
+      "banglishToBangla": "Banglish → 孟加拉语"
+    },
+    "errors": {
+      "nothingSelected": "没有可改写的内容。请先在文本框中选中文本。",
+      "noText": "未找到文本。",
+      "tooLarge": "所选内容过长，无法改写（最多 {{max}} 个字符）。",
+      "targetChanged": "当前窗口已改变，请重试。",
+      "modifiersHeld": "请松开快捷键后重试。",
+      "accessibility": "ReTone 无法读取所选内容，请检查辅助功能权限。",
+      "unavailable": "无法在此应用中读取所选文本。",
+      "notConfigured": "请在 设置 → ReTone 中为文本改写选择模型。",
+      "emptyOutput": "模型未返回文本，请重试或换一个模型。",
+      "rewriteFailed": "改写失败。请在 设置 → ReTone 中检查文本改写模型。",
+      "pasteFailed": "无法粘贴改写结果。",
+      "selectionChanged": "改写完成前所选内容已改变，因此未进行替换。"
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "文本改写模型",
+      "description": "按你选择的语气改写所选文本的模型。本地模型会让你的文本留在此设备上。",
+      "speedHint": "较小的本地模型（如 Qwen3.5 4B）改写速度明显更快。"
+    },
+    "hotkey": {
+      "title": "快捷键",
+      "description": "在任意应用中选中文本，按下快捷键并选择语气，所选内容会被就地改写。"
+    },
+    "picker": {
+      "title": "选择器",
+      "description": "改写时选择器的行为。",
+      "livePreview": "实时预览",
+      "livePreviewDescription": "在生成过程中显示改写后的文本，完成后替换所选内容。",
+      "wholeField": "未选中文本时改写整个输入框",
+      "wholeFieldDescription": "没有选中内容时，选中当前输入框的文本并全部改写。关闭时，选择器会提示你先选中文本。"
+    },
+    "options": {
+      "title": "选项",
+      "description": "选择选择器提供哪些选项，并拖动调整顺序。数字键按此顺序选择。",
+      "atLeastOne": "至少保留一个选项开启。",
+      "maxEnabled": "选择器最多提供 {{max}} 个选项。关闭一个才能开启另一个。",
+      "add": "添加选项",
+      "newOption": "新选项",
+      "edit": "编辑{{name}}",
+      "dragHandle": "调整{{name}}的顺序（拖动或 Alt+↑/↓）",
+      "customBadge": "自定义",
+      "editedBadge": "已编辑",
+      "name": "名称",
+      "namePlaceholder": "例如：翻译成法语",
+      "prompt": "提示词",
+      "promptPlaceholder": "告诉模型如何改写所选文本，例如“将文本翻译成法语。”",
+      "promptHint": "ReTone 会在你的提示词后附加自己的规则，确保回复只包含改写后的文本。",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "保存",
+      "cancel": "取消",
+      "delete": "删除",
+      "reset": "恢复默认",
+      "deleteConfirmTitle": "删除“{{name}}”？",
+      "deleteConfirmDescription": "它将从选择器中移除。此操作无法撤销。"
+    },
+    "title": "ReTone",
+    "description": "在任意应用中选中文本，按下快捷键并选择一种语气。改写后的文本会替换你的选择。",
+    "accessibility": {
+      "title": "需要辅助功能权限",
+      "description": "ReTone 需要辅助功能权限来读取你选中的文本并粘贴改写结果。",
+      "action": "打开辅助功能设置"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+src-tauri/target/
+src-tauri/gen/
+src-tauri/binaries/
+resources/bin/
+*.log
+.DS_Store
+resources/llama-bundle/

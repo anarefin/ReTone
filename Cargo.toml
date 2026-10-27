@@ -1,0 +1,27 @@
+[workspace]
+members = ["src-tauri", "crates/retone-core", "crates/retone-macos", "crates/retone-llama"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Arefin"]
+repository = "https://github.com/anarefin/retone"
+
+[workspace.dependencies]
+retone-core = { path = "crates/retone-core" }
+retone-macos = { path = "crates/retone-macos" }
+retone-llama = { path = "crates/retone-llama" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tracing = "0.1"
+url = "2"
+tempfile = "3"
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }

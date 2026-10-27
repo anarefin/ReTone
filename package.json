@@ -1,0 +1,86 @@
+{
+  "name": "retone",
+  "productName": "ReTone",
+  "version": "0.1.0",
+  "description": "ReTone: rewrite selected text in any app in a tone you pick, with a local model or your own API key",
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "predev": "node scripts/download-llama-server.js",
+    "dev": "cd src && vite",
+    "build:renderer": "cd src && vite build",
+    "download:llama-server": "node scripts/download-llama-server.js",
+    "stage:llama-server": "node scripts/stage-llama-server.js",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build --target aarch64-apple-darwin",
+    "build:mac": "tauri build --target aarch64-apple-darwin",
+    "postbuild:mac": "mkdir -p dist && cp \"target/aarch64-apple-darwin/release/bundle/dmg/ReTone_${npm_package_version}_aarch64.dmg\" dist/ReTone.dmg && echo \"[build:mac] dist/ReTone.dmg\"",
+    "format:js": "eslint . --fix && cd src && eslint . --fix && prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format": "npm run format:js && cargo fmt --all",
+    "format:check": "eslint . && cd src && eslint . && prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "lint": "eslint . && cd src && eslint .",
+    "test": "node --import tsx --test \"test/**/*.test.js\"",
+    "typecheck": "cd src && tsc --noEmit",
+    "quality-check": "npm run format:check && npm run typecheck",
+    "i18n:check": "node scripts/check-i18n.js",
+    "preview": "cd src && vite preview"
+  },
+  "keywords": [
+    "retone",
+    "rewrite",
+    "tone",
+    "llm",
+    "tauri",
+    "desktop-app"
+  ],
+  "author": {
+    "name": "Arefin"
+  },
+  "homepage": "https://github.com/anarefin/retone",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anarefin/retone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anarefin/retone/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tauri-apps/cli": "^2.9.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.7.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "17.5.0",
+    "prettier": "^3.8.3",
+    "tailwindcss": "^4.1.10",
+    "tsx": "^4.23.1",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.1",
+    "vite": "^8.1.6"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-direction": "1.1.2",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tanstack/react-virtual": "^3.13.2",
+    "@tauri-apps/api": "^2.9.0",
+    "@tauri-apps/plugin-http": "^2.8.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "i18next": "^26.3.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.10",
+    "tailwind-merge": "^3.3.1",
+    "zustand": "^5.0.11"
+  }
+}

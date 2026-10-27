@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  check-version:
+    name: Tag matches package.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Compare versions
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error::Tag $TAG does not match package.json version $version"
+            exit 1
+          fi
+
+  build:
+    needs: check-version
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  release:
+    name: Draft GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download DMG
+        uses: actions/download-artifact@v7
+        with:
+          name: retone-macos-arm64
+          path: dist
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          mv dist/ReTone.dmg "dist/ReTone-${TAG#v}-arm64.dmg"
+          gh release create "$TAG" "dist/ReTone-${TAG#v}-arm64.dmg" \
+            --repo anarefin/retone \
+            --draft \
+            --title "ReTone $TAG" \
+            --notes "ReTone $TAG for macOS (Apple silicon).
+
+          This build is signed ad-hoc and not notarized. After installing, right-click ReTone.app and choose Open the first time, then grant Accessibility in System Settings > Privacy & Security (re-grant it after every new build)."

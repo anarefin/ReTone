@@ -1,0 +1,538 @@
+{
+  "settings": {
+    "language": {
+      "uiLabel": "Sprache der Oberfläche",
+      "uiDescription": "Wählen Sie die Sprache für die ReTone-Oberfläche"
+    }
+  },
+  "tray": {
+    "quit": "ReTone beenden",
+    "tooltip": "ReTone – Markierten Text umschreiben",
+    "openSettings": "Einstellungen öffnen",
+    "hideSettings": "Einstellungen ausblenden"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "ReTone beenden",
+    "file": "Datei",
+    "closeWindow": "Fenster schließen"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "Link konnte nicht geöffnet werden",
+      "message": "Der Link konnte im Browser nicht geöffnet werden:\n{{url}}\n\nFehler: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ReTone konnte nicht geladen werden",
+      "message": "ReTone konnte die Benutzeroberfläche nicht laden.",
+      "detail": {
+        "window": "Fenster: {{windowName}}",
+        "error": "Fehler {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "Versuchen Sie, die App neu zu installieren oder mit --log-level=debug zu starten."
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ReTone-Startfehler",
+      "message": "Die Anwendung konnte nicht gestartet werden:\n\n{{error}}\n\nBitte melden Sie dieses Problem."
+    },
+    "globeHotkey": {
+      "title": "Globe-Hotkey nicht verfügbar",
+      "message": "ReTone konnte den Globe-Hotkey nicht aktivieren.",
+      "details": {
+        "unknown": "Unbekannter Fehler beim Starten des Globe-Listeners.",
+        "devHint": "Führen Sie `npm run compile:globe` aus und bauen Sie die App neu, um die Binary neu zu erzeugen.",
+        "reinstallHint": "Installieren Sie ReTone neu oder kontaktieren Sie den Support, wenn das Problem bestehen bleibt."
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "Eine Callback-Funktion ist für das Hotkey-Setup erforderlich",
+      "globeOnlyMac": "Die Globe-Taste ist nur auf macOS verfügbar.",
+      "fnCombinationUnsupported": "Die Globe/Fn-Taste kann nur allein verwendet werden.",
+      "mouseButtonOnlyMac": "Maustasten-Hotkeys werden derzeit nur auf macOS unterstützt.",
+      "alreadyRegistered": "\"{{hotkey}}\" ist bereits von einer anderen Anwendung registriert.",
+      "osReserved": "\"{{hotkey}}\" ist möglicherweise von Ihrer Desktop-Umgebung reserviert.",
+      "keyNotInKeymap": "GNOME kann „{{hotkey}}“ mit Ihrer Tastaturbelegung nicht verwenden. Wählen Sie eine andere Taste.",
+      "keyReservedByGnome": "GNOME verwendet „{{hotkey}}“ bereits für eines seiner eigenen Tastenkürzel. Wählen Sie eine andere Taste.",
+      "rightModifierNeedsListener": "„{{hotkey}}“ kann auf diesem Desktop nicht verwendet werden, da seine Tastenkürzel eine normale Taste benötigen. Fügen Sie eine Taste hinzu, z. B. Control+Alt+Space.",
+      "registrationFailed": "\"{{hotkey}}\" konnte nicht registriert werden. Möglicherweise wird es von einer anderen Anwendung verwendet.",
+      "windowsKeyListenerMissing": "\"{{hotkey}}\" benötigt den Windows-Tasten-Listener, der in dieser Installation fehlt. Wählen Sie ein Tastenkürzel mit einer normalen Taste.",
+      "trySuggestions": "Versuchen Sie: {{suggestions}}",
+      "slotConflict": "Diese Tastenkombination wird bereits für {{slot}} verwendet."
+    }
+  },
+  "systemSettings": {
+    "microphone": "Bitte öffnen Sie die Systemeinstellungen, um Mikrofonberechtigungen zu konfigurieren.",
+    "sound": "Bitte öffnen Sie die Sound-Einstellungen des Systems (z. B. pavucontrol).",
+    "accessibility": "Bedienungshilfen-Einstellungen sind auf dieser Plattform nicht verfügbar.",
+    "systemAudio": "Systemaudio-Einstellungen sind auf dieser Plattform nicht verfügbar.",
+    "screenRecording": "Einstellungen zur Bildschirmaufnahme sind auf dieser Plattform nicht verfügbar.",
+    "loginItems": "Einstellungen für Anmeldeobjekte sind auf dieser Plattform nicht verfügbar."
+  },
+  "windows": {
+    "pttUnavailable": "Der ReTone-Tasten-Listener ist nicht verfügbar."
+  },
+  "common": {
+    "retry": "Erneut versuchen",
+    "reset": "Zurücksetzen",
+    "refresh": "Aktualisieren",
+    "download": "Herunterladen",
+    "cancel": "Abbrechen",
+    "recommended": "Empfohlen",
+    "active": "Aktiv",
+    "signInRequired": "Anmeldung erforderlich",
+    "apiKey": "API-Schlüssel",
+    "loading": "Laden...",
+    "availableModels": "Verfügbare Modelle"
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "Test läuft…",
+        "connected": "Verbunden",
+        "connectionFailed": "Die Verbindung konnte nicht überprüft werden.",
+        "unverified": "Konnte nicht überprüft werden: {{reason}}",
+        "errors": {
+          "endpointRequired": "Gib vor dem Test eine Endpoint-URL ein.",
+          "invalidUrl": "Der Endpoint muss eine gültige HTTP- oder HTTPS-URL sein.",
+          "httpsRequired": "Öffentliche Endpunkte müssen HTTPS verwenden. HTTP ist nur für private Adressen erlaubt.",
+          "unsupportedProvider": "Der Verbindungstest ist für diesen Anbieter nicht verfügbar.",
+          "apiKeyRequired": "Füge vor dem Test einen API-Schlüssel hinzu.",
+          "credentialsRejected": "Der Anbieter hat diese Zugangsdaten abgelehnt.",
+          "endpointNotFound": "Der Endpoint stellt keine OpenAI-kompatible Modellliste bereit.",
+          "transcriptionEndpointNotFound": "Unter dieser Adresse werden keine Transkriptionen angenommen.",
+          "modelNotFound": "Das ausgewählte Modell ist bei diesem Anbieter nicht verfügbar.",
+          "providerStatus": "Der Anbieter hat den Status {{status}} zurückgegeben.",
+          "timeout": "Der Verbindungstest hat das Zeitlimit überschritten.",
+          "network": "Der Anbieter ist nicht erreichbar."
+        }
+      }
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "Cloud",
+      "local": "Lokal",
+      "localDescription": "Läuft auf Ihrem Gerät. Volle Privatsphäre, funktioniert offline.",
+      "cloudDescription": "Leistungsstarke Modelle über API. Schnell und leistungsfähig, erfordert Internet."
+    },
+    "custom": {
+      "endpointWithProtocol": "Geben Sie eine vollständige Basis-URL mit Protokoll ein (z. B. https://server/v1).",
+      "httpsRequired": "HTTPS erforderlich (HTTP nur im lokalen Netzwerk erlaubt).",
+      "endpointInvalid": "Der benutzerdefinierte Endpunkt ist ungültig oder nicht konfiguriert. Prüfe die Endpunkt-URL unter Einstellungen → KI-Modelle.",
+      "endpointUnauthorized": "Der Endpoint hat die Anfrage abgelehnt (401/403). Fügen Sie einen API-Schlüssel hinzu oder passen Sie die Server-Authentifizierung an.",
+      "endpointTitle": "Endpoint-URL",
+      "endpointExamples": "Beispiele:",
+      "apiKeyOptional": "API-Schlüssel (optional)",
+      "apiKeyHelp": "Optional. Wird als Bearer-Token zur Authentifizierung gesendet. Getrennt von Ihrem OpenAI-API-Schlüssel.",
+      "applyAndRefresh": "Anwenden & aktualisieren",
+      "queryPrefix": "Wir fragen",
+      "querySuffix": "nach verfügbaren Modellen ab.",
+      "modelsReloadHint": "Modelle werden neu geladen, wenn Sie das URL-Feld verlassen oder auf 'Anwenden & aktualisieren' klicken.",
+      "enterEndpoint": "Geben Sie oben eine Endpoint-URL ein, um Modelle zu laden.",
+      "fetchingModels": "Modellliste wird vom Endpoint geladen...",
+      "noModels": "Keine Modelle zurückgegeben. Prüfen Sie die Endpoint-URL.",
+      "providerName": "Benutzerdefiniert",
+      "ownerLabel": "Anbieter: {{owner}}",
+      "unableToLoadModels": "Modelle konnten nicht vom Endpoint geladen werden.",
+      "searchPlaceholder": "Modelle suchen…",
+      "selectedGroup": "Ausgewählt",
+      "otherGroup": "Sonstige",
+      "noSearchResults": "Keine Modelle für „{{query}}“",
+      "selectModelHint": "Noch kein Modell ausgewählt — wählen Sie eines aus der Liste unten.",
+      "keyRequiredHint": "Für die Inferenz ist ein API-Schlüssel erforderlich — fügen Sie einen hinzu, um diesen Anbieter zu nutzen."
+    },
+    "effort": {
+      "title": "Denkaufwand",
+      "description": "Wie viel das Modell nachdenkt, bevor es antwortet.",
+      "descriptionWithDefault": "Wie viel das Modell nachdenkt, bevor es antwortet. Auto verwendet die Standardeinstellung des Anbieters ({{value}}).",
+      "auto": "Auto",
+      "options": {
+        "none": "Keiner",
+        "minimal": "Minimal",
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch",
+        "xhigh": "Sehr hoch",
+        "max": "Maximal"
+      }
+    },
+    "getApiKey": "API-Schlüssel holen ->",
+    "selectModel": "Modell auswählen",
+    "availableModels": "Verfügbare Modelle",
+    "disableThinking": {
+      "label": "Denkausgabe deaktivieren",
+      "help": "Überspringt Reasoning-Token für eine sauberere Ausgabe. Empfohlen für Bereinigung. Einige Server ignorieren diesen Hinweis."
+    },
+    "keepModelLoaded": {
+      "label": "Modell geladen lassen",
+      "help": "Bleibt im Speicher, statt nach 5 Minuten Inaktivität entladen zu werden, sodass bei der nächsten Anfrage der Kaltstart entfällt. Gilt für alle Funktionen mit lokalem Modell."
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "Technische Details",
+        "awsRequestId": "AWS-Anfrage-ID",
+        "copy": "Technische Details kopieren",
+        "copyCommand": "Wiederherstellungsbefehl kopieren"
+      }
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "Modell löschen",
+      "description": "Möchten Sie dieses Modell wirklich löschen? Sie müssen es erneut herunterladen, wenn Sie es wieder verwenden möchten."
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "Dein Transkriptionsanbieter hat die Anfrage begrenzt. Warte kurz und versuch es erneut.",
+        "providerKeyMissing": "Für Ihren Transkriptionsanbieter ist kein API-Schlüssel hinterlegt. Fügen Sie ihn unter Einstellungen → Sprache zu Text hinzu.",
+        "cleanupTruncated": "Dem KI-Modell ging der Platz aus, bevor es dein Diktat fertig bereinigt hatte.",
+        "cleanupEmptyReply": "Das KI-Modell lieferte eine leere Antwort statt des bereinigten Diktats."
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "Hotkey nicht registriert"
+      },
+      "errors": {
+        "failedToRegister": "Hotkey konnte nicht registriert werden. Bitte versuchen Sie es erneut."
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "Download-Zeitüberschreitung. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+        "notFound": "Download-Server konnte nicht erreicht werden. Prüfen Sie Ihre Internetverbindung.",
+        "corrupted": "Download war unvollständig oder beschädigt. Bitte versuchen Sie es erneut.",
+        "rateLimited": "Download-Server begrenzt Anfragen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+        "server": "Serverfehler ({{error}}). Bitte versuchen Sie es später erneut.",
+        "generic": "Download fehlgeschlagen: {{error}}",
+        "extractionFailed": "Modell heruntergeladen, aber Installation fehlgeschlagen. Klicken Sie auf „Herunterladen“, um die Installation ohne erneuten Download zu wiederholen.",
+        "tlsError": "Zertifikatsfehler — Ihr Netzwerk verwendet möglicherweise SSL-Inspektion, die Downloads blockiert. Versuchen Sie es über ein anderes Netzwerk.",
+        "unknown": "Unbekannter Fehler"
+      },
+      "downloadFailed": {
+        "title": "Download fehlgeschlagen"
+      },
+      "installationFailed": {
+        "title": "Installation fehlgeschlagen"
+      },
+      "downloadInProgress": {
+        "title": "Download läuft",
+        "description": "Bitte warten Sie, bis der aktuelle Download abgeschlossen ist, oder brechen Sie ihn zuerst ab."
+      },
+      "modelDeleted": {
+        "title": "Modell gelöscht",
+        "description": "Modell erfolgreich gelöscht!"
+      },
+      "deleteFailed": {
+        "title": "Löschen fehlgeschlagen",
+        "description": "Modell konnte nicht gelöscht werden: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "Download abgebrochen",
+        "description": "Der Download wurde abgebrochen."
+      }
+    }
+  },
+  "errorBoundary": {
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte laden Sie die Seite neu.",
+    "reload": "Neu laden",
+    "title": "Etwas ist schiefgelaufen"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "Drücken Sie eine Tastenkombination, um den Hotkey festzulegen",
+    "clickToChange": "Klicken zum Ändern",
+    "clickToChangeLower": "klicken zum Ändern",
+    "clickToSet": "Klicken, um Hotkey festzulegen",
+    "fnCaptureHint": "Drücken Sie eine Taste zum Kombinieren oder loslassen für Globe",
+    "fnHeldHint": "+ Taste oder loslassen für Globe",
+    "globe": "Globe",
+    "hotkeyLabel": "Hotkey",
+    "keyHint": "+ Taste",
+    "listening": "Lauscht...",
+    "pressAnyKey": "Beliebige Taste drücken oder Ctrl+Shift+K",
+    "pressAnyKeyMac": "Beliebige Taste drücken oder ⌘⇧K",
+    "recording": "Aufnahme",
+    "tryShortcut": "Versuchen Sie Ctrl+Shift+K",
+    "tryShortcutMac": "Versuchen Sie ⌘⇧K",
+    "remove": "Hotkey entfernen",
+    "addAnother": "Weiteren Hotkey hinzufügen",
+    "duplicate": "Bereits hinzugefügt",
+    "singleModifierNeedsRightSide": "{{key}} allein kann kein Kürzel sein. Drücke stattdessen {{alternative}} oder füge eine zweite Taste hinzu."
+  },
+  "languageSelector": {
+    "noLanguagesFound": "Keine Sprachen gefunden",
+    "searchPlaceholder": "Sprachen suchen"
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "Eigenen Schlüssel nutzen",
+        "local": "Lokal",
+        "selfHosted": "Selbst gehostet",
+        "providersDesc": "Verwenden Sie Ihren eigenen API-Schlüssel, um Ihren bevorzugten LLM-Anbieter zu verbinden.",
+        "localDesc": "Modelle auf dem Gerät. Voll privat."
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "Auto",
+        "dark": "Dunkel",
+        "description": "Steuern Sie das Erscheinungsbild von ReTone",
+        "light": "Hell",
+        "theme": "Design",
+        "themeDescription": "Wählen Sie zwischen Hell, Dunkel oder Systemstandard",
+        "title": "Darstellung"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "Führen Sie diesen Befehl aus und melden Sie sich ab/an: sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "Ihr Benutzer benötigt Zugriff auf die Tastatureingabegeräte."
+      },
+      "startup": {
+        "launchAtLogin": "Beim Anmelden starten",
+        "launchAtLoginDescription": "ReTone bei der Anmeldung im Hintergrund starten",
+        "title": "Autostart",
+        "description": "Steuern Sie das Verhalten von ReTone beim Start",
+        "startMinimized": "Minimiert starten",
+        "startMinimizedDescription": "Starten, ohne das Einstellungsfenster anzuzeigen",
+        "needsApproval": {
+          "title": "Bestätigung in den Systemeinstellungen erforderlich",
+          "description": "macOS hat ReTone als Anmeldeobjekt registriert, wartet aber darauf, dass du es unter Anmeldeobjekte erlaubst.",
+          "action": "Anmeldeobjekte öffnen"
+        }
+      }
+    }
+  },
+  "models": {
+    "learnMore": "Mehr erfahren",
+    "noneAvailable": "Keine Modelle verfügbar",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "Starkes Reasoning-Modell",
+        "openai_gpt_5_mini": "Schnell und kosteneffizient",
+        "openai_gpt_5_nano": "Ultraschnell, niedrige Latenz",
+        "openai_gpt_4_1": "Starke Basis, 1M Kontext",
+        "openai_gpt_4_1_mini": "Kleineres GPT-4.1-Modell",
+        "openai_gpt_4_1_nano": "GPT-4.1 mit der niedrigsten Latenz",
+        "anthropic_claude_fable_5_1": "Leistungsstärkstes Modell von Anthropic, Mythos-Klasse",
+        "anthropic_claude_fable_5": "Vorheriges Flaggschiff der Mythos-Klasse",
+        "anthropic_claude_opus_5_5": "Neuestes Opus-Modell für komplexes Reasoning, 1M Kontext",
+        "anthropic_claude_sonnet_5_5": "Neuestes Sonnet: schnell und leistungsfähig für die tägliche Arbeit, 1M Kontext",
+        "anthropic_claude_haiku_5_5": "Schnellstes und günstigstes Claude-Modell, 1M Kontext",
+        "anthropic_claude_sonnet_5": "Schnelles, leistungsfähiges Assistentenmodell zu geringeren Kosten",
+        "anthropic_claude_sonnet_4_6": "Ausgewogene Leistung",
+        "anthropic_claude_sonnet_4_5": "Vorherige Sonnet-Generation",
+        "anthropic_claude_haiku_4_5": "Schnell mit nahezu Frontier-Intelligenz",
+        "gemini_gemini_3_5_flash": "Neuestes schnelles, leistungsstarkes Gemini-Modell",
+        "gemini_gemini_3_5_flash_lite": "Schnellstes, kostengünstigstes 3.5-Modell",
+        "gemini_gemini_3_1_pro_preview": "Flaggschiff der nächsten Generation für komplexes Reasoning",
+        "gemini_gemini_3_1_flash_lite": "Leistung auf Frontier-Niveau zu geringen Kosten",
+        "gemini_gemini_3_flash_preview": "Ultraschnelles Modell der nächsten Generation mit hoher Leistungsfähigkeit",
+        "gemini_gemini_2_5_flash_lite": "Niedrigste Latenz und Kosten",
+        "gemini_gemma_4_31b_it": "Googles größtes Gemma 4, 31B dicht, 256K Kontext",
+        "gemini_gemma_4_26b_a4b_it": "Googles Gemma 4 MoE, 4B aktive Parameter, 256K Kontext",
+        "groq_openai_gpt_oss_120b": "OpenAIs Open-Source-Flaggschiff, 500 T/s",
+        "groq_qwen_qwen3_8_27b": "Schnelles Qwen-Modell, 450 T/s, 131K Kontext",
+        "groq_openai_gpt_oss_20b": "Schnelles Open-Source-Modell, 1000 T/s",
+        "openai_gpt_6_astra": "Leistungsstärkstes Modell von OpenAI für Coding und Forschung",
+        "openai_gpt_5_6_sol": "Flaggschiff-GPT-5.6 für komplexes Coding und Forschung",
+        "openai_gpt_5_6_terra": "Ausgewogenes GPT-5.6 für die tägliche Arbeit",
+        "openai_gpt_5_6_luna": "Schnellstes und günstigstes GPT-5.6",
+        "openai_gpt_5_5": "Frontier-Modell für komplexes Reasoning",
+        "anthropic_claude_opus_5": "Vorheriges Opus-Flaggschiff, 1M Kontext",
+        "anthropic_claude_opus_4_8": "Leistungsstarkes Opus-Modell für Ehrlichkeit und Zuverlässigkeit",
+        "anthropic_claude_opus_4_7": "Leistungsstarkes Opus-Modell",
+        "anthropic_claude_opus_4_6": "Vorherige Opus-Generation, 1M Kontext",
+        "anthropic_claude_opus_4_5": "Früheres Opus-Modell"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "Leistungsstarkes Hybridmodell",
+        "qwen_qwen3_5_4b_q4_k_m": "Ausgewogenes Qwen3.5 für allgemeine Nutzung",
+        "qwen_qwen3_5_2b_q4_k_m": "Kompaktes Qwen3.5 für schnelle Aufgaben",
+        "qwen_qwen3_8b_q4_k_m": "Neuestes Qwen3 mit Thinking-Mode-Unterstützung",
+        "qwen_qwen3_8b_q5_k_m": "Qwen3 mit höherer Qualität und Thinking-Mode",
+        "qwen_qwen3_4b_q4_k_m": "Kompaktes Qwen3 mit Reasoning-Fähigkeiten",
+        "qwen_qwen3_1_7b_q8_0": "Kleines, aber fähiges Qwen3-Modell",
+        "qwen_qwen3_32b_q4_k_m": "Leistungsstärkstes lokales Qwen3 mit tiefem Reasoning",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "Kleines Modell, gut für grundlegende Aufgaben",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "Ausgewogenes Modell für den allgemeinen Einsatz",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "Großes Modell mit hoher Qualität (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "Großes Modell, hochwertiges Reasoning (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Schnelles und effizientes Instruction-Modell",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Instruction-Modell mit höherer Qualität",
+        "mistral_nemo_12b_instruct_q4_k_m": "Mistrals 12B-Modell, starke mehrsprachige Leistung",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "Winziges Modell für Edge-Geräte",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "Kleines, aber fähiges mehrsprachiges Modell",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "Leistungsstarkes Modell mit hoher Performance",
+        "openai_oss_gpt_oss_20b_mxfp4": "Open-Weight-Modell von OpenAI für Consumer-Hardware",
+        "gemma_gemma_3_4b_it_q4_k_m": "Googles Open-Weight-Modell, gutes Gleichgewicht aus Geschwindigkeit und Qualität",
+        "gemma_gemma_4_31b_it_q4_k_m": "Googles größtes Gemma 4, beste Qualität",
+        "gemma_gemma_4_31b_it_qat_q4_0": "Offizieller QAT-Build von Google, kleiner bei gleicher Qualität",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "Googles MoE Gemma 4, schnell mit 4B aktiven Parametern",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "Offizieller QAT-MoE-Build von Google, kleiner bei gleicher Qualität",
+        "gemma_gemma_4_e4b_it_q4_k_m": "Googles neuestes multimodales Modell, starkes Reasoning",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "Offizieller QAT-Build von Google, starkes Reasoning, kleinere Größe",
+        "gemma_gemma_4_e2b_it_q4_k_m": "Kompaktes Gemma 4 von Google, schnell und effizient",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "Kompakter offizieller QAT-Build von Google, Qualität erhalten",
+        "gemma_gemma_3_12b_it_q4_k_m": "Googles Mittelklasse-Modell, starkes Reasoning",
+        "gemma_gemma_3_1b_it_q4_k_m": "Ultraschnelles Google-Modell, ideal für kurze Diktat-Bereinigung",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Effizientes On-Device-Modell von Liquid AI, hervorragende Anweisungsbefolgung",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "MoE von Liquid AI, hohe Qualität mit nur 1,5B aktiven Parametern",
+        "liquidai_lfm2_2_6b_q4_k_m": "Ausgewogenes LFM2 für hochwertigere Bereinigung",
+        "liquidai_lfm2_5_350m_q8_0": "Ultraleichtes Modell für schnelle Diktatbereinigung",
+        "liquidai_lfm2_5_230m_q8_0": "Winziges Modell, sofortige Bereinigung auf bescheidener Hardware"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "Das ist zu lang, als dass {{model}} es auf diesem Computer lesen könnte. Es werden etwa {{needed}} Token Kontext benötigt, aber nur {{max}} passen in den Speicher. Versuchen Sie ein Cloud-Modell oder führen Sie die Aktion für eine kürzere Auswahl aus.",
+      "contextTooLargeGeneric": "Das ist zu lang, als dass {{model}} es auf diesem Computer lesen könnte. Versuchen Sie ein Cloud-Modell oder führen Sie die Aktion für eine kürzere Auswahl aus.",
+      "localServerUnavailable": "{{model}} konnte auf diesem Computer nicht gestartet werden. Versuchen Sie es erneut oder wechseln Sie zu einem Cloud-Modell.",
+      "localModelBusy": "Das lokale Modell bearbeitet noch eine andere Anfrage. Warten Sie, bis sie abgeschlossen ist, und versuchen Sie es dann erneut."
+    }
+  },
+  "apiKeyInput": {
+    "placeholder": "API-Schlüssel eingeben"
+  },
+  "gpu": {
+    "reasoningBanner": "KI-Verarbeitung mit GPU beschleunigen",
+    "enableButton": "GPU aktivieren",
+    "active": "GPU-Beschleunigung aktiv",
+    "ready": "GPU-Beschleunigung bereit",
+    "activating": "GPU wird aktiviert...",
+    "activationFailed": "GPU-Beschleunigung nicht verfügbar",
+    "reasoningActivationFailedDescription": "ReTone verwendet die CPU-Verarbeitung.",
+    "retryActivation": "GPU-Beschleunigung erneut versuchen",
+    "remove": "Entfernen",
+    "dismiss": "Nicht jetzt",
+    "cancel": "Abbrechen"
+  },
+  "providerErrors": {
+    "authFailed": "{{provider}} hat Ihren API-Schlüssel abgelehnt.",
+    "accessDenied": "{{provider}} hat den Zugriff verweigert. Ihr Schlüssel deckt dieses Modell möglicherweise nicht ab.",
+    "quotaExhausted": "Ihr {{provider}}-Konto hat kein Guthaben mehr.",
+    "rateLimited": "{{provider}} hat die Anfrage begrenzt. Warten Sie einen Moment und versuchen Sie es erneut.",
+    "modelNotFound": "{{provider}} kennt das Modell „{{model}}“ nicht.",
+    "modelNotFoundNoModel": "{{provider}} kennt das ausgewählte Modell nicht.",
+    "payloadTooLarge": "Diese Aufnahme ist für {{provider}} zu groß.",
+    "requestTooLarge": "Diese Anfrage ist für {{provider}} zu groß.",
+    "badRequest": "{{provider}} konnte diese Anfrage nicht verarbeiten.",
+    "unavailable": "{{provider}} hat derzeit Probleme. Versuchen Sie es in Kürze erneut.",
+    "timeout": "{{provider}} hat zu lange zum Antworten gebraucht.",
+    "unreachable": "{{provider}} konnte nicht erreicht werden. Überprüfen Sie Ihre Verbindung.",
+    "noResponse": "Keine Antwort von {{provider}} erhalten. Überprüfen Sie Ihren API-Schlüssel und Ihre Verbindung.",
+    "unknown": "{{provider}} hat einen unerwarteten Fehler zurückgegeben.",
+    "keyMissing": "Für {{provider}} ist kein API-Schlüssel hinterlegt. Fügen Sie ihn unter Einstellungen → Sprachmodelle hinzu.",
+    "selfHosted": {
+      "authFailed": "Ihr Server hat den API-Schlüssel abgelehnt.",
+      "accessDenied": "Ihr Server hat den Zugriff verweigert. Der Schlüssel deckt dieses Modell möglicherweise nicht ab.",
+      "quotaExhausted": "Ihr Server meldet, dass das Konto kein Guthaben mehr hat.",
+      "rateLimited": "Ihr Server hat die Anfrage begrenzt. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "modelNotFound": "Ihr Server kennt das Modell „{{model}}“ nicht.",
+      "modelNotFoundNoModel": "Ihr Server kennt das ausgewählte Modell nicht.",
+      "payloadTooLarge": "Diese Aufnahme ist für Ihren Server zu groß.",
+      "requestTooLarge": "Diese Anfrage ist für Ihren Server zu groß.",
+      "badRequest": "Ihr Server konnte diese Anfrage nicht verarbeiten.",
+      "unavailable": "Ihr Server hat derzeit Probleme. Versuchen Sie es in Kürze erneut.",
+      "timeout": "Ihr Server hat zu lange zum Antworten gebraucht.",
+      "unreachable": "Ihr Server konnte nicht erreicht werden. Überprüfen Sie, ob er läuft.",
+      "noResponse": "Keine Antwort von Ihrem Server erhalten. Überprüfen Sie seinen API-Schlüssel und ob er läuft.",
+      "unknown": "Ihr Server hat einen unerwarteten Fehler zurückgegeben."
+    },
+    "details": {
+      "requestId": "Anfrage-ID"
+    }
+  },
+  "toneRewrite": {
+    "title": "Auswahl umschreiben",
+    "titleWholeField": "Ganzes Feld umschreiben",
+    "close": "Schließen",
+    "rewriting": "Wird umgeschrieben…",
+    "loadingModel": "Modell wird geladen…",
+    "preview": {
+      "label": "Vorschau der Umformulierung"
+    },
+    "copiedToClipboard": "Der umgeschriebene Text wurde in die Zwischenablage kopiert.",
+    "tones": {
+      "professional": "Professionell",
+      "casual": "Locker",
+      "friendly": "Freundlich",
+      "concise": "Knapp",
+      "fixGrammar": "Grammatik korrigieren",
+      "banglishToEnglish": "Banglish → Englisch",
+      "banglishToBangla": "Banglish → Bengalisch"
+    },
+    "errors": {
+      "nothingSelected": "Nichts zum Umschreiben. Markiere zuerst Text in einem Textfeld.",
+      "noText": "Kein Text gefunden.",
+      "tooLarge": "Die Auswahl ist zu lang zum Umschreiben (höchstens {{max}} Zeichen).",
+      "targetChanged": "Das aktive Fenster hat sich geändert. Versuche es erneut.",
+      "modifiersHeld": "Lass die Tasten des Kürzels los und versuche es erneut.",
+      "accessibility": "ReTone konnte die Auswahl nicht lesen. Prüfe die Bedienungshilfen-Berechtigung.",
+      "unavailable": "Der markierte Text konnte in dieser App nicht gelesen werden.",
+      "notConfigured": "Wähle unter Einstellungen → ReTone ein Modell für die Text-Umschreibung.",
+      "emptyOutput": "Das Modell hat keinen Text geliefert. Versuche es erneut oder wähle ein anderes Modell.",
+      "rewriteFailed": "Das Umschreiben ist fehlgeschlagen. Prüfe das Modell für die Text-Umschreibung unter Einstellungen → ReTone.",
+      "pasteFailed": "Die Umschreibung konnte nicht eingefügt werden.",
+      "selectionChanged": "Die Auswahl hat sich geändert, bevor die Umschreibung fertig war. Es wurde nichts ersetzt."
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "Modell für Text-Umschreibung",
+      "description": "Das Modell, das markierten Text im gewählten Ton umschreibt. Ein lokales Modell behält deinen Text auf diesem Gerät.",
+      "speedHint": "Kleinere lokale Modelle wie Qwen3.5 4B formulieren deutlich schneller um."
+    },
+    "hotkey": {
+      "title": "Tastenkürzel",
+      "description": "Text in einer beliebigen App markieren, Tastenkürzel drücken und einen Ton wählen – die Auswahl wird direkt umgeschrieben."
+    },
+    "picker": {
+      "title": "Auswahlfenster",
+      "description": "Wie sich das Auswahlfenster beim Umformulieren verhält.",
+      "livePreview": "Live-Vorschau",
+      "livePreviewDescription": "Zeigt den umformulierten Text, während er entsteht, und ersetzt die Auswahl, sobald er fertig ist.",
+      "wholeField": "Ganzes Feld umschreiben, wenn nichts markiert ist",
+      "wholeFieldDescription": "Ohne Markierung wird der Text des aktiven Felds markiert und vollständig umgeschrieben. Ist dies aus, bittet die Auswahl dich, zuerst Text zu markieren."
+    },
+    "options": {
+      "title": "Optionen",
+      "description": "Wähle, welche Optionen die Auswahl anbietet, und ziehe sie in die gewünschte Reihenfolge. Zifferntasten wählen sie in dieser Reihenfolge.",
+      "atLeastOne": "Mindestens eine Option bleibt aktiv.",
+      "maxEnabled": "Die Auswahl bietet höchstens {{max}} Optionen. Deaktiviere eine, um eine andere zu aktivieren.",
+      "add": "Option hinzufügen",
+      "newOption": "Neue Option",
+      "edit": "{{name}} bearbeiten",
+      "dragHandle": "{{name}} verschieben (ziehen oder Alt+Pfeil hoch/runter)",
+      "customBadge": "Eigene",
+      "editedBadge": "Bearbeitet",
+      "name": "Name",
+      "namePlaceholder": "z. B. Ins Französische übersetzen",
+      "prompt": "Prompt",
+      "promptPlaceholder": "Beschreibe, wie der markierte Text umgeschrieben werden soll, z. B. „Übersetze den Text ins Französische.“",
+      "promptHint": "ReTone hängt nach deinem Prompt eigene Regeln an, damit die Antwort nur der umgeschriebene Text ist.",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "reset": "Auf Standard zurücksetzen",
+      "deleteConfirmTitle": "„{{name}}“ löschen?",
+      "deleteConfirmDescription": "Die Option wird aus der Auswahl entfernt. Das kann nicht rückgängig gemacht werden."
+    },
+    "title": "ReTone",
+    "description": "Markiere Text in einer beliebigen App, drücke deinen Hotkey und wähle einen Ton. Die Umformulierung ersetzt deine Auswahl.",
+    "accessibility": {
+      "title": "Bedienungshilfen-Zugriff erforderlich",
+      "description": "ReTone braucht Zugriff auf die Bedienungshilfen, um den markierten Text zu lesen und die Umformulierung einzufügen.",
+      "action": "Bedienungshilfen-Einstellungen öffnen"
+    }
+  }
+}

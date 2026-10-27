@@ -1,0 +1,460 @@
+import type { InferenceProvider } from "./types";
+import { API_ENDPOINTS, TOKEN_LIMITS, buildApiUrl } from "../../../config/constants";
+import { getCloudModel, getOpenAiApiConfig } from "../../../models/ModelRegistry";
+import { withRetry, createApiRetryStrategy } from "../../../utils/retry";
+import logger from "../../../utils/logger";
+import { resolveConfiguredOpenAIBase } from "../openaiBase";
+import {
+  applyChatCompletionsParams,
+  emptyOutputError,
+  emptyResponseError,
+  fetchWithParamFallback,
+  isTruncatedFinishReason,
+  REASONING_MODEL_MIN_OUTPUT_TOKENS,
+  responsesReasoningEffort,
+  truncatedOutputError,
+} from "../chatRequestBody";
+import { detectEndpointDialect } from "../thinkingSuppressionDialects";
+import { abortOnCancel, isRequestCancelled, requestCancelledError } from "../requestCancellation";
+import {
+  getLlmRequestTimeoutSeconds,
+  llmRequestTimeoutError,
+} from "../../../helpers/llmRequestTimeout.js";
+import { extractApiErrorMessage } from "../apiErrorMessage";
+import { openCodeSessionHeaders } from "../openCodeSession";
+import {
+  asProviderError,
+  providerHttpError,
+  redactProviderBody,
+} from "../../../helpers/providerHttpErrors.js";
+import { providerFetch } from "../../../platform/providerFetch";
+
+const OPENAI_ENDPOINT_PREF_STORAGE_KEY = "openAiEndpointPreference";
+const PROBE_TIMEOUT_MS = 2_000;
+
+const endpointPreferenceCache = new Map<string, "responses" | "chat">();
+const probedBases = new Set<string>();
+
+function readStoredPreference(base: string): "responses" | "chat" | undefined {
+  if (endpointPreferenceCache.has(base)) {
+    return endpointPreferenceCache.get(base);
+  }
+
+  if (typeof window === "undefined" || !window.localStorage) {
+    return undefined;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(OPENAI_ENDPOINT_PREF_STORAGE_KEY);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed !== "object" || parsed === null) return undefined;
+    const value = parsed[base];
+    if (value === "responses" || value === "chat") {
+      endpointPreferenceCache.set(base, value);
+      return value;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
+function rememberPreference(base: string, preference: "responses" | "chat"): void {
+  endpointPreferenceCache.set(base, preference);
+
+  if (typeof window === "undefined" || !window.localStorage) {
+    return;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(OPENAI_ENDPOINT_PREF_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    const data = typeof parsed === "object" && parsed !== null ? parsed : {};
+    data[base] = preference;
+    window.localStorage.setItem(OPENAI_ENDPOINT_PREF_STORAGE_KEY, JSON.stringify(data));
+  } catch {}
+}
+
+function getEndpointCandidates(base: string): Array<{ url: string; type: "responses" | "chat" }> {
+  const lower = base.toLowerCase();
+
+  if (lower.endsWith("/responses") || lower.endsWith("/chat/completions")) {
+    const type: "responses" | "chat" = lower.endsWith("/responses") ? "responses" : "chat";
+    return [{ url: base, type }];
+  }
+
+  const preference = readStoredPreference(base);
+  if (preference === "chat") {
+    return [{ url: buildApiUrl(base, "/chat/completions"), type: "chat" }];
+  }
+
+  return [
+    { url: buildApiUrl(base, "/responses"), type: "responses" },
+    { url: buildApiUrl(base, "/chat/completions"), type: "chat" },
+  ];
+}
+
+/** Probe `/v1/models` to detect llama.cpp and prefer `/chat/completions`. */
+async function detectServerType(base: string): Promise<void> {
+  if (probedBases.has(base) || readStoredPreference(base) !== undefined) {
+    return;
+  }
+
+  const lower = base.toLowerCase();
+  if (lower.endsWith("/responses") || lower.endsWith("/chat/completions")) {
+    return;
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), PROBE_TIMEOUT_MS);
+  try {
+    const res = await providerFetch(buildApiUrl(base, "/models"), {
+      method: "GET",
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      probedBases.add(base);
+      return;
+    }
+
+    const body = await res.json();
+    const first = body?.data?.[0];
+
+    if (first?.owned_by === "llamacpp") {
+      rememberPreference(base, "chat");
+      logger.logReasoning("LLAMACPP_DETECTED_VIA_MODELS", {
+        base,
+        modelId: first?.id,
+        ownedBy: first.owned_by,
+      });
+    }
+
+    probedBases.add(base);
+  } catch {
+    probedBases.add(base);
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+export const openaiProvider: InferenceProvider = {
+  id: "openai",
+  async call({ text, model, agentName, config, ctx }) {
+    const resolvedProvider = config.provider || "";
+    const isCustomProvider = resolvedProvider === "custom";
+    const isOpenRouter = resolvedProvider === "openrouter";
+
+    logger.logReasoning("OPENAI_START", {
+      model,
+      agentName,
+      isCustomProvider,
+    });
+
+    const overrideKey = isCustomProvider ? config.customApiKey?.trim() : "";
+    const apiKey =
+      overrideKey ||
+      (await ctx.getApiKey(isCustomProvider ? "custom" : isOpenRouter ? "openrouter" : "openai"));
+
+    logger.logReasoning("OPENAI_API_KEY", {
+      hasApiKey: !!apiKey,
+      keyLength: apiKey?.length || 0,
+    });
+
+    const messages = [
+      { role: "system", content: config.systemPrompt || "" },
+      { role: "user", content: text },
+    ];
+
+    const openAiBase = isOpenRouter
+      ? API_ENDPOINTS.OPENROUTER_BASE
+      : resolveConfiguredOpenAIBase(resolvedProvider, config.baseUrl);
+    const dialect = detectEndpointDialect(openAiBase);
+    // OpenRouter and known dialect hosts speak Chat Completions only — no /responses probe needed.
+    let endpointCandidates: Array<{ url: string; type: "responses" | "chat" }>;
+    if (isOpenRouter || dialect) {
+      endpointCandidates = [{ url: buildApiUrl(openAiBase, "/chat/completions"), type: "chat" }];
+    } else {
+      await detectServerType(openAiBase);
+      endpointCandidates = getEndpointCandidates(openAiBase);
+    }
+    const isCustomEndpoint = openAiBase !== API_ENDPOINTS.OPENAI_BASE;
+    // Only the user's own endpoint is self-hosted; isCustomEndpoint also covers OpenRouter.
+    const errorContext = {
+      provider: isOpenRouter ? "OpenRouter" : "OpenAI",
+      selfHosted: isCustomProvider,
+      model,
+      surface: "llm",
+    };
+    // One rewrite is one conversation: every attempt below (endpoint
+    // fallback, parameter fallback, retry) reuses the same session id.
+    const openCodeHeaders = openCodeSessionHeaders(openAiBase);
+
+    logger.logReasoning("OPENAI_ENDPOINTS", {
+      base: openAiBase,
+      isCustomEndpoint,
+      candidates: endpointCandidates.map((candidate) => candidate.url),
+      preference: readStoredPreference(openAiBase) || null,
+    });
+
+    if (isCustomEndpoint) {
+      logger.logReasoning("CUSTOM_ENDPOINT_REQUEST", {
+        customBase: openAiBase,
+        model,
+        textLength: text.length,
+        hasApiKey: !!apiKey,
+        apiKeyPreview: apiKey ? `${apiKey.substring(0, 8)}...` : "(none)",
+      });
+    }
+
+    // Only registry-known OpenAI reasoning models on OpenAI's own host: an
+    // unknown id (fine-tune, proxy) may reject a cap above its output limit.
+    const hasReasoningRoom =
+      !isCustomEndpoint && getCloudModel(model)?.supportsTemperature === false;
+
+    const retryStrategy = createApiRetryStrategy();
+    const response = await withRetry(async () => {
+      let lastError: Error | null = null;
+      let lastRetryableError: Error | null = null;
+
+      for (const { url: endpoint, type } of endpointCandidates) {
+        const controller = new AbortController();
+        const timeoutSeconds = getLlmRequestTimeoutSeconds({ scope: config.inferenceScope });
+        const timeoutId = setTimeout(() => controller.abort(), timeoutSeconds * 1000);
+        const unlinkCancel = abortOnCancel(config.requestId, controller);
+        let readingBody = false;
+        try {
+          const requestedMaxTokens =
+            config.maxTokens ||
+            Math.max(
+              4096,
+              ctx.calculateMaxTokens(
+                text.length,
+                TOKEN_LIMITS.MIN_TOKENS,
+                TOKEN_LIMITS.MAX_TOKENS,
+                TOKEN_LIMITS.TOKEN_MULTIPLIER
+              )
+            );
+          // A known endpoint host knows its own request shape better than the model id does.
+          const apiConfig = dialect ?? getOpenAiApiConfig(model, resolvedProvider);
+          const maxTokens = hasReasoningRoom
+            ? Math.max(requestedMaxTokens, REASONING_MODEL_MIN_OUTPUT_TOKENS)
+            : requestedMaxTokens;
+
+          const requestBody: Record<string, unknown> = { model };
+
+          if (type === "responses") {
+            requestBody.input = messages;
+            requestBody.store = false;
+            requestBody.max_output_tokens = maxTokens;
+            if (apiConfig.supportsTemperature) {
+              requestBody.temperature = config.temperature ?? 0.3;
+            }
+            const effort = responsesReasoningEffort(model, resolvedProvider, config, openAiBase);
+            if (effort) requestBody.reasoning = { effort };
+          } else {
+            requestBody.messages = messages;
+            applyChatCompletionsParams(requestBody, {
+              model,
+              provider: resolvedProvider,
+              endpoint: openAiBase,
+              config,
+              maxTokens,
+            });
+          }
+
+          const res = await fetchWithParamFallback(
+            endpoint,
+            () =>
+              providerFetch(endpoint, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+                  ...openCodeHeaders,
+                },
+                body: JSON.stringify(requestBody),
+                signal: controller.signal,
+              }),
+            requestBody,
+            (details) => logger.logReasoning("OPENAI_PARAM_FALLBACK", { endpoint, ...details })
+          );
+
+          if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ error: res.statusText }));
+            const errorMessage = extractApiErrorMessage(
+              errorData,
+              `OpenAI API error: ${res.status}`
+            );
+
+            const isUnsupportedEndpoint =
+              (res.status === 404 || res.status === 405) && type === "responses";
+
+            if (isUnsupportedEndpoint) {
+              lastError = providerHttpError({
+                ...errorContext,
+                status: res.status,
+                body: errorData,
+                headers: res.headers,
+              });
+              rememberPreference(openAiBase, "chat");
+              logger.logReasoning("OPENAI_ENDPOINT_FALLBACK", {
+                attemptedEndpoint: endpoint,
+                error: redactProviderBody(errorMessage),
+              });
+              continue;
+            }
+
+            throw providerHttpError({
+              ...errorContext,
+              status: res.status,
+              body: errorData,
+              headers: res.headers,
+            });
+          }
+
+          rememberPreference(openAiBase, type);
+          readingBody = true;
+          return await res.json();
+        } catch (error) {
+          if ((error as Error).name === "AbortError") {
+            if (isRequestCancelled(config.requestId)) throw requestCancelledError();
+            throw llmRequestTimeoutError(timeoutSeconds);
+          }
+          if (readingBody) throw error;
+          lastError = error as Error;
+          if (retryStrategy.shouldRetry(lastError)) {
+            lastRetryableError = lastError;
+          }
+          if (type === "responses") {
+            logger.logReasoning("OPENAI_ENDPOINT_FALLBACK", {
+              attemptedEndpoint: endpoint,
+              error: (error as Error).message,
+            });
+            continue;
+          }
+          throw lastRetryableError || error;
+        } finally {
+          clearTimeout(timeoutId);
+          unlinkCancel();
+        }
+      }
+
+      throw lastRetryableError || lastError || new Error("No OpenAI endpoint responded");
+    }, retryStrategy).catch((error) => {
+      // Classified only once it has left withRetry, so the deadline is still
+      // attempted exactly once.
+      throw asProviderError(error, errorContext);
+    });
+
+    const isResponsesApi = Array.isArray(response?.output);
+    const isChatCompletions = Array.isArray(response?.choices);
+
+    const responseIncomplete =
+      response?.status === "incomplete" ||
+      !!response?.incomplete_details ||
+      response?.choices?.some((choice: any) => isTruncatedFinishReason(choice?.finish_reason));
+    const contentFiltered =
+      response?.incomplete_details?.reason === "content_filter" ||
+      response?.choices?.some((choice: any) => choice?.finish_reason === "content_filter");
+    if (config.requireCompleteOutput && responseIncomplete) {
+      throw truncatedOutputError();
+    }
+
+    logger.logReasoning("OPENAI_RAW_RESPONSE", {
+      model,
+      format: isResponsesApi ? "responses" : isChatCompletions ? "chat_completions" : "unknown",
+      hasOutput: isResponsesApi,
+      outputLength: isResponsesApi ? response.output.length : 0,
+      outputTypes: isResponsesApi
+        ? response.output.map((item: { type: string }) => item.type)
+        : undefined,
+      hasChoices: isChatCompletions,
+      choicesLength: isChatCompletions ? response.choices.length : 0,
+      usage: response.usage,
+    });
+
+    let responseText = "";
+    let refusal = "";
+
+    if (isResponsesApi) {
+      for (const item of response.output) {
+        if (item.type === "message" && item.content) {
+          for (const content of item.content) {
+            if (content.type === "output_text" && content.text) {
+              responseText = content.text.trim();
+              break;
+            }
+            if (content.type === "refusal" && content.refusal) {
+              refusal = content.refusal;
+            }
+          }
+          if (responseText) break;
+        }
+      }
+    }
+
+    if (!responseText && typeof response?.output_text === "string") {
+      responseText = response.output_text.trim();
+    }
+
+    if (!responseText && isChatCompletions) {
+      for (const choice of response.choices) {
+        const message = choice?.message ?? choice?.delta;
+        const content = message?.content;
+
+        if (typeof content === "string" && content.trim()) {
+          responseText = content.trim();
+          break;
+        }
+
+        if (Array.isArray(content)) {
+          for (const part of content) {
+            if (typeof part?.text === "string" && part.text.trim()) {
+              responseText = part.text.trim();
+              break;
+            }
+          }
+        }
+
+        if (responseText) break;
+
+        if (typeof choice?.text === "string" && choice.text.trim()) {
+          responseText = choice.text.trim();
+          break;
+        }
+      }
+    }
+
+    logger.logReasoning("OPENAI_RESPONSE", {
+      model,
+      responseLength: responseText.length,
+      tokensUsed: response.usage?.total_tokens || 0,
+      success: true,
+      isEmpty: responseText.length === 0,
+    });
+
+    if (!responseText) {
+      if (refusal) {
+        throw new Error(`Model declined the request: ${refusal}`);
+      }
+      // A content filter also marks a Responses reply "incomplete", but no output
+      // budget ran out: an empty reply, never retried and never echoed back.
+      if (contentFiltered) throw emptyOutputError("Model output was stopped by a content filter");
+      const error = emptyResponseError("OpenAI", config, !!responseIncomplete);
+      // No retry code: that request already had a retry's room.
+      if (error) {
+        throw responseIncomplete && hasReasoningRoom ? truncatedOutputError(error.message) : error;
+      }
+      logger.logReasoning("OPENAI_EMPTY_RESPONSE_FALLBACK", {
+        model,
+        originalTextLength: text.length,
+        reason: "Empty response from API",
+      });
+      return text;
+    }
+
+    return responseText;
+  },
+};

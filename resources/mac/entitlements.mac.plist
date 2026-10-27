@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- The app (hardened runtime). Deliberately minimal: no JIT or
+         unsigned executable memory (WKWebView JITs in its own WebContent
+         process; the Rust binary needs neither) and no library-validation
+         exception (the app loads no third-party dylibs; llama-server, which
+         does, carries its own: llama-server.entitlements.plist). -->
+
+    <!-- The AppleScript paths (select-all, and the copy/paste and selection-read
+         fallbacks) run osascript against System Events. Under the hardened
+         runtime, TCC lets the app ask for Automation only with this. -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+</dict>
+</plist>

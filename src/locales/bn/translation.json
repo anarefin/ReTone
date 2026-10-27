@@ -1,0 +1,538 @@
+{
+  "settings": {
+    "language": {
+      "uiLabel": "ইন্টারফেসের ভাষা",
+      "uiDescription": "ReTone-এর ইন্টারফেসে কোন ভাষা ব্যবহার হবে তা বেছে নিন"
+    }
+  },
+  "tray": {
+    "quit": "ReTone বন্ধ করুন",
+    "tooltip": "ReTone - নির্বাচিত লেখা নতুন করে লিখুন",
+    "openSettings": "সেটিংস খুলুন",
+    "hideSettings": "সেটিংস লুকান"
+  },
+  "menu": {
+    "appLabel": "ReTone",
+    "quit": "ReTone বন্ধ করুন",
+    "file": "ফাইল",
+    "closeWindow": "উইন্ডো বন্ধ করুন"
+  },
+  "window": {
+    "settingsTitle": "ReTone"
+  },
+  "dialog": {
+    "openLink": {
+      "title": "লিংক খোলা যায়নি",
+      "message": "আপনার ব্রাউজারে লিংকটি খোলা যায়নি:\n{{url}}\n\nত্রুটি: {{error}}"
+    },
+    "loadFailure": {
+      "title": "ReTone লোড হয়নি",
+      "message": "ReTone তার ইন্টারফেস লোড করতে পারেনি।",
+      "detail": {
+        "window": "উইন্ডো: {{windowName}}",
+        "error": "ত্রুটি {{errorCode}}: {{errorDescription}}",
+        "url": "URL: {{url}}",
+        "hint": "অ্যাপটি আবার ইনস্টল করুন অথবা --log-level=debug দিয়ে চালু করুন।"
+      }
+    }
+  },
+  "startup": {
+    "error": {
+      "title": "ReTone চালু হওয়ার ত্রুটি",
+      "message": "অ্যাপ্লিকেশনটি চালু করা যায়নি:\n\n{{error}}\n\nঅনুগ্রহ করে সমস্যাটি জানান।"
+    },
+    "globeHotkey": {
+      "title": "Globe হটকি পাওয়া যাচ্ছে না",
+      "message": "ReTone Globe কী-এর হটকি চালু করতে পারেনি।",
+      "details": {
+        "unknown": "Globe লিসেনার চালু করার সময় অজানা ত্রুটি হয়েছে।",
+        "devHint": "লিসেনার বাইনারি আবার তৈরি করতে `npm run compile:globe` চালিয়ে অ্যাপটি আবার বিল্ড করুন।",
+        "reinstallHint": "ReTone আবার ইনস্টল করুন, সমস্যা থেকে গেলে সাপোর্টে যোগাযোগ করুন।"
+      }
+    }
+  },
+  "hotkey": {
+    "errors": {
+      "callbackRequired": "হটকি সেটআপের জন্য একটি কলব্যাক ফাংশন প্রয়োজন",
+      "globeOnlyMac": "Globe কী শুধু macOS-এ পাওয়া যায়।",
+      "fnCombinationUnsupported": "Globe/Fn কী শুধু একা ব্যবহার করা যায়।",
+      "mouseButtonOnlyMac": "মাউস বাটনের হটকি বর্তমানে শুধু macOS-এ সমর্থিত।",
+      "alreadyRegistered": "\"{{hotkey}}\" অন্য একটি অ্যাপ্লিকেশন আগেই নিবন্ধন করেছে।",
+      "osReserved": "\"{{hotkey}}\" সম্ভবত আপনার ডেস্কটপ এনভায়রনমেন্টের জন্য সংরক্ষিত।",
+      "keyNotInKeymap": "আপনার কিবোর্ড লেআউটে GNOME \"{{hotkey}}\" ব্যবহার করতে পারে না। অন্য একটি কী বেছে নিন।",
+      "keyReservedByGnome": "GNOME নিজের একটি শর্টকাটের জন্য \"{{hotkey}}\" আগেই ব্যবহার করছে। অন্য একটি কী বেছে নিন।",
+      "rightModifierNeedsListener": "এই ডেস্কটপে \"{{hotkey}}\" ব্যবহার করা যায় না, এখানে শর্টকাটে একটি সাধারণ কী লাগে। একটি কী যোগ করুন, যেমন Control+Alt+Space।",
+      "registrationFailed": "\"{{hotkey}}\" নিবন্ধন করা যায়নি। হয়তো অন্য কোনো অ্যাপ্লিকেশন এটি ব্যবহার করছে।",
+      "windowsKeyListenerMissing": "\"{{hotkey}}\"-এর জন্য Windows কী লিসেনার দরকার, যা এই ইনস্টলে নেই। একটি সাধারণ কী সহ শর্টকাট বেছে নিন।",
+      "trySuggestions": "চেষ্টা করুন: {{suggestions}}",
+      "slotConflict": "এই হটকি আগে থেকেই {{slot}}-এর জন্য ব্যবহৃত হচ্ছে।"
+    }
+  },
+  "systemSettings": {
+    "microphone": "মাইক্রোফোনের অনুমতি ঠিক করতে আপনার সিস্টেম সেটিংস খুলুন।",
+    "sound": "আপনার সিস্টেমের সাউন্ড সেটিংস খুলুন (যেমন pavucontrol)।",
+    "accessibility": "এই প্ল্যাটফর্মে Accessibility সেটিংস পাওয়া যায় না।",
+    "systemAudio": "এই প্ল্যাটফর্মে সিস্টেম অডিও সেটিংস পাওয়া যায় না।",
+    "screenRecording": "এই প্ল্যাটফর্মে স্ক্রিন রেকর্ডিং সেটিংস পাওয়া যায় না।",
+    "loginItems": "এই প্ল্যাটফর্মে লগইন আইটেম সেটিংস পাওয়া যায় না।"
+  },
+  "windows": {
+    "pttUnavailable": "ReTone-এর কী লিসেনার পাওয়া যাচ্ছে না।"
+  },
+  "common": {
+    "retry": "আবার চেষ্টা করুন",
+    "reset": "রিসেট",
+    "refresh": "রিফ্রেশ",
+    "download": "ডাউনলোড",
+    "cancel": "বাতিল",
+    "recommended": "প্রস্তাবিত",
+    "active": "সক্রিয়",
+    "signInRequired": "সাইন ইন প্রয়োজন",
+    "apiKey": "API কী",
+    "loading": "লোড হচ্ছে...",
+    "availableModels": "উপলব্ধ মডেল"
+  },
+  "onboarding": {
+    "rehaul": {
+      "provider": {
+        "testing": "পরীক্ষা চলছে…",
+        "connected": "সংযুক্ত",
+        "connectionFailed": "সংযোগ যাচাই করা যায়নি।",
+        "unverified": "যাচাই করা যায়নি: {{reason}}",
+        "errors": {
+          "endpointRequired": "পরীক্ষার আগে একটি এন্ডপয়েন্ট URL লিখুন।",
+          "invalidUrl": "এন্ডপয়েন্টটি অবশ্যই একটি বৈধ HTTP বা HTTPS URL হতে হবে।",
+          "httpsRequired": "পাবলিক এন্ডপয়েন্টে HTTPS ব্যবহার করতে হবে। HTTP শুধু প্রাইভেট ঠিকানায় চলে।",
+          "unsupportedProvider": "এই প্রোভাইডারের জন্য সংযোগ পরীক্ষা করা যায় না।",
+          "apiKeyRequired": "পরীক্ষার আগে একটি API কী যোগ করুন।",
+          "credentialsRejected": "প্রোভাইডার এই ক্রেডেনশিয়াল গ্রহণ করেনি।",
+          "endpointNotFound": "এই এন্ডপয়েন্ট কোনো OpenAI-সামঞ্জস্যপূর্ণ মডেল তালিকা দেয় না।",
+          "transcriptionEndpointNotFound": "এই ঠিকানায় কোনো ট্রান্সক্রিপশন সার্ভিস নেই।",
+          "modelNotFound": "নির্বাচিত মডেলটি এই প্রোভাইডারের কাছে নেই।",
+          "providerStatus": "প্রোভাইডার {{status}} স্ট্যাটাস ফেরত দিয়েছে।",
+          "timeout": "সংযোগ পরীক্ষার সময় শেষ হয়ে গেছে।",
+          "network": "প্রোভাইডারের সাথে যোগাযোগ করা যায়নি।"
+        }
+      }
+    }
+  },
+  "reasoning": {
+    "mode": {
+      "cloud": "ক্লাউড",
+      "local": "লোকাল",
+      "localDescription": "আপনার ডিভাইসেই চলে। সম্পূর্ণ প্রাইভেট, অফলাইনেও কাজ করে।",
+      "cloudDescription": "API-এর মাধ্যমে উন্নত মডেল। দ্রুত ও সক্ষম, ইন্টারনেট প্রয়োজন।"
+    },
+    "custom": {
+      "endpointWithProtocol": "প্রোটোকলসহ পূর্ণ বেস URL লিখুন (যেমন https://server/v1)।",
+      "httpsRequired": "HTTPS প্রয়োজন (HTTP শুধু লোকাল নেটওয়ার্কে চলে)।",
+      "endpointInvalid": "কাস্টম এন্ডপয়েন্টটি অবৈধ বা সেট করা হয়নি। সেটিংস → AI মডেল-এ এন্ডপয়েন্ট URL দেখুন।",
+      "endpointUnauthorized": "এন্ডপয়েন্ট অনুরোধটি প্রত্যাখ্যান করেছে (401/403)। একটি API কী যোগ করুন বা সার্ভারের অথ সেটিংস ঠিক করুন।",
+      "endpointTitle": "এন্ডপয়েন্ট URL",
+      "endpointExamples": "উদাহরণ:",
+      "apiKeyOptional": "API কী (ঐচ্ছিক)",
+      "apiKeyHelp": "ঐচ্ছিক। অথেনটিকেশনের জন্য Bearer টোকেন হিসেবে পাঠানো হয়। এটি আপনার OpenAI API কী থেকে আলাদা।",
+      "applyAndRefresh": "প্রয়োগ ও রিফ্রেশ",
+      "queryPrefix": "আমরা",
+      "querySuffix": "থেকে উপলব্ধ মডেল খুঁজব।",
+      "modelsReloadHint": "URL ফিল্ড থেকে সরে গেলে বা \"প্রয়োগ ও রিফ্রেশ\" ক্লিক করলে মডেলগুলো আবার লোড হবে।",
+      "enterEndpoint": "মডেল লোড করতে উপরে একটি এন্ডপয়েন্ট URL লিখুন।",
+      "fetchingModels": "এন্ডপয়েন্ট থেকে মডেল তালিকা আনা হচ্ছে...",
+      "noModels": "কোনো মডেল পাওয়া যায়নি। আপনার এন্ডপয়েন্ট URL দেখুন।",
+      "providerName": "কাস্টম",
+      "ownerLabel": "মালিক: {{owner}}",
+      "unableToLoadModels": "এন্ডপয়েন্ট থেকে মডেল লোড করা যায়নি।",
+      "searchPlaceholder": "মডেল খুঁজুন…",
+      "selectedGroup": "নির্বাচিত",
+      "otherGroup": "অন্যান্য",
+      "noSearchResults": "\"{{query}}\"-এর সাথে মেলে এমন কোনো মডেল নেই",
+      "selectModelHint": "এখনো কোনো মডেল নির্বাচন করা হয়নি — নিচের তালিকা থেকে একটি বেছে নিন।",
+      "keyRequiredHint": "ইনফারেন্সের জন্য একটি API কী প্রয়োজন — এই প্রোভাইডার ব্যবহার করতে একটি যোগ করুন।"
+    },
+    "effort": {
+      "title": "রিজনিং-এর মাত্রা",
+      "description": "উত্তর দেওয়ার আগে মডেল কতটা চিন্তা করবে।",
+      "descriptionWithDefault": "উত্তর দেওয়ার আগে মডেল কতটা চিন্তা করবে। অটো প্রোভাইডারের ডিফল্ট ({{value}}) ব্যবহার করে।",
+      "auto": "অটো",
+      "options": {
+        "none": "নেই",
+        "minimal": "ন্যূনতম",
+        "low": "কম",
+        "medium": "মাঝারি",
+        "high": "বেশি",
+        "xhigh": "অনেক বেশি",
+        "max": "সর্বোচ্চ"
+      }
+    },
+    "getApiKey": "আপনার API কী নিন ->",
+    "selectModel": "মডেল নির্বাচন করুন",
+    "availableModels": "উপলব্ধ মডেল",
+    "disableThinking": {
+      "label": "থিংকিং আউটপুট বন্ধ করুন",
+      "help": "পরিষ্কার আউটপুটের জন্য রিজনিং টোকেন বাদ দেয়। পুনর্লিখনের জন্য প্রস্তাবিত। কিছু সার্ভার এই নির্দেশ উপেক্ষা করে।"
+    },
+    "keepModelLoaded": {
+      "label": "মডেল লোড করে রাখুন",
+      "help": "৫ মিনিট নিষ্ক্রিয় থাকার পর আনলোড না হয়ে মেমরিতে থাকে, তাই পরের অনুরোধে আবার লোড হওয়ার অপেক্ষা লাগে না। লোকাল মডেল ব্যবহার করা সব ফিচারে প্রযোজ্য।"
+    },
+    "enterprise": {
+      "technicalDetails": {
+        "title": "কারিগরি বিবরণ",
+        "awsRequestId": "AWS রিকোয়েস্ট ID",
+        "copy": "কারিগরি বিবরণ কপি করুন",
+        "copyCommand": "রিকভারি কমান্ড কপি করুন"
+      }
+    }
+  },
+  "transcription": {
+    "deleteModel": {
+      "title": "মডেল মুছুন",
+      "description": "আপনি কি নিশ্চিত যে এই মডেলটি মুছতে চান? আবার ব্যবহার করতে চাইলে এটি পুনরায় ডাউনলোড করতে হবে।"
+    }
+  },
+  "hooks": {
+    "audioRecording": {
+      "errorDescriptions": {
+        "providerRateLimited": "আপনার ট্রান্সক্রিপশন প্রোভাইডার অনুরোধের হার সীমিত করেছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
+        "providerKeyMissing": "আপনার ট্রান্সক্রিপশন প্রোভাইডারের জন্য কোনো API কী সেট করা নেই। সেটিংস → Speech to Text-এ যোগ করুন।",
+        "cleanupTruncated": "আপনার লেখা পরিষ্কার করা শেষ হওয়ার আগেই AI মডেলের জায়গা ফুরিয়ে গেছে।",
+        "cleanupEmptyReply": "AI মডেল পরিষ্কার করা লেখার বদলে খালি উত্তর দিয়েছে।"
+      }
+    },
+    "hotkeyRegistration": {
+      "titles": {
+        "notRegistered": "হটকি নিবন্ধিত হয়নি"
+      },
+      "errors": {
+        "failedToRegister": "হটকি নিবন্ধন করা যায়নি। আবার চেষ্টা করুন।"
+      }
+    },
+    "modelDownload": {
+      "errors": {
+        "timeout": "ডাউনলোডের সময় শেষ হয়ে গেছে। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।",
+        "notFound": "ডাউনলোড সার্ভারে পৌঁছানো যায়নি। আপনার ইন্টারনেট সংযোগ দেখুন।",
+        "corrupted": "ডাউনলোড অসম্পূর্ণ বা ক্ষতিগ্রস্ত। আবার চেষ্টা করুন।",
+        "rateLimited": "ডাউনলোড সার্ভার অনুরোধের হার সীমিত করছে। কয়েক মিনিট অপেক্ষা করে আবার চেষ্টা করুন।",
+        "server": "সার্ভার ত্রুটি ({{error}})। পরে আবার চেষ্টা করুন।",
+        "generic": "ডাউনলোড ব্যর্থ: {{error}}",
+        "extractionFailed": "মডেল ডাউনলোড হয়েছে কিন্তু ইনস্টল হয়নি। আবার ডাউনলোড না করে ইনস্টল করতে ডাউনলোডে ক্লিক করুন।",
+        "tlsError": "সার্টিফিকেট ত্রুটি — আপনার নেটওয়ার্ক হয়তো SSL ইন্সপেকশন দিয়ে ডাউনলোড আটকাচ্ছে। অন্য নেটওয়ার্ক থেকে ডাউনলোড করে দেখুন।",
+        "unknown": "অজানা ত্রুটি"
+      },
+      "downloadFailed": {
+        "title": "ডাউনলোড ব্যর্থ"
+      },
+      "installationFailed": {
+        "title": "ইনস্টলেশন ব্যর্থ"
+      },
+      "downloadInProgress": {
+        "title": "ডাউনলোড চলছে",
+        "description": "বর্তমান ডাউনলোড শেষ হওয়া পর্যন্ত অপেক্ষা করুন অথবা আগে সেটি বাতিল করুন।"
+      },
+      "modelDeleted": {
+        "title": "মডেল মুছে ফেলা হয়েছে",
+        "description": "মডেলটি সফলভাবে মুছে ফেলা হয়েছে!"
+      },
+      "deleteFailed": {
+        "title": "মুছতে ব্যর্থ",
+        "description": "মডেল মোছা যায়নি: {{error}}"
+      },
+      "downloadCancelled": {
+        "title": "ডাউনলোড বাতিল",
+        "description": "ডাউনলোডটি বাতিল করা হয়েছে।"
+      }
+    }
+  },
+  "errorBoundary": {
+    "description": "একটি অপ্রত্যাশিত ত্রুটি হয়েছে। আবার চেষ্টা করতে রিলোড করুন।",
+    "reload": "রিলোড",
+    "title": "কিছু একটা সমস্যা হয়েছে"
+  },
+  "hotkeyInput": {
+    "ariaLabel": "হটকি সেট করতে একটি কী কম্বিনেশন চাপুন",
+    "clickToChange": "পরিবর্তন করতে ক্লিক করুন",
+    "clickToChangeLower": "পরিবর্তন করতে ক্লিক করুন",
+    "clickToSet": "হটকি সেট করতে ক্লিক করুন",
+    "fnCaptureHint": "যোগ করতে একটি কী চাপুন, অথবা Globe-এর জন্য ছেড়ে দিন",
+    "fnHeldHint": "+ কী অথবা Globe-এর জন্য ছেড়ে দিন",
+    "globe": "Globe",
+    "hotkeyLabel": "হটকি",
+    "keyHint": "+ কী",
+    "listening": "শুনছে...",
+    "pressAnyKey": "যেকোনো কী বা Ctrl+Shift+K চাপুন",
+    "pressAnyKeyMac": "যেকোনো কী বা ⌘⇧K চাপুন",
+    "recording": "রেকর্ড হচ্ছে",
+    "tryShortcut": "Ctrl+Shift+K চেষ্টা করুন",
+    "tryShortcutMac": "⌘⇧K চেষ্টা করুন",
+    "remove": "হটকি সরান",
+    "addAnother": "আরেকটি হটকি যোগ করুন",
+    "duplicate": "আগেই যোগ করা হয়েছে",
+    "singleModifierNeedsRightSide": "{{key}} একা শর্টকাট হতে পারে না। এর বদলে {{alternative}} চাপুন, অথবা আরেকটি কী যোগ করুন।"
+  },
+  "languageSelector": {
+    "noLanguagesFound": "কোনো ভাষা পাওয়া যায়নি",
+    "searchPlaceholder": "ভাষা খুঁজুন"
+  },
+  "settingsPage": {
+    "aiModels": {
+      "modes": {
+        "providers": "নিজের কী ব্যবহার করুন",
+        "local": "লোকাল",
+        "selfHosted": "সেলফ-হোস্টেড",
+        "providersDesc": "আপনার পছন্দের LLM প্রোভাইডারের সাথে সংযোগ করতে নিজের API কী ব্যবহার করুন।",
+        "localDesc": "ডিভাইসেই চলা মডেল। সম্পূর্ণ প্রাইভেট।"
+      }
+    },
+    "general": {
+      "appearance": {
+        "auto": "অটো",
+        "dark": "ডার্ক",
+        "description": "ReTone দেখতে কেমন হবে তা ঠিক করুন",
+        "light": "লাইট",
+        "theme": "থিম",
+        "themeDescription": "লাইট, ডার্ক অথবা আপনার সিস্টেমের মতো বেছে নিন",
+        "title": "চেহারা"
+      },
+      "hotkey": {
+        "linuxPttPermissionDescription": "এই কমান্ডটি চালিয়ে লগ আউট করে আবার লগ ইন করুন: sudo usermod -aG input $USER",
+        "linuxPttSetupDescription": "আপনার ইউজারের কিবোর্ড ইনপুট ডিভাইসে অ্যাক্সেস প্রয়োজন।"
+      },
+      "startup": {
+        "launchAtLogin": "লগইনের সময় চালু করুন",
+        "launchAtLoginDescription": "লগ ইন করলে ReTone ব্যাকগ্রাউন্ডে চালু হবে",
+        "title": "চালু হওয়া",
+        "description": "চালু হওয়ার সময় ReTone কেমন আচরণ করবে তা ঠিক করুন",
+        "startMinimized": "মিনিমাইজড অবস্থায় চালু করুন",
+        "startMinimizedDescription": "কন্ট্রোল প্যানেল উইন্ডো না দেখিয়ে চালু করুন",
+        "needsApproval": {
+          "title": "System Settings-এ অনুমোদন প্রয়োজন",
+          "description": "macOS ReTone-কে লগইন আইটেম হিসেবে নিবন্ধন করেছে, কিন্তু Login Items-এ আপনার অনুমতির অপেক্ষায় আছে।",
+          "action": "Login Items খুলুন"
+        }
+      }
+    }
+  },
+  "models": {
+    "learnMore": "আরও জানুন",
+    "noneAvailable": "কোনো মডেল উপলব্ধ নেই",
+    "descriptions": {
+      "cloud": {
+        "openai_gpt_5_2": "শক্তিশালী রিজনিং মডেল",
+        "openai_gpt_5_mini": "দ্রুত ও সাশ্রয়ী",
+        "openai_gpt_5_nano": "অতি দ্রুত, কম লেটেন্সি",
+        "openai_gpt_4_1": "শক্তিশালী বেসলাইন, 1M কনটেক্সট",
+        "openai_gpt_4_1_mini": "ছোট GPT-4.1 মডেল",
+        "openai_gpt_4_1_nano": "সবচেয়ে কম লেটেন্সির GPT-4.1",
+        "anthropic_claude_fable_5_1": "Anthropic-এর সবচেয়ে সক্ষম মডেল, Mythos-শ্রেণির",
+        "anthropic_claude_fable_5": "আগের Mythos-শ্রেণির ফ্ল্যাগশিপ",
+        "anthropic_claude_opus_5_5": "জটিল রিজনিং-এর জন্য সর্বশেষ Opus মডেল, 1M কনটেক্সট",
+        "anthropic_claude_sonnet_5_5": "সর্বশেষ Sonnet: প্রতিদিনের কাজে দ্রুত ও সক্ষম, 1M কনটেক্সট",
+        "anthropic_claude_haiku_5_5": "সবচেয়ে দ্রুত ও সাশ্রয়ী Claude মডেল, 1M কনটেক্সট",
+        "anthropic_claude_sonnet_5": "কম খরচে দ্রুত ও সক্ষম অ্যাসিস্ট্যান্ট মডেল",
+        "anthropic_claude_sonnet_4_6": "ভারসাম্যপূর্ণ পারফরম্যান্স",
+        "anthropic_claude_sonnet_4_5": "আগের প্রজন্মের Sonnet",
+        "anthropic_claude_haiku_4_5": "দ্রুত, প্রায় শীর্ষ মানের বুদ্ধিমত্তা",
+        "gemini_gemini_3_5_flash": "সর্বশেষ দ্রুত ও উচ্চ সক্ষমতার Gemini মডেল",
+        "gemini_gemini_3_5_flash_lite": "সবচেয়ে দ্রুত ও সাশ্রয়ী 3.5 মডেল",
+        "gemini_gemini_3_1_pro_preview": "জটিল রিজনিং-এর জন্য পরবর্তী প্রজন্মের ফ্ল্যাগশিপ",
+        "gemini_gemini_3_1_flash_lite": "কম খরচে শীর্ষ মানের পারফরম্যান্স",
+        "gemini_gemini_3_flash_preview": "অতি দ্রুত, উচ্চ সক্ষমতার পরবর্তী প্রজন্মের মডেল",
+        "gemini_gemini_2_5_flash_lite": "সবচেয়ে কম লেটেন্সি ও খরচ",
+        "gemini_gemma_4_31b_it": "Google-এর সবচেয়ে বড় Gemma 4, 31B ডেন্স, 256K কনটেক্সট",
+        "gemini_gemma_4_26b_a4b_it": "Google-এর Gemma 4 MoE, 4B সক্রিয় প্যারামিটার, 256K কনটেক্সট",
+        "groq_openai_gpt_oss_120b": "OpenAI-এর ওপেন-সোর্স ফ্ল্যাগশিপ, 500 T/সেকেন্ড",
+        "groq_qwen_qwen3_8_27b": "দ্রুত Qwen মডেল, 450 T/সেকেন্ড, 131K কনটেক্সট",
+        "groq_openai_gpt_oss_20b": "দ্রুত ওপেন-সোর্স মডেল, 1000 T/সেকেন্ড",
+        "openai_gpt_6_astra": "কোডিং ও গবেষণার জন্য OpenAI-এর সবচেয়ে সক্ষম মডেল",
+        "openai_gpt_5_6_sol": "জটিল কোডিং ও গবেষণার জন্য ফ্ল্যাগশিপ GPT-5.6",
+        "openai_gpt_5_6_terra": "প্রতিদিনের কাজের জন্য ভারসাম্যপূর্ণ GPT-5.6",
+        "openai_gpt_5_6_luna": "সবচেয়ে দ্রুত ও সাশ্রয়ী GPT-5.6",
+        "openai_gpt_5_5": "জটিল রিজনিং-এর জন্য শীর্ষ মানের মডেল",
+        "anthropic_claude_opus_5": "আগের Opus ফ্ল্যাগশিপ, 1M কনটেক্সট",
+        "anthropic_claude_opus_4_8": "সততা ও নির্ভরযোগ্যতার জন্য টিউন করা শক্তিশালী Opus মডেল",
+        "anthropic_claude_opus_4_7": "শক্তিশালী Opus মডেল",
+        "anthropic_claude_opus_4_6": "আগের প্রজন্মের Opus, 1M কনটেক্সট",
+        "anthropic_claude_opus_4_5": "পুরোনো Opus মডেল"
+      },
+      "local": {
+        "qwen_qwen3_5_9b_q4_k_m": "শক্তিশালী হাইব্রিড মডেল",
+        "qwen_qwen3_5_4b_q4_k_m": "সাধারণ ব্যবহারের জন্য ভারসাম্যপূর্ণ Qwen3.5",
+        "qwen_qwen3_5_2b_q4_k_m": "দ্রুত কাজের জন্য ছোট Qwen3.5",
+        "qwen_qwen3_8b_q4_k_m": "থিংকিং মোডসহ সর্বশেষ Qwen3",
+        "qwen_qwen3_8b_q5_k_m": "থিংকিং মোডসহ উচ্চ মানের Qwen3",
+        "qwen_qwen3_4b_q4_k_m": "রিজনিং সক্ষমতাসহ কমপ্যাক্ট Qwen3",
+        "qwen_qwen3_1_7b_q8_0": "ছোট কিন্তু সক্ষম Qwen3 মডেল",
+        "qwen_qwen3_32b_q4_k_m": "গভীর রিজনিংসহ সবচেয়ে শক্তিশালী লোকাল Qwen3",
+        "qwen_qwen2_5_1_5b_instruct_q5_k_m": "ছোট মডেল, সাধারণ কাজের জন্য ভালো",
+        "qwen_qwen2_5_3b_instruct_q5_k_m": "সাধারণ ব্যবহারের জন্য ভারসাম্যপূর্ণ মডেল",
+        "qwen_qwen2_5_7b_instruct_q4_k_m": "উচ্চ মানের বড় মডেল (Q4_K_M)",
+        "qwen_qwen2_5_7b_instruct_q5_k_m": "বড় মডেল, উচ্চ মানের রিজনিং (Q5_K_M)",
+        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "দ্রুত ও দক্ষ ইনস্ট্রাকশন মডেল",
+        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "উচ্চ মানের ইনস্ট্রাকশন মডেল",
+        "mistral_nemo_12b_instruct_q4_k_m": "Mistral-এর 12B মডেল, বহুভাষিক কাজে শক্তিশালী",
+        "llama_llama_3_2_1b_instruct_q4_k_m": "এজ ডিভাইসের জন্য খুব ছোট মডেল",
+        "llama_llama_3_2_3b_instruct_q4_k_m": "ছোট কিন্তু সক্ষম বহুভাষিক মডেল",
+        "llama_llama_3_1_8b_instruct_q4_k_m": "দুর্দান্ত পারফরম্যান্সের শক্তিশালী মডেল",
+        "openai_oss_gpt_oss_20b_mxfp4": "সাধারণ হার্ডওয়্যারের জন্য OpenAI-এর ওপেন-ওয়েট মডেল",
+        "gemma_gemma_3_4b_it_q4_k_m": "Google-এর ওপেন-ওয়েট মডেল, গতি ও মানের চমৎকার ভারসাম্য",
+        "gemma_gemma_4_31b_it_q4_k_m": "Google-এর সবচেয়ে বড় Gemma 4, সেরা মান",
+        "gemma_gemma_4_31b_it_qat_q4_0": "Google-এর অফিশিয়াল QAT বিল্ড, ছোট আকারে মান অক্ষুণ্ণ",
+        "gemma_gemma_4_26b_a4b_it_q4_k_m": "Google-এর MoE Gemma 4, 4B সক্রিয় প্যারামিটারে দ্রুত",
+        "gemma_gemma_4_26b_a4b_it_qat_q4_0": "Google-এর অফিশিয়াল QAT MoE বিল্ড, ছোট আকারে মান অক্ষুণ্ণ",
+        "gemma_gemma_4_e4b_it_q4_k_m": "Google-এর সর্বশেষ মাল্টিমোডাল, শক্তিশালী রিজনিং",
+        "gemma_gemma_4_e4b_it_qat_q4_0": "Google-এর অফিশিয়াল QAT বিল্ড, শক্তিশালী রিজনিং, ছোট আকার",
+        "gemma_gemma_4_e2b_it_q4_k_m": "Google-এর কমপ্যাক্ট Gemma 4, দ্রুত ও দক্ষ",
+        "gemma_gemma_4_e2b_it_qat_q4_0": "Google-এর অফিশিয়াল কমপ্যাক্ট QAT বিল্ড, মান অক্ষুণ্ণ",
+        "gemma_gemma_3_12b_it_q4_k_m": "Google-এর মাঝারি মডেল, শক্তিশালী রিজনিং",
+        "gemma_gemma_3_1b_it_q4_k_m": "অতি দ্রুত Google মডেল, ছোট লেখা পরিষ্কারে সেরা",
+        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AI-এর দক্ষ অন-ডিভাইস মডেল, চমৎকারভাবে নির্দেশ মানে",
+        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AI-এর MoE, মাত্র 1.5B সক্রিয় প্যারামিটারে উচ্চ মান",
+        "liquidai_lfm2_2_6b_q4_k_m": "উচ্চ মানের পরিষ্কারের জন্য ভারসাম্যপূর্ণ LFM2",
+        "liquidai_lfm2_5_350m_q8_0": "দ্রুত লেখা পরিষ্কারের জন্য অতি হালকা মডেল",
+        "liquidai_lfm2_5_230m_q8_0": "খুব ছোট মডেল, সাধারণ হার্ডওয়্যারে তাৎক্ষণিক কাজ"
+      }
+    },
+    "errors": {
+      "contextTooLarge": "এই কম্পিউটারে {{model}}-এর পড়ার জন্য এটি অনেক দীর্ঘ। প্রায় {{needed}} টোকেন কনটেক্সট লাগবে, কিন্তু মেমরিতে মাত্র {{max}} ধরে। একটি ক্লাউড মডেল ব্যবহার করুন, অথবা ছোট অংশ নির্বাচন করে চালান।",
+      "contextTooLargeGeneric": "এই কম্পিউটারে {{model}}-এর পড়ার জন্য এটি অনেক দীর্ঘ। একটি ক্লাউড মডেল ব্যবহার করুন, অথবা ছোট অংশ নির্বাচন করে চালান।",
+      "localServerUnavailable": "এই কম্পিউটারে {{model}} চালু করা যায়নি। আবার চেষ্টা করুন, অথবা একটি ক্লাউড মডেলে যান।",
+      "localModelBusy": "লোকাল মডেলটি এখনো অন্য একটি অনুরোধে কাজ করছে। সেটি শেষ হলে আবার চেষ্টা করুন।"
+    }
+  },
+  "apiKeyInput": {
+    "placeholder": "আপনার API কী পেস্ট করুন"
+  },
+  "gpu": {
+    "reasoningBanner": "GPU অ্যাক্সেলারেশন দিয়ে AI প্রসেসিং দ্রুত করুন",
+    "enableButton": "GPU চালু করুন",
+    "active": "GPU অ্যাক্সেলারেশন সক্রিয়",
+    "ready": "GPU অ্যাক্সেলারেশন প্রস্তুত",
+    "activating": "GPU চালু হচ্ছে...",
+    "activationFailed": "GPU অ্যাক্সেলারেশন পাওয়া যাচ্ছে না",
+    "reasoningActivationFailedDescription": "ReTone CPU প্রসেসিংয়ে চলে গেছে।",
+    "retryActivation": "GPU অ্যাক্সেলারেশন আবার চেষ্টা করুন",
+    "remove": "সরান",
+    "dismiss": "এখন নয়",
+    "cancel": "বাতিল"
+  },
+  "providerErrors": {
+    "authFailed": "{{provider}} আপনার API কী গ্রহণ করেনি।",
+    "accessDenied": "{{provider}} অ্যাক্সেস দেয়নি। আপনার কী-তে হয়তো এই মডেল অন্তর্ভুক্ত নেই।",
+    "quotaExhausted": "আপনার {{provider}} অ্যাকাউন্টে ক্রেডিট শেষ।",
+    "rateLimited": "{{provider}} অনুরোধের হার সীমিত করেছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
+    "modelNotFound": "{{provider}} “{{model}}” মডেলটি চিনতে পারছে না।",
+    "modelNotFoundNoModel": "{{provider}} নির্বাচিত মডেলটি চিনতে পারছে না।",
+    "payloadTooLarge": "এই রেকর্ডিংটি {{provider}}-এর জন্য অনেক বড়।",
+    "requestTooLarge": "এই অনুরোধটি {{provider}}-এর জন্য অনেক বড়।",
+    "badRequest": "{{provider}} এই অনুরোধটি প্রসেস করতে পারেনি।",
+    "unavailable": "{{provider}}-এ এই মুহূর্তে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করুন।",
+    "timeout": "{{provider}} উত্তর দিতে অনেক সময় নিয়েছে।",
+    "unreachable": "{{provider}}-এ পৌঁছানো যায়নি। আপনার সংযোগ দেখুন।",
+    "noResponse": "{{provider}} থেকে কোনো উত্তর পাওয়া যায়নি। আপনার API কী ও সংযোগ দেখুন।",
+    "unknown": "{{provider}} একটি অপ্রত্যাশিত ত্রুটি দিয়েছে।",
+    "keyMissing": "{{provider}}-এর জন্য কোনো API কী সেট করা নেই। সেটিংস → Language Models-এ যোগ করুন।",
+    "selfHosted": {
+      "authFailed": "আপনার সার্ভার API কী গ্রহণ করেনি।",
+      "accessDenied": "আপনার সার্ভার অ্যাক্সেস দেয়নি। কী-তে হয়তো এই মডেল অন্তর্ভুক্ত নেই।",
+      "quotaExhausted": "আপনার সার্ভার বলছে অ্যাকাউন্টে ক্রেডিট শেষ।",
+      "rateLimited": "আপনার সার্ভার অনুরোধের হার সীমিত করেছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
+      "modelNotFound": "আপনার সার্ভার “{{model}}” মডেলটি চিনতে পারছে না।",
+      "modelNotFoundNoModel": "আপনার সার্ভার নির্বাচিত মডেলটি চিনতে পারছে না।",
+      "payloadTooLarge": "এই রেকর্ডিংটি আপনার সার্ভারের জন্য অনেক বড়।",
+      "requestTooLarge": "এই অনুরোধটি আপনার সার্ভারের জন্য অনেক বড়।",
+      "badRequest": "আপনার সার্ভার এই অনুরোধটি প্রসেস করতে পারেনি।",
+      "unavailable": "আপনার সার্ভারে এই মুহূর্তে সমস্যা হচ্ছে। একটু পরে আবার চেষ্টা করুন।",
+      "timeout": "আপনার সার্ভার উত্তর দিতে অনেক সময় নিয়েছে।",
+      "unreachable": "আপনার সার্ভারে পৌঁছানো যায়নি। সেটি চলছে কিনা দেখুন।",
+      "noResponse": "আপনার সার্ভার থেকে কোনো উত্তর পাওয়া যায়নি। এর API কী এবং সেটি চলছে কিনা দেখুন।",
+      "unknown": "আপনার সার্ভার একটি অপ্রত্যাশিত ত্রুটি দিয়েছে।"
+    },
+    "details": {
+      "requestId": "রিকোয়েস্ট ID"
+    }
+  },
+  "toneRewrite": {
+    "title": "নির্বাচিত অংশ নতুন করে লিখুন",
+    "titleWholeField": "পুরো ফিল্ড নতুন করে লিখুন",
+    "close": "বন্ধ করুন",
+    "rewriting": "নতুন করে লেখা হচ্ছে…",
+    "loadingModel": "মডেল লোড হচ্ছে…",
+    "preview": {
+      "label": "নতুন লেখার প্রিভিউ"
+    },
+    "copiedToClipboard": "নতুন করে লেখা টেক্সট আপনার ক্লিপবোর্ডে কপি করা হয়েছে।",
+    "tones": {
+      "professional": "পেশাদার",
+      "casual": "সাধারণ",
+      "friendly": "বন্ধুসুলভ",
+      "concise": "সংক্ষিপ্ত",
+      "fixGrammar": "ব্যাকরণ ঠিক করুন",
+      "banglishToEnglish": "Banglish → English",
+      "banglishToBangla": "Banglish → বাংলা"
+    },
+    "errors": {
+      "nothingSelected": "নতুন করে লেখার মতো কিছু নেই। আগে একটি টেক্সট ফিল্ডে কিছু লেখা নির্বাচন করুন।",
+      "noText": "কোনো লেখা পাওয়া যায়নি।",
+      "tooLarge": "নির্বাচিত অংশটি নতুন করে লেখার জন্য অনেক দীর্ঘ (সর্বোচ্চ {{max}} অক্ষর)।",
+      "targetChanged": "ফোকাস করা উইন্ডো বদলে গেছে। আবার চেষ্টা করুন।",
+      "modifiersHeld": "হটকির কীগুলো ছেড়ে দিয়ে আবার চেষ্টা করুন।",
+      "accessibility": "ReTone নির্বাচিত অংশ পড়তে পারেনি। এর Accessibility অনুমতি দেখুন।",
+      "unavailable": "এই অ্যাপে নির্বাচিত লেখা পড়া যায়নি।",
+      "notConfigured": "সেটিংস → ReTone-এ Text Rewrite-এর জন্য একটি মডেল বেছে নিন।",
+      "emptyOutput": "মডেল কোনো লেখা ফেরত দেয়নি। আবার চেষ্টা করুন বা অন্য মডেল বেছে নিন।",
+      "rewriteFailed": "নতুন করে লেখা ব্যর্থ হয়েছে। সেটিংস → ReTone-এ Text Rewrite মডেল দেখুন।",
+      "pasteFailed": "নতুন লেখাটি পেস্ট করা যায়নি।",
+      "selectionChanged": "নতুন লেখা প্রস্তুত হওয়ার আগেই নির্বাচন বদলে গেছে, তাই কিছু প্রতিস্থাপন করা হয়নি।"
+    }
+  },
+  "reTone": {
+    "model": {
+      "title": "Text Rewrite মডেল",
+      "description": "যে মডেল আপনার বেছে নেওয়া টোনে নির্বাচিত লেখা নতুন করে লেখে। লোকাল মডেল আপনার লেখা এই ডিভাইসেই রাখে।",
+      "speedHint": "Qwen3.5 4B-এর মতো ছোট লোকাল মডেল উল্লেখযোগ্যভাবে দ্রুত লেখে।"
+    },
+    "hotkey": {
+      "title": "হটকি",
+      "description": "যেকোনো অ্যাপে লেখা নির্বাচন করুন, হটকি চাপুন এবং একটি টোন বেছে নিন — নির্বাচিত অংশ সেখানেই নতুন করে লেখা হবে।"
+    },
+    "picker": {
+      "title": "পিকার",
+      "description": "নতুন করে লেখার সময় পিকার কেমন আচরণ করবে।",
+      "livePreview": "লাইভ প্রিভিউ",
+      "livePreviewDescription": "লেখা হওয়ার সাথে সাথে নতুন লেখা দেখান, শেষ হলে নির্বাচিত অংশ প্রতিস্থাপন করুন।",
+      "wholeField": "কিছু নির্বাচন করা না থাকলে পুরো ফিল্ড নতুন করে লিখুন",
+      "wholeFieldDescription": "কিছু নির্বাচন করা না থাকলে ফোকাস করা ফিল্ডের পুরো লেখা নির্বাচন করে নতুন করে লেখে। বন্ধ থাকলে পিকার আগে লেখা নির্বাচন করতে বলে।"
+    },
+    "options": {
+      "title": "অপশন",
+      "description": "পিকারে কোন অপশনগুলো থাকবে তা বেছে নিন এবং টেনে ক্রম ঠিক করুন। নম্বর কী এই ক্রমেই অপশন বেছে নেয়।",
+      "atLeastOne": "অন্তত একটি অপশন চালু থাকবে।",
+      "maxEnabled": "পিকারে সর্বোচ্চ {{max}}টি অপশন থাকে। আরেকটি চালু করতে একটি বন্ধ করুন।",
+      "add": "অপশন যোগ করুন",
+      "newOption": "নতুন অপশন",
+      "edit": "{{name}} সম্পাদনা করুন",
+      "dragHandle": "{{name}}-এর ক্রম বদলান (টানুন, অথবা Alt+Up/Down)",
+      "customBadge": "কাস্টম",
+      "editedBadge": "সম্পাদিত",
+      "name": "নাম",
+      "namePlaceholder": "যেমন: ফরাসিতে অনুবাদ",
+      "prompt": "প্রম্পট",
+      "promptPlaceholder": "নির্বাচিত লেখা কীভাবে নতুন করে লিখতে হবে তা মডেলকে বলুন, যেমন “লেখাটি ফরাসিতে অনুবাদ করো।”",
+      "promptHint": "ReTone আপনার প্রম্পটের পরে নিজের নিয়ম যোগ করে, তাই উত্তরে শুধু নতুন করে লেখা টেক্সটই আসে।",
+      "characterCount": "{{count}}/{{max}}",
+      "save": "সংরক্ষণ",
+      "cancel": "বাতিল",
+      "delete": "মুছুন",
+      "reset": "ডিফল্টে ফেরান",
+      "deleteConfirmTitle": "“{{name}}” মুছবেন?",
+      "deleteConfirmDescription": "এটি পিকার থেকে সরিয়ে দেওয়া হবে। এটি আর ফেরানো যাবে না।"
+    },
+    "title": "ReTone",
+    "description": "যেকোনো অ্যাপে লেখা নির্বাচন করুন, আপনার হটকি চাপুন এবং একটি টোন বেছে নিন। নতুন লেখা আপনার নির্বাচিত অংশের জায়গা নেবে।",
+    "accessibility": {
+      "title": "Accessibility অ্যাক্সেস প্রয়োজন",
+      "description": "আপনার নির্বাচিত লেখা পড়তে এবং নতুন লেখা পেস্ট করতে ReTone-এর Accessibility অ্যাক্সেস প্রয়োজন।",
+      "action": "Accessibility সেটিংস খুলুন"
+    }
+  }
+}

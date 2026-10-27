@@ -1,0 +1,23 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Core event and window access for the settings and picker windows, plus the renderer's provider fetches (HTTPS anywhere, plain HTTP to any host so a Custom endpoint on the LAN works). App commands are allowed by default.",
+  "windows": ["settings", "tone-rewrite-picker-*"],
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "https://*" },
+        { "url": "http://*" },
+        { "url": "http://*:*" }
+      ],
+      "deny": [
+        { "url": "http://169.254.*" },
+        { "url": "http://169.254.*:*" },
+        { "url": "https://169.254.*" },
+        { "url": "https://169.254.*:*" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Merged into the bundle's Info.plist by the Tauri bundler. -->
+    <key>CFBundleIconName</key>
+    <string>retone</string>
+    <key>NSAccessibilityUsageDescription</key>
+    <string>ReTone needs accessibility permissions to read the text you select and paste its rewrite back.</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>ReTone uses System Events to select, copy and paste text in the app you are rewriting in.</string>
+    <key>LSUIElement</key>
+    <false/>
+</dict>
+</plist>
