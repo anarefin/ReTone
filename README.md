@@ -10,13 +10,12 @@ Built with Tauri 2 (Rust) and React. **macOS on Apple silicon (arm64) only.**
 
 ## Download & install
 
-**Requirements:** a Mac with Apple silicon (M1 or later) running macOS 12 or later.
+**Requirements:** a Mac with Apple silicon (M1 or later) running macOS 26 or later.
 
 1. Download `ReTone-<version>-arm64.dmg` from the [latest release](https://github.com/anarefin/retone/releases/latest).
 2. Open the DMG and drag **ReTone** to **Applications**.
 3. Open ReTone. It is free and signed ad-hoc rather than with an Apple Developer ID, so macOS blocks the first launch:
-   - **macOS 15 or later:** click **Done** on the warning, then open System Settings › Privacy & Security, scroll down and click **Open Anyway** next to ReTone. Confirm with your password.
-   - **macOS 12–14:** right-click ReTone in Applications, choose **Open**, then **Open** again.
+   - Click **Done** on the warning, then open System Settings › Privacy & Security, scroll down and click **Open Anyway** next to ReTone. Confirm with your password.
    - Or, in Terminal: `xattr -dr com.apple.quarantine /Applications/ReTone.app`
 4. Grant **Accessibility** when asked (System Settings › Privacy & Security › Accessibility). ReTone needs it to read your selection and paste the rewrite.
 5. ReTone lives in the menu bar. In its Settings window, set a hotkey and choose a model: download the free local model, or enter an API key for OpenAI, Anthropic, Gemini, Groq, OpenRouter or a custom endpoint.
@@ -32,7 +31,7 @@ Built with Tauri 2 (Rust) and React. **macOS on Apple silicon (arm64) only.**
 
 ### Prerequisites
 
-- macOS 12 or later on an Apple silicon Mac
+- macOS 26 or later on an Apple silicon Mac
 - Xcode Command Line Tools: `xcode-select --install`
 - Rust stable, installed with [rustup](https://rustup.rs)
 - Node.js **26** (LTS). `.nvmrc` pins it and `engine-strict` refuses other versions. For example: `brew install node`

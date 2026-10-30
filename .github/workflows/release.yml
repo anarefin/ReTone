@@ -54,13 +54,12 @@ jobs:
           mv dist/ReTone.dmg "dist/$dmg"
           (cd dist && shasum -a 256 "$dmg" > "$dmg.sha256")
           cat > notes.md <<EOF
-          ReTone $TAG for macOS on Apple silicon (M1 or later), macOS 12 or later.
+          ReTone $TAG for macOS on Apple silicon (M1 or later), macOS 26 or later.
 
           ### Install
           1. Download \`$dmg\`, open it and drag **ReTone** to **Applications**.
           2. Open ReTone. This build is signed ad-hoc and not notarized, so macOS blocks the first launch:
-             - **macOS 15 or later:** click **Done**, then go to System Settings › Privacy & Security, scroll down and click **Open Anyway** next to ReTone.
-             - **macOS 12–14:** right-click ReTone in Applications and choose **Open**.
+             - Click **Done**, then go to System Settings › Privacy & Security, scroll down and click **Open Anyway** next to ReTone.
              - Or, in Terminal: \`xattr -dr com.apple.quarantine /Applications/ReTone.app\`
           3. Grant **Accessibility** when asked (System Settings › Privacy & Security › Accessibility). ReTone needs it to read your selection and paste the rewrite.
           4. In Settings, set a hotkey and choose a model.

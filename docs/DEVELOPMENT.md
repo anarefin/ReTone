@@ -56,7 +56,7 @@ A bad release: delete it and its tag on GitHub (`gh release delete vX.Y.Z --clea
 
 ## Manual checklist
 
-Install `dist/ReTone.dmg` (drag to Applications; the first time, System Settings › Privacy & Security › Open Anyway on macOS 15+, right-click → Open on 12–14), grant Accessibility (re-grant after each build), then:
+Install `dist/ReTone.dmg` (drag to Applications; the first time, System Settings › Privacy & Security › Open Anyway), grant Accessibility (re-grant after each build), then:
 
 - [ ] Tray icon shows in the menu bar; its menu opens/hides Settings and quits
 - [ ] Picker over a selection in TextEdit, a Safari/Chrome field, and an Electron-based app (Slack/VS Code)
@@ -90,4 +90,3 @@ Install `dist/ReTone.dmg` (drag to Applications; the first time, System Settings
   - `NSApp.isActive` reads `true` while the non-activating panel is key even though the target stays frontmost; treat `app_active` in the log as informational.
 - **llama-server**: `/health` and `/v1/models` stay unauthenticated in llama.cpp b9763; without the per-launch key nothing else is readable. The dev build copies `resources/bin` into `target/debug/bin` (~56 MB).
 - **Dev noise**: a browser tab left open on `127.0.0.1:5183` also connects to the Vite server and logs `__TAURI_INTERNALS__` errors in the `tauri dev` output.
-- Not tested on macOS 12.

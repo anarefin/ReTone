@@ -50,7 +50,7 @@
       "signingIdentity": "-",
       "hardenedRuntime": true,
       "entitlements": "../resources/mac/entitlements.mac.plist",
-      "minimumSystemVersion": "12.0",
+      "minimumSystemVersion": "26.0",
       "files": {
         "Resources/Assets.car": "../src/assets/Assets.car"
       },
