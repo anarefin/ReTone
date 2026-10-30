@@ -97,11 +97,14 @@ jobs:
           set -euo pipefail
           app="target/aarch64-apple-darwin/release/bundle/macos/ReTone.app"
           codesign --verify --deep --strict --verbose=2 "$app"
-          codesign -dv --verbose=4 "$app" 2>&1 | tee /dev/stderr | grep -q "Identifier=com.arefin.retone"
+          info=$(codesign -dv --verbose=4 "$app" 2>&1)
+          echo "$info"
+          grep -q "Identifier=com.arefin.retone" <<<"$info"
           server="$app/Contents/Resources/bin/llama-server-darwin-arm64"
           test -x "$server"
           codesign --verify --strict "$server"
-          codesign -dv "$server" 2>&1 | grep -q "flags=0x10002(adhoc,runtime)"
+          server_info=$(codesign -dv "$server" 2>&1)
+          grep -q "flags=0x10002(adhoc,runtime)" <<<"$server_info"
           "$server" --version
           test -f "$app/Contents/Resources/Assets.car"
           test -f "$app/Contents/Resources/THIRD_PARTY_NOTICES.md"
