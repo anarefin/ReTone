@@ -39,6 +39,9 @@ impl LoginItemStatus {
 pub struct AutoStartState {
     pub enabled: bool,
     pub requires_approval: bool,
+    /// False where launch at login cannot be changed at all (macOS 12, or a
+    /// bare binary such as `tauri dev`), so the toggle can say why.
+    pub available: bool,
 }
 
 /// An item awaiting approval reads as off (it will not launch), with the
@@ -47,6 +50,7 @@ pub fn resolve_auto_start_state(status: LoginItemStatus) -> AutoStartState {
     AutoStartState {
         enabled: status == LoginItemStatus::Enabled,
         requires_approval: status == LoginItemStatus::RequiresApproval,
+        available: status != LoginItemStatus::Unavailable,
     }
 }
 
@@ -118,7 +122,8 @@ mod tests {
             resolve_auto_start_state(LoginItemStatus::RequiresApproval),
             AutoStartState {
                 enabled: false,
-                requires_approval: true
+                requires_approval: true,
+                available: true
             }
         );
     }
@@ -129,24 +134,34 @@ mod tests {
             resolve_auto_start_state(LoginItemStatus::Enabled),
             AutoStartState {
                 enabled: true,
-                requires_approval: false
+                requires_approval: false,
+                available: true
             }
         );
     }
 
     #[test]
     fn a_disabled_macos_item_is_neither_enabled_nor_awaiting_approval() {
-        for status in [
-            LoginItemStatus::NotRegistered,
-            LoginItemStatus::NotFound,
-            LoginItemStatus::Unavailable,
-        ] {
+        for status in [LoginItemStatus::NotRegistered, LoginItemStatus::NotFound] {
             assert_eq!(
                 resolve_auto_start_state(status),
-                AutoStartState::default(),
+                AutoStartState {
+                    enabled: false,
+                    requires_approval: false,
+                    available: true
+                },
                 "{status:?}"
             );
         }
+    }
+
+    // A bare binary (`tauri dev`) or macOS 12: the toggle says why it is off.
+    #[test]
+    fn without_sm_app_service_the_toggle_reads_as_unavailable() {
+        assert_eq!(
+            resolve_auto_start_state(LoginItemStatus::Unavailable),
+            AutoStartState::default()
+        );
     }
 
     // openAsHidden and wasOpenedAsHidden are no-ops on macOS 13+, so
@@ -164,11 +179,12 @@ mod tests {
         let json = serde_json::to_value(AutoStartState {
             enabled: true,
             requires_approval: false,
+            available: true,
         })
         .unwrap();
         assert_eq!(
             json,
-            serde_json::json!({ "enabled": true, "requiresApproval": false })
+            serde_json::json!({ "enabled": true, "requiresApproval": false, "available": true })
         );
     }
 
@@ -220,7 +236,7 @@ mod tests {
         let item = FakeItem::new(LoginItemStatus::Enabled);
         assert_eq!(set_auto_start_enabled(&item, false), Ok(()));
         assert_eq!(*item.calls.borrow(), ["unregister"]);
-        assert_eq!(auto_start_state(&item), AutoStartState::default());
+        assert!(!auto_start_state(&item).enabled);
     }
 
     // The user switched the item off in System Settings: register fails, the

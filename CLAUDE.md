@@ -22,7 +22,7 @@ ReTone rewrites text selected in any other app. A global hotkey opens a small to
 - **macOS**: `objc2` + `objc2-app-kit` / `-foundation` / `-core-graphics` / `-core-foundation` / `-service-management`, raw ApplicationServices FFI for AX, `keyring` 3 (apple-native).
 - **Renderer**: React 19, TypeScript, Tailwind CSS v4, Vite, zustand, Radix primitives, react-i18next.
 - **Local inference**: llama.cpp `llama-server` (pinned `b9763`, Metal), spawned as a sidecar.
-- **Node.js 24** (`.nvmrc`, `engine-strict`). Never regenerate `package-lock.json` with another major version. Locally: `export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node@24/bin:$PATH"`.
+- **Node.js 26** (`.nvmrc`, `engine-strict`). Never regenerate `package-lock.json` with another major version. Locally: `export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node/bin:$PATH"`.
 
 ## Repo Layout
 
@@ -47,7 +47,8 @@ test/                    renderer tests (node --test)
 - **Picker window** (label `tone-rewrite-picker-<n>`, one label per generation): 280 px wide, frameless, transparent (`macOSPrivateApi`), all workspaces, level screen-saver + 1, content-protected, shadowless, created hidden. `retone-macos::panel` swaps its class to a non-activating `NSPanel` (`RetonePickerPanel`), so showing it makes it key without activating ReTone (macOS 14+ cooperative activation can refuse activation). Hidden and reused, never reloaded per press; destroyed only when the hotkey is cleared or the renderer crashes.
 - Both windows load `index.html`; `AppRouter.jsx` renders the picker for `?tone-rewrite-picker=true`.
 - **Dock** (`dock.rs` + `retone-core::dock_policy`): activation policy Regular/Accessory follows the settings window, driven only by explicit show/hide calls (never window events). Dock `Reopen` shows settings.
-- **Tray** (`tray.rs`): template icon, Open/Hide Settings + Quit, rebuilt on visibility and language change; NSStatusItem `autosaveName` under ReTone's own GUID. Never change the GUID once released.
+- **App icon** (`app_icon.rs` + `retone-core::app_icon`): Settings › Appearance offers `mono` (the bundle icon), `light`, `aurora`, `ring`, saved as `APP_ICON`. A choice replaces only the Dock image (`setApplicationIconImage`, re-applied each time the tile appears) and the tray template; Finder/Launchpad keep Mono, since rewriting the signed bundle would break the signature and the Accessibility grant.
+- **Tray** (`tray.rs`): template icon (follows the app icon), Open/Hide Settings + Quit, rebuilt on visibility and language change; NSStatusItem `autosaveName` under ReTone's own GUID. Never change the GUID once released.
 - **Menu** (`menu.rs`): app, Edit (so ⌘C/⌘V work in inputs), Window (+ Bring All to Front); View (reload/devtools) only in debug builds.
 - **Channels**: `RETONE_CHANNEL` (`development`/`staging`/`production`). userData is `~/Library/Application Support/ReTone` in production, `ReTone-<channel>` otherwise.
 - **Navigation guard** (`retone-core::navigation`): only the app's own page (`/`, `/index.html`, and the bare `tauri://localhost`) may load; http(s)/mailto links open in the browser via `tauri-plugin-opener`; a failed open shows `dialog.openLink.*`.
@@ -76,7 +77,7 @@ test/                    renderer tests (node --test)
 - **Anthropic** goes through Rust (`process_anthropic_reasoning`, `src-tauri/src/anthropic.rs`, 30 s deadline).
 - **Connection check** (`test_provider_connection`): `retone-core::providers::connection_test` (12 s probe, failure priority, `unverified` for 408/429/5xx/timeouts) cached by `connection_cache` (10-min Connected TTL).
 - **Errors**: `retone-core::providers::errors` is kept in sync with `src/helpers/providerHttpErrors.js` / `ipcErrorFields.js` (same codes and message keys; 500-char redacted detail). Raw provider bodies never reach UI text.
-- **Model registry**: `src/models/modelRegistryData.json` is the single source of truth (renderer and `retone-llama::registry` via `include_str!`). Defaults: local mode, provider `qwen`, model `qwen3.5-4b-q4_k_m`.
+- **Model registry**: `src/models/modelRegistryData.json` is the single source of truth (renderer and `retone-llama::registry` via `include_str!`). Local families: Qwen and Gemma. Defaults: local mode, provider `qwen`, model `qwen3.5-4b-q4_k_m`; a saved local model the registry no longer lists is reset to that default at startup (`resetRetiredLocalModelSelections`).
 
 ### Local models (`crates/retone-llama`)
 
@@ -111,7 +112,7 @@ test/                    renderer tests (node --test)
 ## Settings Storage
 
 - **Renderer localStorage** (per webview origin): `theme`, `uiLanguage`, `toneRewriteKey`, `toneRewriteMode`, `toneRewriteProvider`, `toneRewriteModel`, `toneRewriteCloudBaseUrl`, `toneRewriteDisableThinking` (default true), `toneRewriteReasoningEffort`, `toneRewriteOptions` (JSON), `toneRewriteLivePreview` (default true), `toneRewriteWholeField` (default false), `keepLocalModelLoaded` (default false). API keys never go to localStorage.
-- **`userData/.env`** (`src-tauri/src/env.rs`, `retone-core::env_file`, line-preserving upserts): `TONE_REWRITE_KEY`, `START_MINIMIZED`, `UI_LANGUAGE`, `LLAMA_GPU_BACKEND`, plus `RETONE_LOG_LEVEL` / `RETONE_CACHE_ROOT` if set by hand.
+- **`userData/.env`** (`src-tauri/src/env.rs`, `retone-core::env_file`, line-preserving upserts): `TONE_REWRITE_KEY`, `START_MINIMIZED`, `UI_LANGUAGE`, `APP_ICON`, `LLAMA_GPU_BACKEND`, plus `RETONE_LOG_LEVEL` / `RETONE_CACHE_ROOT` if set by hand.
 - `sync_startup_preferences` pushes `keepLocalModelLoaded` (→ `set_keep_resident`) and `toneRewriteWholeField` (→ controller) from the renderer.
 
 ## Secrets (Keychain)
@@ -131,7 +132,7 @@ The renderer keeps calling `window.retoneAPI.*`; `src/platform/nativeBridge.ts` 
 | Area | Commands / events |
 | --- | --- |
 | Keys | `get_/save_{openai,anthropic,gemini,groq,openrouter,cleanup_custom}_key`, `test_provider_connection`; event `api-key-updated` |
-| System | `get_app_version`, `open_external`, `write_clipboard`, `get_/set_auto_start_enabled`, `get_/set_start_minimized`, `get_/set_ui_language`, `sync_startup_preferences` |
+| System | `get_app_version`, `open_external`, `write_clipboard`, `get_/set_auto_start_enabled`, `get_/set_start_minimized`, `get_/set_app_icon`, `get_/set_ui_language`, `sync_startup_preferences` |
 | Permissions | `check_accessibility_permission`, `open_accessibility_settings`, `open_login_items_settings` |
 | Hotkeys | `set_hotkey_listening_mode`, `get_hotkey_mode_info`; events `globe-key-pressed`, `globe-key-released`, `hotkey-registration-failed` |
 | ReTone | `update_tone_rewrite_hotkey`, `get_tone_rewrite_key`, `tone_rewrite_get_payload`, `tone_rewrite_apply`, `tone_rewrite_close`, `tone_rewrite_set_height`; events `tone-rewrite-show`, `tone-rewrite-reset` |
@@ -153,14 +154,14 @@ All user-facing strings **must** go through react-i18next (renderer) or `src-tau
 ## Image and Icon Assets — REQUIRED
 
 - Raster UI assets in `src/assets/`; always `import` them (never literal paths). UI icons from `src/components/icons/` (vendored Nucleo; map in `nucleo-map.json`, run `node scripts/sync-nucleo-icons.js`); never import `lucide-react`.
-- App icons: `src-tauri/icons/icon.icns` + `icon.png` (same art as `src/assets/icon.*`); the macOS 26 icon is `src/assets/Assets.car` (bundled as `Contents/Resources/Assets.car`, `CFBundleIconName = retone`). The tray uses `src/assets/iconTemplate@3x.png`. Brand art is rendered outside this repo; copy updated files in rather than editing PNGs by hand.
+- App icons: `src-tauri/icons/icon.icns` + `icon.png` (same art as `src/assets/icon.*`; must be RGBA or `generate_context!` fails); alternates in `src/assets/app-icons/`; the macOS 26 icon is `src/assets/Assets.car` (bundled as `Contents/Resources/Assets.car`, `CFBundleIconName = retone`). The tray uses `src/assets/iconTemplate@3x.png`. Brand art is rendered outside this repo; copy updated files in rather than editing PNGs by hand.
 - Fonts: bundled Noto Sans + Noto Sans Bengali (`src/assets/fonts/`).
 
 ## Development
 
 ```bash
-export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node@24/bin:$PATH"
-npm install                 # Node 24
+export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node/bin:$PATH"
+npm install                 # Node 26
 npm run tauri dev           # Vite on 127.0.0.1:5183 + debug app (predev downloads llama-server into resources/bin)
 npm run build:mac           # tauri build --target aarch64-apple-darwin → .app + .dmg
 cargo build --workspace && cargo test --workspace
@@ -216,4 +217,4 @@ Ignored smoke tests (touch real OS state; run by hand): `cargo test -p retone-ma
 4. **Whole field does nothing**: the Automation prompt for System Events was denied (System Settings › Privacy & Security › Automation).
 5. **Local model fails**: llama-server missing (`npm run download:llama-server`; bundles need `stage:llama-server`), model file missing (re-download), out of memory (smaller model). Requests to the server without the per-launch key get 401.
 6. **Keychain prompts on every build**: expected with ad-hoc signatures.
-7. **Lockfile**: always `npm install` with Node 24.
+7. **Lockfile**: always `npm install` with Node 26.

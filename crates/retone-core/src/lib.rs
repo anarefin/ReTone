@@ -1,6 +1,7 @@
 //! Pure ReTone logic. Nothing here touches the OS, so every module is unit-tested
 //! headless. OS boundaries live in `retone-macos` and the app crate.
 
+pub mod app_icon;
 pub mod channel;
 pub mod dock_policy;
 pub mod env_file;

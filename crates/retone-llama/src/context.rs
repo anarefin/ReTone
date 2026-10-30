@@ -100,7 +100,7 @@ pub const FIXED_OS_RESERVE_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 /// Compute buffers also grow with context (measured, then doubled for margin).
 pub const COMPUTE_FIXED_BYTES: u64 = 384 * 1024 * 1024;
 pub const COMPUTE_BYTES_PER_TOKEN: u64 = 4096;
-/// Recurrent state of hybrid models (Qwen3.5, LFM2), outside the KV cache.
+/// Recurrent state of hybrid models (Qwen3.5), outside the KV cache.
 pub const RECURRENT_STATE_BYTES: u64 = 512 * 1024 * 1024;
 /// A discrete GPU's VRAM is not probed; stay modest until it is.
 pub const UNVERIFIED_GPU_CEILING: u64 = 65536;

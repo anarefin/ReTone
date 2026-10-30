@@ -285,6 +285,12 @@
     },
     "general": {
       "appearance": {
+        "appIcon": "অ্যাপ আইকন",
+        "appIconAurora": "অরোরা",
+        "appIconDescription": "Dock ও মেনু বারের আইকন বদলায়। Finder-এ ডিফল্ট আইকনই থাকে।",
+        "appIconLight": "লাইট",
+        "appIconMono": "মনো",
+        "appIconRing": "রিং",
         "auto": "অটো",
         "dark": "ডার্ক",
         "description": "ReTone দেখতে কেমন হবে তা ঠিক করুন",
@@ -300,6 +306,7 @@
       "startup": {
         "launchAtLogin": "লগইনের সময় চালু করুন",
         "launchAtLoginDescription": "লগ ইন করলে ReTone ব্যাকগ্রাউন্ডে চালু হবে",
+        "launchAtLoginUnavailable": "macOS 13 বা তার পরের সংস্করণে ইনস্টল করা অ্যাপে উপলব্ধ",
         "title": "চালু হওয়া",
         "description": "চালু হওয়ার সময় ReTone কেমন আচরণ করবে তা ঠিক করুন",
         "startMinimized": "মিনিমাইজড অবস্থায় চালু করুন",
@@ -367,13 +374,6 @@
         "qwen_qwen2_5_3b_instruct_q5_k_m": "সাধারণ ব্যবহারের জন্য ভারসাম্যপূর্ণ মডেল",
         "qwen_qwen2_5_7b_instruct_q4_k_m": "উচ্চ মানের বড় মডেল (Q4_K_M)",
         "qwen_qwen2_5_7b_instruct_q5_k_m": "বড় মডেল, উচ্চ মানের রিজনিং (Q5_K_M)",
-        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "দ্রুত ও দক্ষ ইনস্ট্রাকশন মডেল",
-        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "উচ্চ মানের ইনস্ট্রাকশন মডেল",
-        "mistral_nemo_12b_instruct_q4_k_m": "Mistral-এর 12B মডেল, বহুভাষিক কাজে শক্তিশালী",
-        "llama_llama_3_2_1b_instruct_q4_k_m": "এজ ডিভাইসের জন্য খুব ছোট মডেল",
-        "llama_llama_3_2_3b_instruct_q4_k_m": "ছোট কিন্তু সক্ষম বহুভাষিক মডেল",
-        "llama_llama_3_1_8b_instruct_q4_k_m": "দুর্দান্ত পারফরম্যান্সের শক্তিশালী মডেল",
-        "openai_oss_gpt_oss_20b_mxfp4": "সাধারণ হার্ডওয়্যারের জন্য OpenAI-এর ওপেন-ওয়েট মডেল",
         "gemma_gemma_3_4b_it_q4_k_m": "Google-এর ওপেন-ওয়েট মডেল, গতি ও মানের চমৎকার ভারসাম্য",
         "gemma_gemma_4_31b_it_q4_k_m": "Google-এর সবচেয়ে বড় Gemma 4, সেরা মান",
         "gemma_gemma_4_31b_it_qat_q4_0": "Google-এর অফিশিয়াল QAT বিল্ড, ছোট আকারে মান অক্ষুণ্ণ",
@@ -384,12 +384,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Google-এর কমপ্যাক্ট Gemma 4, দ্রুত ও দক্ষ",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Google-এর অফিশিয়াল কমপ্যাক্ট QAT বিল্ড, মান অক্ষুণ্ণ",
         "gemma_gemma_3_12b_it_q4_k_m": "Google-এর মাঝারি মডেল, শক্তিশালী রিজনিং",
-        "gemma_gemma_3_1b_it_q4_k_m": "অতি দ্রুত Google মডেল, ছোট লেখা পরিষ্কারে সেরা",
-        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AI-এর দক্ষ অন-ডিভাইস মডেল, চমৎকারভাবে নির্দেশ মানে",
-        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AI-এর MoE, মাত্র 1.5B সক্রিয় প্যারামিটারে উচ্চ মান",
-        "liquidai_lfm2_2_6b_q4_k_m": "উচ্চ মানের পরিষ্কারের জন্য ভারসাম্যপূর্ণ LFM2",
-        "liquidai_lfm2_5_350m_q8_0": "দ্রুত লেখা পরিষ্কারের জন্য অতি হালকা মডেল",
-        "liquidai_lfm2_5_230m_q8_0": "খুব ছোট মডেল, সাধারণ হার্ডওয়্যারে তাৎক্ষণিক কাজ"
+        "gemma_gemma_3_1b_it_q4_k_m": "অতি দ্রুত Google মডেল, ছোট লেখা পরিষ্কারে সেরা"
       }
     },
     "errors": {

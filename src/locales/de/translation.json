@@ -285,6 +285,12 @@
     },
     "general": {
       "appearance": {
+        "appIcon": "App-Symbol",
+        "appIconAurora": "Aurora",
+        "appIconDescription": "Ändert das Symbol im Dock und in der Menüleiste. Der Finder behält das Standardsymbol.",
+        "appIconLight": "Hell",
+        "appIconMono": "Mono",
+        "appIconRing": "Ring",
         "auto": "Auto",
         "dark": "Dunkel",
         "description": "Steuern Sie das Erscheinungsbild von ReTone",
@@ -300,6 +306,7 @@
       "startup": {
         "launchAtLogin": "Beim Anmelden starten",
         "launchAtLoginDescription": "ReTone bei der Anmeldung im Hintergrund starten",
+        "launchAtLoginUnavailable": "Verfügbar in der installierten App ab macOS 13",
         "title": "Autostart",
         "description": "Steuern Sie das Verhalten von ReTone beim Start",
         "startMinimized": "Minimiert starten",
@@ -367,13 +374,6 @@
         "qwen_qwen2_5_3b_instruct_q5_k_m": "Ausgewogenes Modell für den allgemeinen Einsatz",
         "qwen_qwen2_5_7b_instruct_q4_k_m": "Großes Modell mit hoher Qualität (Q4_K_M)",
         "qwen_qwen2_5_7b_instruct_q5_k_m": "Großes Modell, hochwertiges Reasoning (Q5_K_M)",
-        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Schnelles und effizientes Instruction-Modell",
-        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Instruction-Modell mit höherer Qualität",
-        "mistral_nemo_12b_instruct_q4_k_m": "Mistrals 12B-Modell, starke mehrsprachige Leistung",
-        "llama_llama_3_2_1b_instruct_q4_k_m": "Winziges Modell für Edge-Geräte",
-        "llama_llama_3_2_3b_instruct_q4_k_m": "Kleines, aber fähiges mehrsprachiges Modell",
-        "llama_llama_3_1_8b_instruct_q4_k_m": "Leistungsstarkes Modell mit hoher Performance",
-        "openai_oss_gpt_oss_20b_mxfp4": "Open-Weight-Modell von OpenAI für Consumer-Hardware",
         "gemma_gemma_3_4b_it_q4_k_m": "Googles Open-Weight-Modell, gutes Gleichgewicht aus Geschwindigkeit und Qualität",
         "gemma_gemma_4_31b_it_q4_k_m": "Googles größtes Gemma 4, beste Qualität",
         "gemma_gemma_4_31b_it_qat_q4_0": "Offizieller QAT-Build von Google, kleiner bei gleicher Qualität",
@@ -384,12 +384,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Kompaktes Gemma 4 von Google, schnell und effizient",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Kompakter offizieller QAT-Build von Google, Qualität erhalten",
         "gemma_gemma_3_12b_it_q4_k_m": "Googles Mittelklasse-Modell, starkes Reasoning",
-        "gemma_gemma_3_1b_it_q4_k_m": "Ultraschnelles Google-Modell, ideal für kurze Diktat-Bereinigung",
-        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Effizientes On-Device-Modell von Liquid AI, hervorragende Anweisungsbefolgung",
-        "liquidai_lfm2_5_8b_a1b_q4_k_m": "MoE von Liquid AI, hohe Qualität mit nur 1,5B aktiven Parametern",
-        "liquidai_lfm2_2_6b_q4_k_m": "Ausgewogenes LFM2 für hochwertigere Bereinigung",
-        "liquidai_lfm2_5_350m_q8_0": "Ultraleichtes Modell für schnelle Diktatbereinigung",
-        "liquidai_lfm2_5_230m_q8_0": "Winziges Modell, sofortige Bereinigung auf bescheidener Hardware"
+        "gemma_gemma_3_1b_it_q4_k_m": "Ultraschnelles Google-Modell, ideal für kurze Diktat-Bereinigung"
       }
     },
     "errors": {

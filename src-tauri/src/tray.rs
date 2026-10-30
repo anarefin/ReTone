@@ -2,7 +2,7 @@
 //! Quit. The menu is rebuilt whenever the settings window is shown or hidden so
 //! its first item reads right, and on a language change.
 
-use crate::{app, i18n, windows};
+use crate::{app, app_icon, i18n, windows};
 use retone_core::tray_placement::{MACOS_TRAY_GUID, TrayPlacementStep, macos_tray_placement_plan};
 use tauri::image::Image;
 use tauri::menu::{Menu, MenuItem, PredefinedMenuItem};
@@ -12,8 +12,6 @@ use tauri::{AppHandle, Wry};
 pub const TRAY_ID: &str = "retone-tray";
 const TOGGLE_SETTINGS_ID: &str = "tray-toggle-settings";
 const QUIT_ID: &str = "tray-quit";
-
-const TEMPLATE_ICON: &[u8] = include_bytes!("../../src/assets/iconTemplate@3x.png");
 
 fn build_menu(app: &AppHandle) -> tauri::Result<Menu<Wry>> {
     let settings_label = if windows::is_settings_visible(app) {
@@ -45,7 +43,7 @@ pub fn create(app: &AppHandle) -> tauri::Result<()> {
                 let _ = (key, position);
             }
             TrayPlacementStep::CreateItem => {
-                let icon = Image::from_bytes(TEMPLATE_ICON)?;
+                let icon = Image::from_bytes(app_icon::tray_template(app_icon::saved(app)))?;
                 TrayIconBuilder::with_id(TRAY_ID)
                     .icon(icon)
                     .icon_as_template(true)
@@ -86,6 +84,19 @@ fn set_autosave_name(app: &AppHandle, name: &'static str) {
 }
 
 /// Rebuilds the menu and tooltip (visibility or language changed).
+/// Swaps the menu-bar image for another template image.
+pub fn set_icon(app: &AppHandle, template_png: &[u8]) {
+    let Some(tray) = app.tray_by_id(TRAY_ID) else {
+        return;
+    };
+    let result = Image::from_bytes(template_png)
+        .and_then(|icon| tray.set_icon(Some(icon)))
+        .and_then(|()| tray.set_icon_as_template(true));
+    if let Err(error) = result {
+        tracing::warn!(target: "tray", "Failed to change the tray icon: {error}");
+    }
+}
+
 pub fn refresh(app: &AppHandle) {
     let Some(tray) = app.tray_by_id(TRAY_ID) else {
         return;

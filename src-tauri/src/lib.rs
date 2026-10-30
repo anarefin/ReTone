@@ -2,6 +2,7 @@
 
 mod anthropic;
 mod app;
+mod app_icon;
 mod clipboard;
 mod commands;
 mod dialog;
@@ -52,6 +53,8 @@ pub(crate) fn register_commands(builder: tauri::Builder<tauri::Wry>) -> tauri::B
         system::set_auto_start_enabled,
         system::get_start_minimized,
         system::set_start_minimized,
+        system::get_app_icon,
+        system::set_app_icon,
         system::get_ui_language,
         system::set_ui_language,
         system::sync_startup_preferences,

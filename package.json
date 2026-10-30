@@ -5,7 +5,7 @@
   "description": "ReTone: rewrite selected text in any app in a tone you pick, with a local model or your own API key",
   "private": true,
   "engines": {
-    "node": ">=24"
+    "node": ">=26 <27"
   },
   "scripts": {
     "predev": "node scripts/download-llama-server.js",

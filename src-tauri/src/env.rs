@@ -11,6 +11,7 @@ use std::sync::{Mutex, RwLock};
 pub const TONE_REWRITE_KEY: &str = "TONE_REWRITE_KEY";
 pub const START_MINIMIZED: &str = "START_MINIMIZED";
 pub const UI_LANGUAGE: &str = "UI_LANGUAGE";
+pub const APP_ICON: &str = "APP_ICON";
 
 pub struct EnvStore {
     path: PathBuf,
@@ -72,6 +73,11 @@ impl EnvStore {
         self.get(START_MINIMIZED).as_deref() == Some("true")
     }
 
+    /// The app icon picked in Settings; the bundle icon when none is saved.
+    pub fn app_icon(&self) -> retone_core::app_icon::AppIcon {
+        retone_core::app_icon::AppIcon::from_saved(self.get(APP_ICON).as_deref())
+    }
+
     /// The saved UI language, normalized, or "" when none is saved.
     pub fn ui_language(&self) -> String {
         self.get(UI_LANGUAGE)
@@ -92,6 +98,7 @@ mod tests {
         let store = EnvStore::load(dir.path());
         store.set(START_MINIMIZED, Some("true")).unwrap();
         store.set(UI_LANGUAGE, Some("bn")).unwrap();
+        store.set(APP_ICON, Some("aurora")).unwrap();
         store
             .set(TONE_REWRITE_KEY, Some("Control+Shift+Space"))
             .unwrap();
@@ -100,6 +107,7 @@ mod tests {
         let reloaded = EnvStore::load(dir.path());
         assert!(reloaded.start_minimized());
         assert_eq!(reloaded.ui_language(), "bn");
+        assert_eq!(reloaded.app_icon(), retone_core::app_icon::AppIcon::Aurora);
         assert_eq!(reloaded.tone_rewrite_key(), "");
         assert_eq!(reloaded.get("RETONE_LOG_LEVEL").as_deref(), Some("debug"));
         let text = fs::read_to_string(dir.path().join(".env")).unwrap();

@@ -1,11 +1,11 @@
 //! Real llama-server smoke run (ignored by default: needs the downloaded
-//! binary in `resources/bin` and network for a ~250 MB model on first run).
+//! binary in `resources/bin` and network for a ~0.8 GB model on first run).
 //!
 //!   cargo test -p retone-llama --test smoke -- --ignored --nocapture
 //!   RETONE_SMOKE_BIN_DIR=target/aarch64-apple-darwin/release/bundle/macos/ReTone.app/Contents/Resources/bin \
 //!     cargo test -p retone-llama --test smoke -- --ignored --nocapture
 //!
-//! Downloads LFM2.5-230M into the real cache (`~/.cache/retone/models`, or
+//! Downloads Gemma 3 1B into the real cache (`~/.cache/retone/models`, or
 //! `RETONE_CACHE_ROOT`) unless present, sends one completion through the
 //! bridge, checks the idle stop, the quit-time shutdown, and that a server a
 //! "crashed" app left behind is reaped from its pid file.
@@ -23,7 +23,7 @@ use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
 
-const MODEL: &str = "lfm2.5-230m-q8_0";
+const MODEL: &str = "gemma-3-1b-it-q4_k_m";
 
 /// `resources/bin`, or `RETONE_SMOKE_BIN_DIR` (e.g. a built bundle's
 /// `ReTone.app/Contents/Resources/bin`, to run the signed, hardened copy).

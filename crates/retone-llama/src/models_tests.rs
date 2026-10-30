@@ -831,7 +831,7 @@ fn download_manager(dir: &Path, base_url: String) -> ModelManager {
     )
 }
 
-const SMALL_MODEL: &str = "lfm2.5-230m-q8_0";
+const SMALL_MODEL: &str = "qwen3-1.7b-q8_0";
 
 #[tokio::test]
 async fn downloads_a_model_reporting_progress_and_listing_it() {
@@ -867,7 +867,7 @@ async fn downloads_a_model_reporting_progress_and_listing_it() {
     assert_eq!(listed["isDownloaded"], true);
     assert_eq!(listed["isDownloading"], false);
     assert_eq!(listed["path"], path.display().to_string());
-    assert_eq!(listed["providerId"], "liquidai");
+    assert_eq!(listed["providerId"], "qwen");
     assert_eq!(listed["fileName"], model.file_name);
     // Already there: no second request.
     manager
@@ -898,12 +898,12 @@ async fn download_failures_are_typed() {
     assert_eq!(error.details["statusCode"], 404);
 
     let error = manager
-        .download_model("lfm2.5-350m-q8_0", &|_, _, _| {})
+        .download_model("qwen3-1.7b-q8_0", &|_, _, _| {})
         .await
         .unwrap_err();
     assert_eq!(
         error.code, "DOWNLOAD_FAILED",
-        "the 350M file also matches Q8_0"
+        "the Qwen3 1.7B file also matches Q8_0"
     );
 
     let error = manager

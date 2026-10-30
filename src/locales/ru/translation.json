@@ -285,6 +285,12 @@
     },
     "general": {
       "appearance": {
+        "appIcon": "Значок приложения",
+        "appIconAurora": "Аврора",
+        "appIconDescription": "Меняет значок в Dock и в строке меню. В Finder остаётся значок по умолчанию.",
+        "appIconLight": "Светлый",
+        "appIconMono": "Моно",
+        "appIconRing": "Кольцо",
         "auto": "Авто",
         "dark": "Тёмная",
         "description": "Управляйте внешним видом ReTone",
@@ -300,6 +306,7 @@
       "startup": {
         "launchAtLogin": "Запускать при входе",
         "launchAtLoginDescription": "Запускать ReTone в фоновом режиме при входе в систему",
+        "launchAtLoginUnavailable": "Доступно в установленном приложении на macOS 13 или новее",
         "title": "Автозапуск",
         "description": "Управляйте поведением ReTone при запуске",
         "startMinimized": "Запуск в свёрнутом виде",
@@ -367,13 +374,6 @@
         "qwen_qwen2_5_3b_instruct_q5_k_m": "Сбалансированная модель общего назначения",
         "qwen_qwen2_5_7b_instruct_q4_k_m": "Большая модель высокого качества (Q4_K_M)",
         "qwen_qwen2_5_7b_instruct_q5_k_m": "Большая модель, качественное рассуждение (Q5_K_M)",
-        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Быстрая и эффективная модель для инструкций",
-        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Более качественная модель для инструкций",
-        "mistral_nemo_12b_instruct_q4_k_m": "12B модель Mistral, сильная мультиязычная поддержка",
-        "llama_llama_3_2_1b_instruct_q4_k_m": "Миниатюрная модель для маломощных устройств",
-        "llama_llama_3_2_3b_instruct_q4_k_m": "Маленькая, но способная многоязычная модель",
-        "llama_llama_3_1_8b_instruct_q4_k_m": "Мощная модель с отличной производительностью",
-        "openai_oss_gpt_oss_20b_mxfp4": "Открытая модель OpenAI для потребительского оборудования",
         "gemma_gemma_3_4b_it_q4_k_m": "Открытая модель Google, отличный баланс скорости и качества",
         "gemma_gemma_4_31b_it_q4_k_m": "Крупнейшая Gemma 4 от Google, лучшее качество",
         "gemma_gemma_4_31b_it_qat_q4_0": "Официальная сборка QAT от Google, меньше при сохранении качества",
@@ -384,12 +384,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Компактная Gemma 4 от Google, быстрая и эффективная",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Компактная официальная сборка QAT от Google, качество сохранено",
         "gemma_gemma_3_12b_it_q4_k_m": "Средняя модель Google, сильное рассуждение",
-        "gemma_gemma_3_1b_it_q4_k_m": "Сверхбыстрая модель Google, лучшая для очистки коротких диктовок",
-        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Эффективная локальная модель Liquid AI, отлично следует инструкциям",
-        "liquidai_lfm2_5_8b_a1b_q4_k_m": "MoE от Liquid AI: высокое качество при 1,5B активных параметров",
-        "liquidai_lfm2_2_6b_q4_k_m": "Сбалансированная LFM2 для более качественной обработки",
-        "liquidai_lfm2_5_350m_q8_0": "Сверхлёгкая модель для быстрой очистки диктовки",
-        "liquidai_lfm2_5_230m_q8_0": "Крошечная модель, мгновенная очистка на слабом железе"
+        "gemma_gemma_3_1b_it_q4_k_m": "Сверхбыстрая модель Google, лучшая для очистки коротких диктовок"
       }
     },
     "errors": {

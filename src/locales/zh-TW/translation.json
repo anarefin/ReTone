@@ -285,6 +285,12 @@
     },
     "general": {
       "appearance": {
+        "appIcon": "App 圖像",
+        "appIconAurora": "極光",
+        "appIconDescription": "更改 Dock 和選單列中的圖像。Finder 仍顯示預設圖像。",
+        "appIconLight": "淺色",
+        "appIconMono": "單色",
+        "appIconRing": "圓環",
         "auto": "自動",
         "dark": "深色",
         "description": "控制 ReTone 的外觀",
@@ -300,6 +306,7 @@
       "startup": {
         "launchAtLogin": "登入時啟動",
         "launchAtLoginDescription": "登入時在背景啟動 ReTone",
+        "launchAtLoginUnavailable": "在 macOS 13 或更新版本上安裝的 App 中可用",
         "title": "啟動",
         "description": "控制 ReTone 啟動時的行為",
         "startMinimized": "啟動時最小化",
@@ -367,13 +374,6 @@
         "qwen_qwen2_5_3b_instruct_q5_k_m": "均衡模型，通用型",
         "qwen_qwen2_5_7b_instruct_q4_k_m": "大型模型，高品質（Q4_K_M）",
         "qwen_qwen2_5_7b_instruct_q5_k_m": "大型模型，高品質推理（Q5_K_M）",
-        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "快速且高效的指令模型",
-        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "更高品質的指令模型",
-        "mistral_nemo_12b_instruct_q4_k_m": "Mistral 12B 模型，優秀的多語言性能",
-        "llama_llama_3_2_1b_instruct_q4_k_m": "極小型模型，適合邊緣裝置",
-        "llama_llama_3_2_3b_instruct_q4_k_m": "小巧但有能力的多語言模型",
-        "llama_llama_3_1_8b_instruct_q4_k_m": "強大的高效能模型",
-        "openai_oss_gpt_oss_20b_mxfp4": "OpenAI 開放權重模型，適用於消費級硬體",
         "gemma_gemma_3_4b_it_q4_k_m": "Google 開放權重模型，速度與品質的絕佳平衡",
         "gemma_gemma_4_31b_it_q4_k_m": "Google 最大的 Gemma 4，最佳品質",
         "gemma_gemma_4_31b_it_qat_q4_0": "Google 官方 QAT 建置，體積更小且品質不減",
@@ -384,12 +384,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Google 緊湊型 Gemma 4，快速高效",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Google 官方緊湊型 QAT 建置，品質不減",
         "gemma_gemma_3_12b_it_q4_k_m": "Google 中型模型，強推理能力",
-        "gemma_gemma_3_1b_it_q4_k_m": "超快 Google 模型，最適合短語音清理",
-        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Liquid AI 高效端側模型，指令遵循出色",
-        "liquidai_lfm2_5_8b_a1b_q4_k_m": "Liquid AI 的 MoE 模型，僅 1.5B 啟用參數即可實現高品質",
-        "liquidai_lfm2_2_6b_q4_k_m": "更高品質清理的均衡 LFM2 模型",
-        "liquidai_lfm2_5_350m_q8_0": "超輕量模型，快速清理聽寫文字",
-        "liquidai_lfm2_5_230m_q8_0": "微型模型，低階硬體也能即時清理"
+        "gemma_gemma_3_1b_it_q4_k_m": "超快 Google 模型，最適合短語音清理"
       }
     },
     "errors": {

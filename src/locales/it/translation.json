@@ -285,6 +285,12 @@
     },
     "general": {
       "appearance": {
+        "appIcon": "Icona dell’app",
+        "appIconAurora": "Aurora",
+        "appIconDescription": "Cambia l’icona nel Dock e nella barra dei menu. Il Finder mantiene l’icona predefinita.",
+        "appIconLight": "Chiara",
+        "appIconMono": "Mono",
+        "appIconRing": "Anello",
         "auto": "Automatico",
         "dark": "Scuro",
         "description": "Personalizza l'aspetto di ReTone",
@@ -300,6 +306,7 @@
       "startup": {
         "launchAtLogin": "Avvia all'accesso",
         "launchAtLoginDescription": "Avvia ReTone in background all'accesso",
+        "launchAtLoginUnavailable": "Disponibile nell’app installata su macOS 13 o versioni successive",
         "title": "Avvio",
         "description": "Controlla il comportamento di ReTone all'avvio",
         "startMinimized": "Avvia ridotto a icona",
@@ -367,13 +374,6 @@
         "qwen_qwen2_5_3b_instruct_q5_k_m": "Modello bilanciato per uso generale",
         "qwen_qwen2_5_7b_instruct_q4_k_m": "Modello grande con alta qualità (Q4_K_M)",
         "qwen_qwen2_5_7b_instruct_q5_k_m": "Modello grande, ragionamento di alta qualità (Q5_K_M)",
-        "mistral_mistral_7b_instruct_v0_3_q4_k_m": "Modello instruction veloce ed efficiente",
-        "mistral_mistral_7b_instruct_v0_3_q5_k_m": "Modello instruction di qualità superiore",
-        "mistral_nemo_12b_instruct_q4_k_m": "Modello 12B di Mistral, buone prestazioni multilingue",
-        "llama_llama_3_2_1b_instruct_q4_k_m": "Modello minuscolo per dispositivi edge",
-        "llama_llama_3_2_3b_instruct_q4_k_m": "Modello multilingue piccolo ma capace",
-        "llama_llama_3_1_8b_instruct_q4_k_m": "Modello potente con ottime prestazioni",
-        "openai_oss_gpt_oss_20b_mxfp4": "Modello open-weight di OpenAI per hardware consumer",
         "gemma_gemma_3_4b_it_q4_k_m": "Modello open-weight di Google, ottimo equilibrio tra velocità e qualità",
         "gemma_gemma_4_31b_it_q4_k_m": "Il più grande Gemma 4 di Google, migliore qualità",
         "gemma_gemma_4_31b_it_qat_q4_0": "Build QAT ufficiale di Google, più leggero a parità di qualità",
@@ -384,12 +384,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Gemma 4 compatto di Google, veloce ed efficiente",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Build QAT compatta ufficiale di Google, qualità preservata",
         "gemma_gemma_3_12b_it_q4_k_m": "Modello di fascia media di Google, ragionamento solido",
-        "gemma_gemma_3_1b_it_q4_k_m": "Modello Google ultraveloce, ideale per la pulizia di brevi dettature",
-        "liquidai_lfm2_5_1_2b_instruct_q4_k_m": "Modello efficiente di Liquid AI, eccellente nel seguire le istruzioni",
-        "liquidai_lfm2_5_8b_a1b_q4_k_m": "MoE di Liquid AI, alta qualità con solo 1,5B parametri attivi",
-        "liquidai_lfm2_2_6b_q4_k_m": "LFM2 bilanciato per una pulizia di qualità superiore",
-        "liquidai_lfm2_5_350m_q8_0": "Modello ultraleggero per una pulizia rapida della dettatura",
-        "liquidai_lfm2_5_230m_q8_0": "Modello minuscolo, pulizia istantanea su hardware modesto"
+        "gemma_gemma_3_1b_it_q4_k_m": "Modello Google ultraveloce, ideale per la pulizia di brevi dettature"
       }
     },
     "errors": {

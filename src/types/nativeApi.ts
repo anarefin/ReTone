@@ -37,6 +37,9 @@ export interface LocalModelDownloadStatus {
 
 export type GpuBackend = "vulkan" | "cpu" | "metal" | null;
 
+/** The app icons offered in Settings; `mono` is the bundle icon. */
+export type AppIconId = "mono" | "light" | "aurora" | "ring";
+
 export interface LlamaServerStatus {
   available: boolean;
   running: boolean;
@@ -156,10 +159,16 @@ declare global {
       openExternal: (url: string) => Promise<{ success: boolean; error?: string }>;
       writeClipboard: (text: string) => Promise<{ success: boolean; xwaylandOnly?: boolean }>;
 
-      getAutoStartEnabled?: () => Promise<{ enabled: boolean; requiresApproval: boolean }>;
+      getAutoStartEnabled?: () => Promise<{
+        enabled: boolean;
+        requiresApproval: boolean;
+        available: boolean;
+      }>;
       setAutoStartEnabled?: (enabled: boolean) => Promise<{ success: boolean; error?: string }>;
       getStartMinimized?: () => Promise<boolean>;
       setStartMinimized?: (enabled: boolean) => Promise<{ success: boolean }>;
+      getAppIcon?: () => Promise<AppIconId>;
+      setAppIcon?: (icon: AppIconId) => Promise<{ success: boolean; icon?: AppIconId; error?: string }>;
       getUiLanguage?: () => Promise<string>;
       setUiLanguage?: (language: string) => Promise<{ success: boolean; language: string }>;
       syncStartupPreferences?: (prefs: {

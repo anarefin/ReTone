@@ -10,11 +10,15 @@ import {
   type InferenceScopeStoreKeys,
 } from "../config/inferenceScopes";
 import { findStaleLocalModelKeys } from "../helpers/localModelSelections";
+import { getLocalModel } from "../models/ModelRegistry";
 import ReasoningService from "../services/ReasoningService";
 
 // Requires localStorage as well as window: test harnesses import this store
 // with partial window stubs.
 const isBrowser = typeof window !== "undefined" && typeof localStorage !== "undefined";
+
+const DEFAULT_LOCAL_PROVIDER = "qwen";
+const DEFAULT_LOCAL_MODEL = "qwen3.5-4b-q4_k_m";
 
 // `message` is main's translated reason, when it gave one.
 export type HotkeyRegistrationResult = { success: boolean; message?: string };
@@ -257,8 +261,8 @@ export const useSettingsStore = create<SettingsState>()((set) => ({
   toneRewriteKey: readString("toneRewriteKey", ""),
   setToneRewriteKey: registerToneRewriteHotkey,
   toneRewriteMode: readToneRewriteMode(),
-  toneRewriteProvider: readString("toneRewriteProvider", "qwen"),
-  toneRewriteModel: readString("toneRewriteModel", "qwen3.5-4b-q4_k_m"),
+  toneRewriteProvider: readString("toneRewriteProvider", DEFAULT_LOCAL_PROVIDER),
+  toneRewriteModel: readString("toneRewriteModel", DEFAULT_LOCAL_MODEL),
   toneRewriteCloudBaseUrl: readString("toneRewriteCloudBaseUrl", ""),
   toneRewriteDisableThinking: readBoolean("toneRewriteDisableThinking", true),
   toneRewriteReasoningEffort: readString("toneRewriteReasoningEffort", ""),
@@ -362,6 +366,25 @@ export function clearMissingLocalModelSelections(isInstalled: (modelId: string) 
   }
 }
 
+/**
+ * Moves a local selection of a model the registry no longer lists (a family
+ * dropped from the catalog) back to the default local model, since its
+ * provider id no longer resolves and inference would fail closed.
+ */
+function resetRetiredLocalModelSelections(): void {
+  const settings = useSettingsStore.getState() as unknown as Record<string, unknown>;
+  const staleKeys: string[] = findStaleLocalModelKeys(
+    Object.values(INFERENCE_SCOPES),
+    settings,
+    (modelId: string) => !!getLocalModel(modelId)
+  );
+  for (const { storeKeys } of Object.values(INFERENCE_SCOPES)) {
+    if (!staleKeys.includes(storeKeys.model)) continue;
+    setStringSetting(storeKeys.provider, DEFAULT_LOCAL_PROVIDER);
+    setStringSetting(storeKeys.model, DEFAULT_LOCAL_MODEL);
+  }
+}
+
 // The picker window's whole-field setting and the shared llama-server's
 // keep-loaded preference live in the main process.
 function syncStartupPreferences(state: SettingsState) {
@@ -398,6 +421,7 @@ export async function initializeSettings(): Promise<void> {
     }
   });
 
+  resetRetiredLocalModelSelections();
   syncStartupPreferences(useSettingsStore.getState());
   useSettingsStore.subscribe((state, previous) => {
     if (

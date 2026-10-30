@@ -1,8 +1,9 @@
 //! App info, links, startup preferences and the UI language.
 
 use crate::app::{AppState, StartupPreferences};
-use crate::env::{START_MINIMIZED, UI_LANGUAGE};
-use crate::{i18n, menu, tray, windows};
+use crate::env::{APP_ICON, START_MINIMIZED, UI_LANGUAGE};
+use crate::{app_icon, i18n, menu, tray, windows};
+use retone_core::app_icon::AppIcon;
 #[cfg(target_os = "macos")]
 use retone_core::login_item::LoginItemPort;
 use retone_core::login_item::{self, AutoStartState};
@@ -102,6 +103,25 @@ pub fn set_start_minimized(state: State<'_, AppState>, enabled: bool) -> Value {
         tracing::warn!(target: "environment", "Failed to save START_MINIMIZED: {error}");
     }
     json!({ "success": true })
+}
+
+#[tauri::command]
+pub fn get_app_icon(state: State<'_, AppState>) -> &'static str {
+    state.env.app_icon().id()
+}
+
+/// Saves the app icon picked in Settings and shows it in the Dock and menu bar.
+/// Sync, so it runs on the main thread like the other tray changes.
+#[tauri::command]
+pub fn set_app_icon(app: AppHandle, state: State<'_, AppState>, icon: String) -> Value {
+    let Some(icon) = AppIcon::parse(&icon) else {
+        return json!({ "success": false, "error": "unknown_icon" });
+    };
+    if let Err(error) = state.env.set(APP_ICON, Some(icon.id())) {
+        tracing::warn!(target: "environment", "Failed to save APP_ICON: {error}");
+    }
+    app_icon::apply(&app, icon);
+    json!({ "success": true, "icon": icon.id() })
 }
 
 #[tauri::command]

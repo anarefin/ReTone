@@ -1,6 +1,6 @@
 {
   "fill": {
-    "automatic-gradient": "extended-srgb:0.00000,0.41569,0.30588,1.00000"
+    "automatic-gradient": "extended-srgb:0.98431,0.98431,0.98824,1.00000"
   },
   "groups": [
     {
@@ -15,7 +15,7 @@
         "opacity": 0.5
       },
       "translucency": {
-        "enabled": true,
+        "enabled": false,
         "value": 0.5
       }
     }

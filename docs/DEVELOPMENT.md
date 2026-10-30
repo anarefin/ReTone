@@ -5,7 +5,7 @@ How to verify a change, how to check a release build, and the known limitations 
 ## Verify
 
 ```bash
-export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node@24/bin:$PATH"
+export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/node/bin:$PATH"
 cargo build --workspace && cargo test --workspace
 cargo clippy --workspace --all-targets -- -D warnings && cargo fmt --check
 npm run typecheck && npm test && npm run i18n:check && npm run lint

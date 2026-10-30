@@ -48,7 +48,7 @@ test("the local live preview sends the server's key as a Bearer token", async (t
   let text = "";
   for await (const delta of reasoningService.processTextStreaming(
     [{ role: "user", content: "hi" }],
-    "lfm2.5-230m-q8_0",
+    "qwen3.5-2b-q4_k_m",
     "local",
     { systemPrompt: "Rewrite." }
   )) {

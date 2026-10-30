@@ -41,6 +41,11 @@ impl TauriDock {
                 tracing::warn!(target: "dock", "Failed to set the activation policy: {error}");
                 return;
             }
+            // An icon set while Accessory is dropped when the tile appears, so
+            // apply the chosen one each time the Dock icon is shown.
+            if visible {
+                crate::app_icon::set_dock_icon(&self.app, crate::app_icon::saved(&self.app));
+            }
         }
         self.visible = visible;
     }

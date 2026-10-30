@@ -1,6 +1,7 @@
 use objc2::runtime::AnyObject;
-use objc2_app_kit::{NSStatusItem, NSWindow, NSWindowCollectionBehavior};
-use objc2_foundation::{NSDictionary, NSNumber, NSString, NSUserDefaults};
+use objc2::{AllocAnyThread, MainThreadMarker};
+use objc2_app_kit::{NSApplication, NSImage, NSStatusItem, NSWindow, NSWindowCollectionBehavior};
+use objc2_foundation::{NSData, NSDictionary, NSNumber, NSString, NSUserDefaults};
 use std::ffi::c_void;
 
 use crate::PICKER_WINDOW_LEVEL;
@@ -66,4 +67,31 @@ pub fn cursor_location() -> Option<(f64, f64)> {
     let event = CGEvent::new(None)?;
     let point = CGEvent::location(Some(&event));
     Some((point.x, point.y))
+}
+
+/// Sets the Dock icon from PNG data: an icon picked in Settings, or any icon
+/// outside a `.app` bundle, where macOS shows the generic executable icon.
+/// Does nothing off the main thread or when the data isn't a readable image.
+pub fn set_application_icon(png: &[u8]) {
+    let Some(mtm) = MainThreadMarker::new() else {
+        return;
+    };
+    let data = NSData::with_bytes(png);
+    let Some(image) = NSImage::initWithData(NSImage::alloc(), &data) else {
+        return;
+    };
+    let app = NSApplication::sharedApplication(mtm);
+    // SAFETY: on the main thread with a valid NSImage.
+    unsafe { app.setApplicationIconImage(Some(&image)) };
+}
+
+/// Puts the bundle's own icon back in the Dock after [`set_application_icon`].
+/// Does nothing off the main thread.
+pub fn reset_application_icon() {
+    let Some(mtm) = MainThreadMarker::new() else {
+        return;
+    };
+    let app = NSApplication::sharedApplication(mtm);
+    // SAFETY: on the main thread; nil restores the bundle icon.
+    unsafe { app.setApplicationIconImage(None) };
 }

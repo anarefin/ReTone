@@ -15,6 +15,18 @@ import { useHotkeyModeInfo } from "../hooks/useHotkeyModeInfo";
 import { validateHotkeyForSlot } from "../utils/hotkeyValidation";
 import { getCachedPlatform } from "../utils/platform";
 import logger from "../utils/logger";
+import type { AppIconId } from "../types/nativeApi";
+import thumbMono from "../assets/app-icons/thumb-mono.png";
+import thumbLight from "../assets/app-icons/thumb-light.png";
+import thumbAurora from "../assets/app-icons/thumb-aurora.png";
+import thumbRing from "../assets/app-icons/thumb-ring.png";
+
+const APP_ICON_OPTIONS: { value: AppIconId; thumb: string; labelKey: string }[] = [
+  { value: "mono", thumb: thumbMono, labelKey: "settingsPage.general.appearance.appIconMono" },
+  { value: "light", thumb: thumbLight, labelKey: "settingsPage.general.appearance.appIconLight" },
+  { value: "aurora", thumb: thumbAurora, labelKey: "settingsPage.general.appearance.appIconAurora" },
+  { value: "ring", thumb: thumbRing, labelKey: "settingsPage.general.appearance.appIconRing" },
+];
 
 const UI_LANGUAGE_OPTIONS: LanguageOption[] = [
   { value: "en", label: "English", flag: "🇺🇸" },
@@ -82,6 +94,7 @@ export default function SettingsWindow() {
 
   const [autoStartEnabled, setAutoStartEnabled] = useState(false);
   const [autoStartNeedsApproval, setAutoStartNeedsApproval] = useState(false);
+  const [autoStartAvailable, setAutoStartAvailable] = useState(true);
   const [autoStartLoading, setAutoStartLoading] = useState(true);
   const [startMinimized, setStartMinimizedState] = useState(false);
 
@@ -91,6 +104,7 @@ export default function SettingsWindow() {
       const state = await window.retoneAPI.getAutoStartEnabled();
       setAutoStartEnabled(state.enabled);
       setAutoStartNeedsApproval(state.requiresApproval);
+      setAutoStartAvailable(state.available ?? true);
     } catch (error) {
       logger.error("Failed to get auto-start status", error, "settings");
     }
@@ -109,9 +123,12 @@ export default function SettingsWindow() {
     try {
       setAutoStartLoading(true);
       const result = await window.retoneAPI.setAutoStartEnabled(enabled);
-      // Read the state back rather than assuming: on Windows the OS can have the
-      // item disabled out from under us, and on macOS it can need approval first.
-      if (result.success) await readAutoStartState();
+      if (!result.success) {
+        logger.warn("Launch at login was not changed", { error: result.error }, "settings");
+      }
+      // Read the state back rather than assuming: the item can need approval
+      // first, and a failed change leaves the toggle where macOS has it.
+      await readAutoStartState();
     } catch (error) {
       logger.error("Failed to set auto-start", error, "settings");
     } finally {
@@ -122,6 +139,21 @@ export default function SettingsWindow() {
   const handleStartMinimizedChange = (enabled: boolean) => {
     setStartMinimizedState(enabled);
     void window.retoneAPI?.setStartMinimized?.(enabled);
+  };
+
+  const [appIcon, setAppIconState] = useState<AppIconId>("mono");
+  useEffect(() => {
+    window.retoneAPI
+      ?.getAppIcon?.()
+      .then((icon) => setAppIconState(icon))
+      .catch(() => {});
+  }, []);
+
+  const handleAppIconChange = (icon: AppIconId) => {
+    setAppIconState(icon);
+    window.retoneAPI
+      ?.setAppIcon?.(icon)
+      .catch((error) => logger.error("Failed to set the app icon", error, "settings"));
   };
 
   const themeOptions = [
@@ -204,6 +236,48 @@ export default function SettingsWindow() {
             </SettingsPanelRow>
             <SettingsPanelRow>
               <SettingsRow
+                label={t("settingsPage.general.appearance.appIcon")}
+                description={t("settingsPage.general.appearance.appIconDescription")}
+              >
+                <div
+                  role="radiogroup"
+                  aria-label={t("settingsPage.general.appearance.appIcon")}
+                  className="flex items-center gap-1.5"
+                >
+                  {APP_ICON_OPTIONS.map((option) => {
+                    const isSelected = appIcon === option.value;
+                    const label = t(option.labelKey);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        aria-label={label}
+                        title={label}
+                        onClick={() => handleAppIconChange(option.value)}
+                        className={`rounded-lg p-0.5 outline-none transition-colors duration-100 focus-visible:ring-2 focus-visible:ring-ring/30 ${
+                          isSelected ? "ring-2 ring-primary" : "ring-1 ring-transparent hover:ring-border"
+                        }`}
+                      >
+                        <img
+                          src={option.thumb}
+                          alt=""
+                          aria-hidden="true"
+                          width={36}
+                          height={36}
+                          decoding="async"
+                          draggable={false}
+                          className="block h-9 w-9"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </SettingsRow>
+            </SettingsPanelRow>
+            <SettingsPanelRow>
+              <SettingsRow
                 label={t("settings.language.uiLabel")}
                 description={t("settings.language.uiDescription")}
               >
@@ -227,12 +301,16 @@ export default function SettingsWindow() {
             <SettingsPanelRow>
               <SettingsRow
                 label={t("settingsPage.general.startup.launchAtLogin")}
-                description={t("settingsPage.general.startup.launchAtLoginDescription")}
+                description={t(
+                  autoStartAvailable
+                    ? "settingsPage.general.startup.launchAtLoginDescription"
+                    : "settingsPage.general.startup.launchAtLoginUnavailable"
+                )}
               >
                 <Toggle
                   checked={autoStartEnabled}
                   onChange={(checked: boolean) => void handleAutoStartChange(checked)}
-                  disabled={autoStartLoading}
+                  disabled={autoStartLoading || !autoStartAvailable}
                 />
               </SettingsRow>
             </SettingsPanelRow>
