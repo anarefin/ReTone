@@ -22,12 +22,11 @@ export const PROVIDER_ERROR_CODES = Object.freeze({
 
 const C = PROVIDER_ERROR_CODES;
 
-// "noteFormatting" opens Language Models on its Note Formatting tab.
-const PROVIDER_SETTINGS_TARGETS = Object.freeze(["speechToText", "llms", "noteFormatting"]);
+const PROVIDER_SETTINGS_TARGETS = Object.freeze(["llms"]);
 
 export const isProviderSettingsTarget = (value) => PROVIDER_SETTINGS_TARGETS.includes(value);
 
-const SETTINGS_TARGET_BY_SURFACE = { transcription: "speechToText", llm: "llms" };
+const SETTINGS_TARGET_BY_SURFACE = { llm: "llms" };
 
 // Only failures the user fixes in Settings get the deep link.
 const FIXABLE = new Set([
@@ -43,9 +42,9 @@ const MESSAGE_KEYS = {
   [C.AUTH_FAILED]: "providerErrors.authFailed",
   [C.ACCESS_DENIED]: "providerErrors.accessDenied",
   [C.QUOTA_EXHAUSTED]: "providerErrors.quotaExhausted",
-  [C.RATE_LIMITED]: "hooks.audioRecording.errorDescriptions.providerRateLimited",
+  [C.RATE_LIMITED]: "providerErrors.rateLimited",
   [C.MODEL_NOT_FOUND]: "providerErrors.modelNotFound",
-  [C.PAYLOAD_TOO_LARGE]: "providerErrors.payloadTooLarge",
+  [C.PAYLOAD_TOO_LARGE]: "providerErrors.requestTooLarge",
   [C.BAD_REQUEST]: "providerErrors.badRequest",
   [C.UNAVAILABLE]: "providerErrors.unavailable",
   [C.TIMEOUT]: "providerErrors.timeout",
@@ -55,9 +54,7 @@ const MESSAGE_KEYS = {
 };
 
 // English twins of the en locale strings, by message key: Error.message is what
-// History rows, logs and key-less surfaces show, so it reads as a sentence, not
-// a status dump. The transcription-only hooks keys say "your transcription
-// provider"; their twins name it, since History has no other place to.
+// logs and key-less surfaces show, so it reads as a sentence, not a status dump.
 const ENGLISH = {
   "providerErrors.authFailed": "{{provider}} rejected your API key.",
   "providerErrors.accessDenied": "{{provider}} denied access. Your key may not include this model.",
@@ -66,7 +63,6 @@ const ENGLISH = {
     "{{provider}} rate-limited the request. Wait a moment and try again.",
   "providerErrors.modelNotFound": "{{provider}} doesn't recognize the model “{{model}}”.",
   "providerErrors.modelNotFoundNoModel": "{{provider}} doesn't recognize the selected model.",
-  "providerErrors.payloadTooLarge": "This recording is too large for {{provider}}.",
   "providerErrors.requestTooLarge": "This request is too large for {{provider}}.",
   "providerErrors.badRequest": "{{provider}} couldn't process this request.",
   "providerErrors.unavailable": "{{provider}} is having problems right now. Try again shortly.",
@@ -86,7 +82,6 @@ const ENGLISH = {
   "providerErrors.selfHosted.modelNotFound": "Your server doesn't recognize the model “{{model}}”.",
   "providerErrors.selfHosted.modelNotFoundNoModel":
     "Your server doesn't recognize the selected model.",
-  "providerErrors.selfHosted.payloadTooLarge": "This recording is too large for your server.",
   "providerErrors.selfHosted.requestTooLarge": "This request is too large for your server.",
   "providerErrors.selfHosted.badRequest": "Your server couldn't process this request.",
   "providerErrors.selfHosted.unavailable":
@@ -96,10 +91,6 @@ const ENGLISH = {
   "providerErrors.selfHosted.noResponse":
     "Couldn't get a response from your server. Check its API key and that it's running.",
   "providerErrors.selfHosted.unknown": "Your server returned an unexpected error.",
-  "hooks.audioRecording.errorDescriptions.providerRateLimited":
-    "{{provider}} rate-limited the request. Wait a moment and try again.",
-  "hooks.audioRecording.errorDescriptions.providerKeyMissing":
-    "No API key is set for {{provider}}.",
 };
 
 export const SELF_HOSTED_NAME = "Your server";
@@ -205,18 +196,7 @@ function buildClassification(code, { provider, model, surface, selfHosted, techn
     if (model) messageParams.model = model;
     else messageKey = "providerErrors.modelNotFoundNoModel";
   }
-  if (code === C.KEY_MISSING) {
-    messageKey =
-      surface === "transcription"
-        ? "hooks.audioRecording.errorDescriptions.providerKeyMissing"
-        : "providerErrors.keyMissing";
-  }
-  if (surface === "llm") {
-    // The transcription keys are the dictation pill's established copy; LLM
-    // surfaces name the provider and send text, not a recording.
-    if (code === C.RATE_LIMITED) messageKey = "providerErrors.rateLimited";
-    if (code === C.PAYLOAD_TOO_LARGE) messageKey = "providerErrors.requestTooLarge";
-  }
+  if (code === C.KEY_MISSING) messageKey = "providerErrors.keyMissing";
   // "Your server" takes a different case or article in each sentence in many
   // languages (Russian, German), so self-hosted errors have their own sentences.
   if (selfHosted && messageKey.startsWith("providerErrors.")) {

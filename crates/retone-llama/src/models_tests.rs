@@ -178,7 +178,7 @@ async fn a_short_request_costs_no_measurement_and_no_restart() {
             SHORT_PROMPT,
             &InferenceOptions {
                 max_tokens: Some(900),
-                ..opts("Clean up dictation.")
+                ..opts("Rewrite this text.")
             },
         )
         .await
@@ -199,7 +199,7 @@ async fn a_long_request_grows_the_context_once_and_succeeds() {
     .await;
     let result = s
         .manager
-        .run_inference(&s.model_id, &long_prompt(), &opts("Write meeting notes."))
+        .run_inference(&s.model_id, &long_prompt(), &opts("Summarize this text."))
         .await
         .unwrap();
     assert_eq!(result, "done");
@@ -316,7 +316,7 @@ async fn a_prompt_that_fits_gets_a_smaller_answer_rather_than_a_refusal() {
             &long_prompt(),
             &InferenceOptions {
                 max_tokens: Some(4096),
-                ..opts("Write meeting notes.")
+                ..opts("Summarize this text.")
             },
         )
         .await
@@ -439,7 +439,7 @@ async fn a_reply_the_window_clipped_is_refused_when_asked() {
             &InferenceOptions {
                 max_tokens: Some(4096),
                 refuse_clipped_by_window: true,
-                ..opts("Write meeting notes.")
+                ..opts("Summarize this text.")
             },
         )
         .await
@@ -466,7 +466,7 @@ async fn a_trimmed_reply_that_finishes_is_kept() {
             &InferenceOptions {
                 max_tokens: Some(4096),
                 refuse_clipped_by_window: true,
-                ..opts("Write meeting notes.")
+                ..opts("Summarize this text.")
             },
         )
         .await

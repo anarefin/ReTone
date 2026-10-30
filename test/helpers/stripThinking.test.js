@@ -6,8 +6,8 @@ const load = () => import("../../src/helpers/stripThinking.js");
 test("removes a well-formed think block and keeps the answer", async () => {
   const { stripThinkingTags } = await load();
   assert.equal(
-    stripThinkingTags("<think>let me reason about this</think>Meeting Notes Summary"),
-    "Meeting Notes Summary"
+    stripThinkingTags("<think>let me reason about this</think>Rewritten Text Summary"),
+    "Rewritten Text Summary"
   );
 });
 
@@ -56,9 +56,9 @@ test("still keeps sequential (non-nested) think blocks from leaking", async () =
 
 test("strips mixed-case think tags and handles stray closing tags", async () => {
   const { stripThinkingTags } = await load();
-  assert.equal(stripThinkingTags("<Think>reasoning</Think>Meeting Notes"), "Meeting Notes");
-  assert.equal(stripThinkingTags("<THINK>reasoning</THINK>Meeting Notes"), "Meeting Notes");
-  assert.equal(stripThinkingTags("</think>Meeting Notes"), "Meeting Notes");
-  assert.equal(stripThinkingTags("</Think>Meeting Notes"), "Meeting Notes");
+  assert.equal(stripThinkingTags("<Think>reasoning</Think>Rewritten Text"), "Rewritten Text");
+  assert.equal(stripThinkingTags("<THINK>reasoning</THINK>Rewritten Text"), "Rewritten Text");
+  assert.equal(stripThinkingTags("</think>Rewritten Text"), "Rewritten Text");
+  assert.equal(stripThinkingTags("</Think>Rewritten Text"), "Rewritten Text");
   assert.equal(stripThinkingTags("Title<THINK>unterminated"), "Title");
 });

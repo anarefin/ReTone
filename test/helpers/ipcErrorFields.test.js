@@ -9,20 +9,20 @@ test("ipcErrorFields keeps every classified field and drops undefined ones", asy
     code: "PROVIDER_AUTH_FAILED",
     messageKey: "providerErrors.authFailed",
     messageParams: { provider: "Mistral" },
-    settingsTarget: "speechToText",
+    settingsTarget: "llms",
     technicalDetails: { provider: "Mistral", status: 401 },
     status: 401,
-    surface: "transcription",
+    surface: "llm",
   });
   assert.deepEqual(ipcErrorFields(error), {
     error: "Mistral rejected your API key.",
     code: "PROVIDER_AUTH_FAILED",
     messageKey: "providerErrors.authFailed",
     messageParams: { provider: "Mistral" },
-    settingsTarget: "speechToText",
+    settingsTarget: "llms",
     technicalDetails: { provider: "Mistral", status: 401 },
     status: 401,
-    surface: "transcription",
+    surface: "llm",
   });
   assert.deepEqual(ipcErrorFields(new Error("plain")), { error: "plain" });
 });
@@ -35,7 +35,7 @@ test("errorFromIpcResult rebuilds an Error with the same fields", async () => {
     messageParams: { provider: "xAI" },
     technicalDetails: { status: 503 },
     status: 503,
-    surface: "transcription",
+    surface: "llm",
   });
   const rebuilt = errorFromIpcResult(ipcErrorFields(original));
   assert.ok(rebuilt instanceof Error);

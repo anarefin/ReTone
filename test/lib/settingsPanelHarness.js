@@ -7,8 +7,6 @@ const {
   installHookDom,
 } = require("./rendererTestHarness");
 
-const MIGRATED = { _providerSettingsMigrated: "1", uploadTranscriptionMigrated: "true" };
-
 function findAll(node, predicate, found = []) {
   if (Array.isArray(node)) {
     for (const child of node) findAll(child, predicate, found);
@@ -60,7 +58,7 @@ async function mountSettingsPanel(
   if (fetch) t.mock.method(globalThis, "fetch", fetch);
   const connections = [];
   installBrowserGlobals(t, {
-    initialStorage: { ...MIGRATED, ...settings },
+    initialStorage: { ...settings },
     window: {
       location: { search: "" },
       retoneAPI: {

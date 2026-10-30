@@ -13,13 +13,13 @@ test("a keyed error is translated with its params", async () => {
       message: "Mistral rejected your API key.",
       messageKey: "providerErrors.authFailed",
       messageParams: { provider: "Mistral" },
-      settingsTarget: "speechToText",
+      settingsTarget: "llms",
       technicalDetails: { provider: "Mistral", status: 401 },
     },
     t
   );
   assert.equal(out.description, 'providerErrors.authFailed|{"provider":"Mistral"}');
-  assert.equal(out.settingsTarget, "speechToText");
+  assert.equal(out.settingsTarget, "llms");
   assert.deepEqual(out.technicalDetails, { provider: "Mistral", status: 401 });
 });
 

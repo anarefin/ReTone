@@ -68,17 +68,6 @@
       "slotConflict": "Diese Tastenkombination wird bereits für {{slot}} verwendet."
     }
   },
-  "systemSettings": {
-    "microphone": "Bitte öffnen Sie die Systemeinstellungen, um Mikrofonberechtigungen zu konfigurieren.",
-    "sound": "Bitte öffnen Sie die Sound-Einstellungen des Systems (z. B. pavucontrol).",
-    "accessibility": "Bedienungshilfen-Einstellungen sind auf dieser Plattform nicht verfügbar.",
-    "systemAudio": "Systemaudio-Einstellungen sind auf dieser Plattform nicht verfügbar.",
-    "screenRecording": "Einstellungen zur Bildschirmaufnahme sind auf dieser Plattform nicht verfügbar.",
-    "loginItems": "Einstellungen für Anmeldeobjekte sind auf dieser Plattform nicht verfügbar."
-  },
-  "windows": {
-    "pttUnavailable": "Der ReTone-Tasten-Listener ist nicht verfügbar."
-  },
   "common": {
     "retry": "Erneut versuchen",
     "reset": "Zurücksetzen",
@@ -107,7 +96,6 @@
           "apiKeyRequired": "Füge vor dem Test einen API-Schlüssel hinzu.",
           "credentialsRejected": "Der Anbieter hat diese Zugangsdaten abgelehnt.",
           "endpointNotFound": "Der Endpoint stellt keine OpenAI-kompatible Modellliste bereit.",
-          "transcriptionEndpointNotFound": "Unter dieser Adresse werden keine Transkriptionen angenommen.",
           "modelNotFound": "Das ausgewählte Modell ist bei diesem Anbieter nicht verfügbar.",
           "providerStatus": "Der Anbieter hat den Status {{status}} zurückgegeben.",
           "timeout": "Der Verbindungstest hat das Zeitlimit überschritten.",
@@ -169,7 +157,7 @@
     "availableModels": "Verfügbare Modelle",
     "disableThinking": {
       "label": "Denkausgabe deaktivieren",
-      "help": "Überspringt Reasoning-Token für eine sauberere Ausgabe. Empfohlen für Bereinigung. Einige Server ignorieren diesen Hinweis."
+      "help": "Überspringt Reasoning-Token für eine sauberere Ausgabe. Empfohlen für Umformulierungen. Einige Server ignorieren diesen Hinweis."
     },
     "keepModelLoaded": {
       "label": "Modell geladen lassen",
@@ -182,23 +170,13 @@
         "copy": "Technische Details kopieren",
         "copyCommand": "Wiederherstellungsbefehl kopieren"
       }
-    }
-  },
-  "transcription": {
-    "deleteModel": {
-      "title": "Modell löschen",
-      "description": "Möchten Sie dieses Modell wirklich löschen? Sie müssen es erneut herunterladen, wenn Sie es wieder verwenden möchten."
+    },
+    "errors": {
+      "outputTruncated": "Dem KI-Modell ging der Platz aus, bevor es deinen Text fertig umgeschrieben hatte.",
+      "emptyReply": "Das KI-Modell lieferte eine leere Antwort statt des umgeschriebenen Texts."
     }
   },
   "hooks": {
-    "audioRecording": {
-      "errorDescriptions": {
-        "providerRateLimited": "Dein Transkriptionsanbieter hat die Anfrage begrenzt. Warte kurz und versuch es erneut.",
-        "providerKeyMissing": "Für Ihren Transkriptionsanbieter ist kein API-Schlüssel hinterlegt. Fügen Sie ihn unter Einstellungen → Sprache zu Text hinzu.",
-        "cleanupTruncated": "Dem KI-Modell ging der Platz aus, bevor es dein Diktat fertig bereinigt hatte.",
-        "cleanupEmptyReply": "Das KI-Modell lieferte eine leere Antwort statt des bereinigten Diktats."
-      }
-    },
     "hotkeyRegistration": {
       "titles": {
         "notRegistered": "Hotkey nicht registriert"
@@ -299,10 +277,7 @@
         "themeDescription": "Wählen Sie zwischen Hell, Dunkel oder Systemstandard",
         "title": "Darstellung"
       },
-      "hotkey": {
-        "linuxPttPermissionDescription": "Führen Sie diesen Befehl aus und melden Sie sich ab/an: sudo usermod -aG input $USER",
-        "linuxPttSetupDescription": "Ihr Benutzer benötigt Zugriff auf die Tastatureingabegeräte."
-      },
+      "hotkey": {},
       "startup": {
         "launchAtLogin": "Beim Anmelden starten",
         "launchAtLoginDescription": "ReTone bei der Anmeldung im Hintergrund starten",
@@ -316,7 +291,25 @@
           "description": "macOS hat ReTone als Anmeldeobjekt registriert, wartet aber darauf, dass du es unter Anmeldeobjekte erlaubst.",
           "action": "Anmeldeobjekte öffnen"
         }
+      },
+      "updates": {
+        "title": "Updates",
+        "description": "Neue Versionen von ReTone über GitHub erhalten",
+        "version": "ReTone {{version}}",
+        "idle": "Auf GitHub nach einer neueren Version suchen",
+        "checking": "Wird geprüft…",
+        "upToDate": "Du bist auf dem neuesten Stand",
+        "available": "Version {{version}} ist verfügbar",
+        "failed": "Updates konnten nicht geprüft werden. Versuche es später erneut.",
+        "check": "Nach Updates suchen",
+        "download": "Herunterladen"
       }
+    },
+    "tabs": {
+      "general": "Allgemein",
+      "label": "Einstellungsbereiche",
+      "model": "Modell",
+      "retone": "ReTone"
     }
   },
   "models": {
@@ -384,7 +377,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Kompaktes Gemma 4 von Google, schnell und effizient",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Kompakter offizieller QAT-Build von Google, Qualität erhalten",
         "gemma_gemma_3_12b_it_q4_k_m": "Googles Mittelklasse-Modell, starkes Reasoning",
-        "gemma_gemma_3_1b_it_q4_k_m": "Ultraschnelles Google-Modell, ideal für kurze Diktat-Bereinigung"
+        "gemma_gemma_3_1b_it_q4_k_m": "Ultraschnelles Google-Modell, ideal für kurze Umformulierungen"
       }
     },
     "errors": {
@@ -392,6 +385,10 @@
       "contextTooLargeGeneric": "Das ist zu lang, als dass {{model}} es auf diesem Computer lesen könnte. Versuchen Sie ein Cloud-Modell oder führen Sie die Aktion für eine kürzere Auswahl aus.",
       "localServerUnavailable": "{{model}} konnte auf diesem Computer nicht gestartet werden. Versuchen Sie es erneut oder wechseln Sie zu einem Cloud-Modell.",
       "localModelBusy": "Das lokale Modell bearbeitet noch eine andere Anfrage. Warten Sie, bis sie abgeschlossen ist, und versuchen Sie es dann erneut."
+    },
+    "deleteModel": {
+      "title": "Modell löschen",
+      "description": "Möchten Sie dieses Modell wirklich löschen? Sie müssen es erneut herunterladen, wenn Sie es wieder verwenden möchten."
     }
   },
   "apiKeyInput": {
@@ -417,7 +414,6 @@
     "rateLimited": "{{provider}} hat die Anfrage begrenzt. Warten Sie einen Moment und versuchen Sie es erneut.",
     "modelNotFound": "{{provider}} kennt das Modell „{{model}}“ nicht.",
     "modelNotFoundNoModel": "{{provider}} kennt das ausgewählte Modell nicht.",
-    "payloadTooLarge": "Diese Aufnahme ist für {{provider}} zu groß.",
     "requestTooLarge": "Diese Anfrage ist für {{provider}} zu groß.",
     "badRequest": "{{provider}} konnte diese Anfrage nicht verarbeiten.",
     "unavailable": "{{provider}} hat derzeit Probleme. Versuchen Sie es in Kürze erneut.",
@@ -433,7 +429,6 @@
       "rateLimited": "Ihr Server hat die Anfrage begrenzt. Warten Sie einen Moment und versuchen Sie es erneut.",
       "modelNotFound": "Ihr Server kennt das Modell „{{model}}“ nicht.",
       "modelNotFoundNoModel": "Ihr Server kennt das ausgewählte Modell nicht.",
-      "payloadTooLarge": "Diese Aufnahme ist für Ihren Server zu groß.",
       "requestTooLarge": "Diese Anfrage ist für Ihren Server zu groß.",
       "badRequest": "Ihr Server konnte diese Anfrage nicht verarbeiten.",
       "unavailable": "Ihr Server hat derzeit Probleme. Versuchen Sie es in Kürze erneut.",

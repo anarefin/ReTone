@@ -59,18 +59,18 @@ test("Responses retries when a permanent Chat fallback follows a transient failu
 
   const { openaiProvider } = await load();
   const resultPromise = openaiProvider.call({
-    text: "Clean this transcript",
+    text: "Rewrite this text",
     model: "responses-only-model",
     agentName: null,
     config: {
       provider: "custom",
       baseUrl: "https://responses-only.example/v1",
       customApiKey: "test-key",
-      systemPrompt: "Clean the transcript",
+      systemPrompt: "Rewrite the text",
     },
     ctx: {
       getApiKey: async () => "test-key",
-      getSystemPrompt: () => "Clean the transcript",
+      getSystemPrompt: () => "Rewrite the text",
       getCustomDictionary: () => [],
       getPreferredLanguage: () => "en",
       getUiLanguage: () => "en",

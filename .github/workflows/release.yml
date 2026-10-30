@@ -32,7 +32,7 @@ jobs:
       contents: read
 
   release:
-    name: Draft GitHub release
+    name: Publish GitHub release
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -44,17 +44,36 @@ jobs:
           name: retone-macos-arm64
           path: dist
 
-      - name: Create draft release
+      - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          mv dist/ReTone.dmg "dist/ReTone-${TAG#v}-arm64.dmg"
-          gh release create "$TAG" "dist/ReTone-${TAG#v}-arm64.dmg" \
-            --repo anarefin/retone \
-            --draft \
-            --title "ReTone $TAG" \
-            --notes "ReTone $TAG for macOS (Apple silicon).
+          dmg="ReTone-${TAG#v}-arm64.dmg"
+          mv dist/ReTone.dmg "dist/$dmg"
+          (cd dist && shasum -a 256 "$dmg" > "$dmg.sha256")
+          cat > notes.md <<EOF
+          ReTone $TAG for macOS on Apple silicon (M1 or later), macOS 12 or later.
 
-          This build is signed ad-hoc and not notarized. After installing, right-click ReTone.app and choose Open the first time, then grant Accessibility in System Settings > Privacy & Security (re-grant it after every new build)."
+          ### Install
+          1. Download \`$dmg\`, open it and drag **ReTone** to **Applications**.
+          2. Open ReTone. This build is signed ad-hoc and not notarized, so macOS blocks the first launch:
+             - **macOS 15 or later:** click **Done**, then go to System Settings › Privacy & Security, scroll down and click **Open Anyway** next to ReTone.
+             - **macOS 12–14:** right-click ReTone in Applications and choose **Open**.
+             - Or, in Terminal: \`xattr -dr com.apple.quarantine /Applications/ReTone.app\`
+          3. Grant **Accessibility** when asked (System Settings › Privacy & Security › Accessibility). ReTone needs it to read your selection and paste the rewrite.
+          4. In Settings, set a hotkey and choose a model.
+
+          ### Updating
+          Replace the app in Applications. macOS ties the Accessibility grant to each build, so remove the old ReTone entry in Accessibility (the **−** button) and grant it again.
+
+          ### Verify the download
+          \`shasum -a 256 -c $dmg.sha256\` (run in the folder with both files).
+          EOF
+          gh release create "$TAG" "dist/$dmg" "dist/$dmg.sha256" \
+            --repo anarefin/retone \
+            --latest \
+            --title "ReTone $TAG" \
+            --notes-file notes.md \
+            --generate-notes

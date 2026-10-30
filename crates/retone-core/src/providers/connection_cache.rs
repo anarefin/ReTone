@@ -15,17 +15,7 @@ use std::time::{Duration, Instant};
 pub const CONNECTED_TTL: Duration = Duration::from_secs(10 * 60);
 
 /// Everything that decides a check's answer.
-const CHECK_FIELDS: [&str; 9] = [
-    "scope",
-    "provider",
-    "apiKey",
-    "baseUrl",
-    "model",
-    "clientId",
-    "clientSecret",
-    "environment",
-    "tenant",
-];
+const CHECK_FIELDS: [&str; 5] = ["scope", "provider", "apiKey", "baseUrl", "model"];
 
 fn check_key(config: &Value) -> String {
     let fields: Vec<&Value> = CHECK_FIELDS
@@ -213,15 +203,11 @@ mod tests {
         let base = config();
         let mut variants = vec![base.clone()];
         for (field, value) in [
-            ("scope", "transcription"),
+            ("scope", "other"),
             ("provider", "groq"),
             ("apiKey", "sk-other"),
             ("baseUrl", "http://127.0.0.1:1234/v1"),
             ("model", "gpt-other"),
-            ("clientId", "corti-id"),
-            ("clientSecret", "corti-secret"),
-            ("environment", "eu"),
-            ("tenant", "acme"),
         ] {
             let mut v = base.clone();
             v[field] = json!(value);

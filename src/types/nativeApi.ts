@@ -12,7 +12,7 @@ export interface IpcErrorFields {
   settingsTarget?: string;
   technicalDetails?: TechnicalErrorDetailsData;
   status?: number;
-  surface?: "transcription" | "llm";
+  surface?: "llm";
 }
 
 export type ToneRewritePickerPayload =
@@ -39,6 +39,13 @@ export type GpuBackend = "vulkan" | "cpu" | "metal" | null;
 
 /** The app icons offered in Settings; `mono` is the bundle icon. */
 export type AppIconId = "mono" | "light" | "aurora" | "ring";
+
+export interface UpdateCheckResult {
+  status: "upToDate" | "available" | "failed";
+  currentVersion: string;
+  latestVersion?: string;
+  url?: string;
+}
 
 export interface LlamaServerStatus {
   available: boolean;
@@ -147,8 +154,8 @@ declare global {
       saveGroqKey: (key: string) => Promise<{ success: boolean }>;
       getOpenrouterKey: () => Promise<string>;
       saveOpenrouterKey: (key: string) => Promise<{ success: boolean }>;
-      getCleanupCustomKey: () => Promise<string>;
-      saveCleanupCustomKey: (key: string) => Promise<{ success: boolean }>;
+      getCustomKey: () => Promise<string>;
+      saveCustomKey: (key: string) => Promise<{ success: boolean }>;
       onApiKeyUpdated?: (callback: (storeKey: string) => void) => () => void;
       testProviderConnection?: (
         config: ProviderConnectionCheck
@@ -156,6 +163,7 @@ declare global {
 
       getPlatform: () => "darwin" | "win32" | "linux";
       getAppVersion?: () => Promise<string>;
+      checkForUpdate?: () => Promise<UpdateCheckResult>;
       openExternal: (url: string) => Promise<{ success: boolean; error?: string }>;
       writeClipboard: (text: string) => Promise<{ success: boolean; xwaylandOnly?: boolean }>;
 

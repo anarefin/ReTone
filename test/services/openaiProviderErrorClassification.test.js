@@ -5,7 +5,7 @@ const load = () => import("../../src/services/ai/inferenceProviders/openai.ts");
 
 const providerContext = {
   getApiKey: async () => "test-key",
-  getSystemPrompt: () => "Clean the transcript",
+  getSystemPrompt: () => "Rewrite the text",
   getCustomDictionary: () => [],
   getPreferredLanguage: () => "en",
   getUiLanguage: () => "en",
@@ -44,7 +44,7 @@ test("a single-candidate custom /responses endpoint's 429 insufficient_quota sur
   const { openaiProvider } = await load();
   await assert.rejects(
     openaiProvider.call({
-      text: "raw transcript",
+      text: "raw text",
       model: "cleanup-model",
       agentName: null,
       config: {
@@ -77,7 +77,7 @@ test("OpenRouter is classified by its own name, never as self-hosted", async (t)
   const { openaiProvider } = await load();
   await assert.rejects(
     openaiProvider.call({
-      text: "raw transcript",
+      text: "raw text",
       model: "nope/nope",
       agentName: null,
       config: { provider: "openrouter" },
@@ -107,7 +107,7 @@ test("a custom endpoint's error is classified self-hosted", async (t) => {
   const { openaiProvider } = await load();
   await assert.rejects(
     openaiProvider.call({
-      text: "raw transcript",
+      text: "raw text",
       model: "cleanup-model",
       agentName: null,
       config: {

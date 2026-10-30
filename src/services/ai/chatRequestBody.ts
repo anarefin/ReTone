@@ -18,7 +18,7 @@ import { applyThinkingSuppression, isThinkingSuppressed } from "./thinkingSuppre
  * catalog is dynamic (models outside the registry must not fall through to
  * `max_completion_tokens`); local/lan are llama.cpp-style servers.
  */
-const LEGACY_CHAT_COMPLETIONS_PROVIDERS = new Set(["local", "lan", "groq", "tinfoil", "corti"]);
+const LEGACY_CHAT_COMPLETIONS_PROVIDERS = new Set(["local", "lan", "groq", "tinfoil"]);
 
 /**
  * Single place that turns (model, provider, endpoint, config) into the
@@ -46,7 +46,7 @@ export function applyChatCompletionsParams(
   }
 ): void {
   const providerKey = provider.toLowerCase();
-  // No systemPrompt override means the default cleanup path: a deterministic
+  // No systemPrompt override means the default transform path: a deterministic
   // transform, so zero temperature.
   const defaultTemperature = config.systemPrompt ? 0.3 : 0;
 
@@ -63,7 +63,7 @@ export function applyChatCompletionsParams(
   }
 
   // The user's chosen effort wins; otherwise deterministic transforms
-  // (cleanup, selection edits) pin the family's preferred effort — see
+  // (selection rewrites) pin the family's preferred effort — see
   // modelFamilyConstraints for the gpt-oss rationale. A suppressed request has
   // no chosen effort, so applyThinkingSuppression still decides it.
   const familyEffort = getModelFamilyConstraints(model)?.reasoningEffort;
@@ -72,8 +72,8 @@ export function applyChatCompletionsParams(
     // OpenRouter takes effort only inside its reasoning object.
     if (providerKey === "openrouter") requestBody.reasoning = { effort };
     else requestBody.reasoning_effort = effort;
-  } else if (familyEffort?.cleanupValue && isDeterministicTransform(config)) {
-    requestBody.reasoning_effort = familyEffort.cleanupValue;
+  } else if (familyEffort?.transformValue && isDeterministicTransform(config)) {
+    requestBody.reasoning_effort = familyEffort.transformValue;
   }
 
   const suppressed = applyThinkingSuppression(
@@ -112,8 +112,8 @@ export function responsesReasoningEffort(
   }
   const effort = chosenReasoningEffort(provider, model, config, endpoint);
   if (effort) return effort;
-  if (familyEffort?.cleanupValue && isDeterministicTransform(config)) {
-    return familyEffort.cleanupValue;
+  if (familyEffort?.transformValue && isDeterministicTransform(config)) {
+    return familyEffort.transformValue;
   }
   return familyEffort?.defaultValue;
 }
@@ -166,13 +166,11 @@ export function isTruncatedFinishReason(reason: unknown): boolean {
 }
 
 /**
- * Dictation cleanup renders these errors as the toast title, so they carry the key
- * the renderer translates. Anthropic and enterprise attach the same key on the
- * main-process side; local llama reports a code that localInferenceError.ts maps.
+ * The picker shows these errors, so they carry the key the renderer translates;
+ * local llama reports a code that localInferenceError.ts maps.
  */
-export const TRUNCATED_OUTPUT_MESSAGE_KEY =
-  "hooks.audioRecording.errorDescriptions.cleanupTruncated";
-export const EMPTY_OUTPUT_MESSAGE_KEY = "hooks.audioRecording.errorDescriptions.cleanupEmptyReply";
+export const TRUNCATED_OUTPUT_MESSAGE_KEY = "reasoning.errors.outputTruncated";
+export const EMPTY_OUTPUT_MESSAGE_KEY = "reasoning.errors.emptyReply";
 
 /** Output cut off at the token cap; providers may pass their own wording for the logs. */
 export function truncatedOutputError(
@@ -183,7 +181,7 @@ export function truncatedOutputError(
 
 /**
  * Code on the truncated error for a reply cut off before any answer: a reasoning
- * model spent the whole output cap thinking. Note formatting retries those.
+ * model spent the whole output cap thinking.
  */
 export const OUTPUT_LIMIT_BEFORE_ANSWER_CODE = "OUTPUT_LIMIT_BEFORE_ANSWER";
 
@@ -201,7 +199,7 @@ export function emptyOutputError(
 
 /**
  * Error for a completion that produced no text, or null when the caller may
- * echo its input instead. Only the default cleanup transform (no systemPrompt)
+ * echo its input instead. Only the default transform (no systemPrompt)
  * may echo: a prompted task would take its raw material as the finished result.
  */
 export function emptyResponseError(

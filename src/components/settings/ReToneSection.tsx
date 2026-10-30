@@ -20,7 +20,6 @@ import {
   toneRewriteOptionIcon,
   toneRewriteOptionLabel,
 } from "../toneRewriteIcons";
-import InferenceConfigEditor from "./InferenceConfigEditor";
 import ReToneOptionRow, { type ReToneOptionDraft } from "./ReToneOptionRow";
 
 interface ReToneSectionProps {
@@ -29,14 +28,6 @@ interface ReToneSectionProps {
 }
 
 const NEW_OPTION_ID = "new";
-
-// Above this size a local model is noticeably slow for a quick rewrite.
-const FAST_LOCAL_MODEL_MAX_BILLIONS = 4;
-
-function localModelBillions(modelId: string): number | null {
-  const match = modelId.match(/(\d+(?:\.\d+)?)b(?![a-z])/i);
-  return match ? Number(match[1]) : null;
-}
 
 // Where a drop lands: before the row under the pointer, or after it when the
 // pointer is in its lower half.
@@ -53,10 +44,6 @@ export default function ReToneSection({ hotkeyInput }: ReToneSectionProps) {
   const setLivePreview = useSettingsStore((s) => s.setToneRewriteLivePreview);
   const wholeField = useSettingsStore((s) => s.toneRewriteWholeField);
   const setWholeField = useSettingsStore((s) => s.setToneRewriteWholeField);
-  const mode = useSettingsStore((s) => s.toneRewriteMode);
-  const model = useSettingsStore((s) => s.toneRewriteModel);
-  const modelBillions = mode === "local" ? localModelBillions(model) : null;
-  const showSpeedHint = modelBillions !== null && modelBillions > FAST_LOCAL_MODEL_MAX_BILLIONS;
   const { confirmDialog, showConfirmDialog, hideConfirmDialog } = useDialogs();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
@@ -135,15 +122,14 @@ export default function ReToneSection({ hotkeyInput }: ReToneSectionProps) {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
+      <div>
         <SectionHeader
-          title={t("reTone.model.title")}
-          description={t("reTone.model.description")}
+          title={t("reTone.hotkey.title")}
+          description={t("reTone.hotkey.description")}
         />
-        <InferenceConfigEditor scope="toneRewrite" />
-        {showSpeedHint && (
-          <p className="text-xs text-muted-foreground">{t("reTone.model.speedHint")}</p>
-        )}
+        <SettingsPanel>
+          <SettingsPanelRow>{hotkeyInput}</SettingsPanelRow>
+        </SettingsPanel>
       </div>
 
       <div>
@@ -168,16 +154,6 @@ export default function ReToneSection({ hotkeyInput }: ReToneSectionProps) {
               <Toggle checked={wholeField} onChange={setWholeField} />
             </SettingsRow>
           </SettingsPanelRow>
-        </SettingsPanel>
-      </div>
-
-      <div>
-        <SectionHeader
-          title={t("reTone.hotkey.title")}
-          description={t("reTone.hotkey.description")}
-        />
-        <SettingsPanel>
-          <SettingsPanelRow>{hotkeyInput}</SettingsPanelRow>
         </SettingsPanel>
       </div>
 

@@ -42,11 +42,21 @@ What a good bundle looks like:
 - `codesign -dv`: `Identifier=com.arefin.retone`, `flags=0x10002(adhoc,runtime)`, entitlements = apple-events only; the deep strict verify reports "valid on disk" and "satisfies its Designated Requirement".
 - `Contents/Resources/bin`: `llama-server-darwin-arm64` (`com.arefin.retone.llama-server`, `adhoc,runtime`, disable-library-validation) plus its dylibs, each passing `codesign --verify --strict`.
 - `Contents/Resources/Assets.car` and `Contents/Resources/THIRD_PARTY_NOTICES.md` present; Info.plist has `NSAccessibilityUsageDescription`, `NSAppleEventsUsageDescription` and `CFBundleIconName = retone`.
-- Tauri writes `ReTone_<version>_aarch64.dmg`; `postbuild:mac` (and CI) copy it to `dist/ReTone.dmg`, and the release asset is `ReTone-<version>-arm64.dmg`.
+- Tauri writes `ReTone_<version>_aarch64.dmg`; `postbuild:mac` (and CI) copy it to `dist/ReTone.dmg`, and the release asset is `ReTone-<version>-arm64.dmg` with a `.sha256` beside it.
+
+## Cutting a release
+
+1. Bump `version` in `package.json` (Tauri and Cargo read it from there) and commit to `main`.
+2. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag must equal `v` + the `package.json` version.
+3. `release.yml` runs the full CI pipeline, then **publishes** the release (not a draft) as Latest, with the DMG, its `.sha256`, the install notes and generated changes.
+4. Check the release page, then download the DMG and run `shasum -a 256 -c ReTone-X.Y.Z-arm64.dmg.sha256`.
+5. Settings › General › Updates in older builds finds the new release through `releases/latest` (once a day or on demand).
+
+A bad release: delete it and its tag on GitHub (`gh release delete vX.Y.Z --cleanup-tag`), fix, bump the version and tag again. Don't reuse a version number.
 
 ## Manual checklist
 
-Install `dist/ReTone.dmg` (drag to Applications, right-click → Open the first time), grant Accessibility (re-grant after each build), then:
+Install `dist/ReTone.dmg` (drag to Applications; the first time, System Settings › Privacy & Security › Open Anyway on macOS 15+, right-click → Open on 12–14), grant Accessibility (re-grant after each build), then:
 
 - [ ] Tray icon shows in the menu bar; its menu opens/hides Settings and quits
 - [ ] Picker over a selection in TextEdit, a Safari/Chrome field, and an Electron-based app (Slack/VS Code)

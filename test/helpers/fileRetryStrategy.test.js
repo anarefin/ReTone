@@ -6,7 +6,7 @@ const assert = require("node:assert/strict");
 
 const load = () => import("../../src/utils/retry.ts");
 
-test("transient filesystem errors retry — antivirus and indexers briefly lock temp audio files", async () => {
+test("transient filesystem errors retry — antivirus and indexers briefly lock temp files", async () => {
   const { createFileRetryStrategy } = await load();
   const { shouldRetry } = createFileRetryStrategy();
 

@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 
 const ctx = {
   getApiKey: async () => "test-key",
-  getSystemPrompt: () => "Clean the transcript",
+  getSystemPrompt: () => "Rewrite the text",
   getCustomDictionary: () => [],
   getPreferredLanguage: () => "en",
   getUiLanguage: () => "en",
@@ -44,7 +44,7 @@ async function setup(t, name, fetchResponse, config = {}) {
   };
   const call = () =>
     openaiProvider.call({
-      text: "raw transcript",
+      text: "raw text",
       model: "cleanup-model",
       agentName: null,
       config: {

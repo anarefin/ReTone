@@ -16,13 +16,13 @@ export interface ModelFamilyConstraints {
     /** Levels a Custom or OpenRouter endpoint offers for this family. */
     options?: string[];
     /**
-     * Effort for deterministic transforms (cleanup, selection edits). gpt-oss
+     * Effort for deterministic transforms (selection rewrites). gpt-oss
      * defaults to medium; low cuts hidden reasoning tokens (latency) and the
-     * tendency to answer the transcript instead of cleaning it. At higher
+     * tendency to answer the text instead of rewriting it. At higher
      * efforts gpt-oss can leave the whole reply in the reasoning channel and
      * return whitespace content, failing selection edits.
      */
-    cleanupValue?: string;
+    transformValue?: string;
     /**
      * Effort sent while thinking is on, for a family whose server default
      * reasons past the app's output caps. Without it the server's default applies.
@@ -41,7 +41,7 @@ const FAMILIES: Array<ModelFamilyConstraints & { match: RegExp }> = [
     // live on Groq and Tinfoil: "none" is a 400 on both.
     reasoningEffort: {
       suppressValue: "low",
-      cleanupValue: "low",
+      transformValue: "low",
       options: ["low", "medium", "high"],
     },
   },
@@ -57,8 +57,8 @@ const FAMILIES: Array<ModelFamilyConstraints & { match: RegExp }> = [
     family: "glm-5.3",
     match: /glm[-_]?5[-.]?3/,
     // GLM-5.3/Flash always reason: low|high|max only, no off switch.
-    // "low" is the closest to off. At the server default, max, a long meeting
-    // spent the whole 4,096-token notes budget thinking; at high it fit,
+    // "low" is the closest to off. At the server default, max, a long input
+    // spent the whole 4,096-token output budget thinking; at high it fit,
     // so max isn't offered either.
     reasoningEffort: { suppressValue: "low", defaultValue: "high", options: ["low", "high"] },
   },

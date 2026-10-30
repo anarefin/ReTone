@@ -27,10 +27,6 @@ static SUFFIXES: LazyLock<Vec<(Regex, &'static str)>> = LazyLock::new(|| {
         (r"(?i)/responses$", ""),
         (r"(?i)/v1/models$", "/v1"),
         (r"(?i)/models$", ""),
-        (r"(?i)/v1/audio/transcriptions$", "/v1"),
-        (r"(?i)/audio/transcriptions$", ""),
-        (r"(?i)/v1/audio/translations$", "/v1"),
-        (r"(?i)/audio/translations$", ""),
     ]
     .into_iter()
     .map(|(p, r)| (Regex::new(p).expect("suffix pattern"), r))

@@ -40,7 +40,7 @@ test("shortcuts with more than three keys are rejected", async () => {
   assert.equal(result.errorCode, "TOO_MANY_KEYS");
 });
 
-test("a bare letter needs a modifier — otherwise typing that letter anywhere would trigger dictation", async () => {
+test("a bare letter needs a modifier — otherwise typing that letter anywhere would trigger ReTone", async () => {
   const { validateHotkey } = await load();
 
   const result = validateHotkey("K", "win32");

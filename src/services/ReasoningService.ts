@@ -71,7 +71,7 @@ class ReasoningService extends BaseReasoningService {
     if (provider === "custom") {
       // A Custom endpoint may need no key at all.
       try {
-        return ((await window.retoneAPI?.getCleanupCustomKey?.()) || "").trim();
+        return ((await window.retoneAPI?.getCustomKey?.()) || "").trim();
       } catch (err) {
         logger.logReasoning("CUSTOM_KEY_IPC_ERROR", { error: (err as Error)?.message });
         return "";

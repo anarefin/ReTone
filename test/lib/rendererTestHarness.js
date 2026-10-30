@@ -281,86 +281,10 @@ async function createRendererServer(
   return vite;
 }
 
-// Minimal Web Audio + capture stubs so the mic pipeline can run under Node.
-function installMicCaptureGlobals(t) {
-  const track = {
-    readyState: "live",
-    label: "Fake Mic",
-    stop() {},
-    getSettings: () => ({}),
-  };
-  const stream = {
-    getTracks: () => [track],
-    getAudioTracks: () => [track],
-    getVideoTracks: () => [],
-  };
-  const mediaDevices = {
-    getUserMedia: async () => stream,
-    enumerateDevices: async () => [],
-    addEventListener() {},
-    removeEventListener() {},
-  };
-  const node = () => ({
-    connect() {},
-    disconnect() {},
-    gain: { value: 0 },
-    fftSize: 0,
-    smoothingTimeConstant: 0,
-  });
-  class FakeAudioContext {
-    constructor() {
-      this.state = "running";
-      this.audioWorklet = { addModule: async () => {} };
-      this.destination = {};
-    }
-    createMediaStreamSource() {
-      return node();
-    }
-    createGain() {
-      return node();
-    }
-    createAnalyser() {
-      return node();
-    }
-    async resume() {}
-    async close() {}
-  }
-  class FakeAudioWorkletNode {
-    constructor() {
-      this.port = { onmessage: null, postMessage() {} };
-    }
-    connect() {}
-    disconnect() {}
-  }
-
-  const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, "navigator");
-  Object.defineProperty(globalThis, "navigator", {
-    value: { mediaDevices },
-    configurable: true,
-    writable: true,
-  });
-  globalThis.AudioContext = FakeAudioContext;
-  globalThis.AudioWorkletNode = FakeAudioWorkletNode;
-  t.after(() => {
-    if (originalNavigator) Object.defineProperty(globalThis, "navigator", originalNavigator);
-    else delete globalThis.navigator;
-    delete globalThis.AudioContext;
-    delete globalThis.AudioWorkletNode;
-  });
-}
-
-// The real useAuth loads the auth client, whose session work outlives a test's
-// browser globals; hooks that only read the user get a signed-out stand-in.
-const SIGNED_OUT_AUTH_MOCK = {
-  "/hooks/useAuth": `export const useAuth = () => ({ isLoaded: true, isSignedIn: false, user: null });`,
-};
-
 module.exports = {
-  SIGNED_OUT_AUTH_MOCK,
   addTeardown,
   createRendererServer,
   installBrowserGlobals,
   installHookDom,
   installHostDom,
-  installMicCaptureGlobals,
 };

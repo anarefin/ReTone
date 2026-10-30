@@ -7,14 +7,14 @@ const load = () => import("../../src/services/ai/inferenceProviders/openai.ts");
 // a summary-sized cap could be spent entirely on reasoning. The Responses API
 // then answers "incomplete" with only a reasoning item, and the provider used
 // to hand the caller its own input back as if it were the model's output —
-// Generate AI Summary saved the raw transcript as the enhanced note.
+// the raw text came back as the rewrite.
 
-const TRANSCRIPT = "## Meeting Transcript\nYou: we agreed to ship on Friday.\n".repeat(50);
+const LONG_INPUT = "## Draft\nYou: we agreed to ship on Friday.\n".repeat(50);
 
 function makeCtx() {
   return {
     getApiKey: async () => "test-key",
-    getSystemPrompt: () => "Clean the transcript",
+    getSystemPrompt: () => "Rewrite the text",
     getCustomDictionary: () => [],
     getPreferredLanguage: () => "en",
     getUiLanguage: () => "en",
@@ -66,7 +66,7 @@ test("an OpenAI reasoning model gets an output cap that leaves room for its reas
   const { openaiProvider } = await load();
 
   const result = await openaiProvider.call({
-    text: TRANSCRIPT,
+    text: LONG_INPUT,
     model: "gpt-5.6-terra",
     agentName: null,
     config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -86,7 +86,7 @@ test("a non-reasoning OpenAI model keeps the caller's output budget", async (t) 
   const { openaiProvider } = await load();
 
   await openaiProvider.call({
-    text: TRANSCRIPT,
+    text: LONG_INPUT,
     model: "gpt-4.1",
     agentName: null,
     config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -102,7 +102,7 @@ test("a model id the registry does not know keeps the caller's output budget", a
   const { openaiProvider } = await load();
 
   await openaiProvider.call({
-    text: TRANSCRIPT,
+    text: LONG_INPUT,
     model: "ft:gpt-4o-2024-08-06:acme::abc123",
     agentName: null,
     config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -117,7 +117,7 @@ test("a custom endpoint keeps the caller's output budget even for a reasoning-sh
   const { openaiProvider } = await load();
 
   await openaiProvider.call({
-    text: TRANSCRIPT,
+    text: LONG_INPUT,
     model: "gpt-5.6-terra",
     agentName: null,
     config: {
@@ -133,10 +133,10 @@ test("a custom endpoint keeps the caller's output budget even for a reasoning-sh
   assert.equal(bodies[0].max_output_tokens, 4096);
 });
 
-// GLM-5.3 reasons at max unless asked otherwise, and on a long meeting that
-// thinking spent the whole 4,096-token notes budget before any notes.
-const glmNotesCall = (config = {}) => ({
-  text: TRANSCRIPT,
+// GLM-5.3 reasons at max unless asked otherwise, and on a long input that
+// thinking spent the whole 4,096-token output budget before any answer.
+const glmLongCall = (config = {}) => ({
+  text: LONG_INPUT,
   model: "glm-5.3",
   agentName: null,
   config: {
@@ -154,7 +154,7 @@ test("a GLM-5.3 notes request on a Responses endpoint pins high effort", async (
   const bodies = installFetch(t, () => completeMessage("# Notes"));
   const { openaiProvider } = await load();
 
-  await openaiProvider.call(glmNotesCall());
+  await openaiProvider.call(glmLongCall());
 
   assert.deepEqual(bodies[0].reasoning, { effort: "high" });
 });
@@ -163,7 +163,7 @@ test("with thinking disabled, GLM-5.3 on a Responses endpoint gets its low floor
   const bodies = installFetch(t, () => completeMessage("# Notes"));
   const { openaiProvider } = await load();
 
-  await openaiProvider.call(glmNotesCall({ disableThinking: true }));
+  await openaiProvider.call(glmLongCall({ disableThinking: true }));
 
   assert.deepEqual(bodies[0].reasoning, { effort: "low" });
 });
@@ -179,14 +179,14 @@ test("Responses requests carry the other families' effort facts too", async (t) 
 
   // gpt-oss cleanup pins low, as on chat; qwen's off value is none.
   await openaiProvider.call({
-    text: "raw transcript",
+    text: "raw text",
     model: "gpt-oss:20b",
     agentName: null,
     config: customConfig,
     ctx: makeCtx(),
   });
   await openaiProvider.call({
-    text: "raw transcript",
+    text: "raw text",
     model: "qwen3:32b",
     agentName: null,
     config: { ...customConfig, disableThinking: true },
@@ -201,8 +201,8 @@ test("a model outside the family table gets the generic off value on a Responses
   const bodies = installFetch(t, () => completeMessage("# Notes"));
   const { openaiProvider } = await load();
 
-  await openaiProvider.call({ ...glmNotesCall({ disableThinking: true }), model: "glm-5.2" });
-  await openaiProvider.call({ ...glmNotesCall({ disableThinking: false }), model: "glm-5.2" });
+  await openaiProvider.call({ ...glmLongCall({ disableThinking: true }), model: "glm-5.2" });
+  await openaiProvider.call({ ...glmLongCall({ disableThinking: false }), model: "glm-5.2" });
 
   // "none", as the chat body's generic dialect sends; thinking on leaves the default.
   assert.deepEqual(bodies[0].reasoning, { effort: "none" });
@@ -213,7 +213,7 @@ test("a chosen level on a Responses endpoint is checked against the endpoint's h
   const bodies = installFetch(t, () => completeMessage("Cleaned."));
   const { openaiProvider } = await load();
   const xaiCall = (reasoningEffort) => ({
-    text: "raw transcript",
+    text: "raw text",
     model: "grok-4.7",
     agentName: null,
     config: {
@@ -244,7 +244,7 @@ test("a Custom endpoint that rejects the off value pays the 400 once, not on eve
   const { openaiProvider } = await load();
   const cleanup = () =>
     openaiProvider.call({
-      text: "raw transcript",
+      text: "raw text",
       model: "gpt-4o-prod",
       agentName: null,
       config: {
@@ -278,7 +278,7 @@ test("a Responses result that ran out of tokens before any text is an error, not
 
   const error = await openaiProvider
     .call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "gpt-5.6-terra",
       agentName: null,
       config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -291,9 +291,9 @@ test("a Responses result that ran out of tokens before any text is an error, not
 
   assert.match(error?.message ?? "", /ran out of output tokens/);
   assert.equal(error.messageKey, TRUNCATED_OUTPUT_MESSAGE_KEY);
-  // The code is what note formatting retries with more room; this
+  // The code is what a caller retries with more room; this
   // model's request already had it.
-  assert.equal(error.code, undefined, "note formatting must not send the same cap again");
+  assert.equal(error.code, undefined, "a caller must not send the same cap again");
 });
 
 test("a Custom endpoint's Responses result that only reasoned carries the retry code", async (t) => {
@@ -310,7 +310,7 @@ test("a Custom endpoint's Responses result that only reasoned carries the retry 
 
   await assert.rejects(
     openaiProvider.call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "glm-5.3",
       agentName: null,
       config: {
@@ -345,7 +345,7 @@ test("a Responses result stopped by a content filter is not reported as running 
   ]) {
     await assert.rejects(
       openaiProvider.call({
-        text: TRANSCRIPT,
+        text: LONG_INPUT,
         model: "gpt-5.6-terra",
         agentName: null,
         config,
@@ -383,7 +383,7 @@ test("a cancelled run aborts its request in flight and is not retried", async (t
   t.after(trackRequest("run-1"));
 
   const call = openaiProvider.call({
-    text: TRANSCRIPT,
+    text: LONG_INPUT,
     model: "glm-5.3",
     agentName: null,
     config: {
@@ -420,7 +420,7 @@ test("a Chat Completions result cut off before any text is an error, not the inp
 
   await assert.rejects(
     openaiProvider.call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "gpt-5.6-terra",
       agentName: null,
       config: {
@@ -449,7 +449,7 @@ test("a cut-off on a task that needs complete output carries no retry code", asy
 
   const error = await openaiProvider
     .call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "gpt-4.1",
       agentName: null,
       config: {
@@ -466,7 +466,7 @@ test("a cut-off on a task that needs complete output carries no retry code", asy
     );
 
   assert.equal(error?.messageKey, TRUNCATED_OUTPUT_MESSAGE_KEY);
-  assert.equal(error.code, undefined, "note formatting must not retry a summary rewrite");
+  assert.equal(error.code, undefined, "a caller must not retry a summary rewrite");
 });
 
 test("an empty but complete response on a task with its own prompt is an error, not the input echoed back", async (t) => {
@@ -475,7 +475,7 @@ test("an empty but complete response on a task with its own prompt is an error, 
 
   await assert.rejects(
     openaiProvider.call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "gpt-5.6-terra",
       agentName: null,
       config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -498,7 +498,7 @@ test("a refusal surfaces as an error carrying the model's reason", async (t) => 
 
   await assert.rejects(
     openaiProvider.call({
-      text: TRANSCRIPT,
+      text: LONG_INPUT,
       model: "gpt-5.6-terra",
       agentName: null,
       config: { provider: "openai", systemPrompt: "Summarize", maxTokens: 4096 },
@@ -513,12 +513,12 @@ test("an empty but complete response still falls back to the input for cleanup",
   const { openaiProvider } = await load();
 
   const result = await openaiProvider.call({
-    text: "raw dictation",
+    text: "raw input",
     model: "gpt-4.1",
     agentName: null,
     config: { provider: "openai" },
     ctx: makeCtx(),
   });
 
-  assert.equal(result, "raw dictation");
+  assert.equal(result, "raw input");
 });

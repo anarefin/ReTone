@@ -5,7 +5,7 @@ const load = () => import("../../src/services/ai/inferenceProviders/openai.ts");
 
 const providerContext = {
   getApiKey: async () => "test-key",
-  getSystemPrompt: () => "Clean the transcript",
+  getSystemPrompt: () => "Rewrite the text",
   getCustomDictionary: () => [],
   getPreferredLanguage: () => "en",
   getUiLanguage: () => "en",
@@ -42,7 +42,7 @@ async function callOpenAI(t, { base, responses, chat, requested = [] }, config =
 
   const { openaiProvider } = await load();
   return openaiProvider.call({
-    text: "raw transcript",
+    text: "raw text",
     model: "cleanup-model",
     agentName: null,
     config: { provider: "custom", baseUrl: base, customApiKey: "test-key", ...config },
@@ -69,7 +69,7 @@ test("an incomplete Responses reply rejects with the localizable truncation erro
     (error) => {
       assert.match(error.message, /Model output was truncated/);
       // The cleanup toast renders this key rather than the English message.
-      assert.equal(error.messageKey, "hooks.audioRecording.errorDescriptions.cleanupTruncated");
+      assert.equal(error.messageKey, "reasoning.errors.outputTruncated");
       return true;
     }
   );
@@ -114,7 +114,7 @@ test("an empty reply rejects with the localizable empty-reply error", async (t) 
     ),
     (error) => {
       assert.match(error.message, /Model returned an empty response/);
-      assert.equal(error.messageKey, "hooks.audioRecording.errorDescriptions.cleanupEmptyReply");
+      assert.equal(error.messageKey, "reasoning.errors.emptyReply");
       return true;
     }
   );
@@ -126,5 +126,5 @@ test("an empty reply falls back to the input when complete output is not require
     responses: { output: [] },
   });
 
-  assert.equal(text, "raw transcript");
+  assert.equal(text, "raw text");
 });

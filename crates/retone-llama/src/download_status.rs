@@ -126,20 +126,20 @@ mod tests {
     #[test]
     fn tracks_independent_downloads_with_normalized_progress() {
         let mut status = LocalModelDownloadStatus::new();
-        let whisper = status.start("whisper", "base");
+        let gemma = status.start("llm", "gemma-3-1b");
         let llm = status.start("llm", "qwen-2.5-7b");
         let installing = status.update(
-            "parakeet",
-            "parakeet-tdt-0.6b-v3",
+            "llm",
+            "qwen3.5-4b",
             StatusUpdate {
                 phase: Some("installing".into()),
                 progress: Some(100.0),
                 ..StatusUpdate::default()
             },
         );
-        let progressed = status.update("whisper", "base", progress(42.0, 42, 100));
+        let progressed = status.update("llm", "gemma-3-1b", progress(42.0, 42, 100));
 
-        assert_eq!(whisper.phase, "downloading");
+        assert_eq!(gemma.phase, "downloading");
         assert_eq!(llm.progress, 0.0);
         assert_eq!(installing.phase, "installing");
         assert!(progressed.sequence > installing.sequence);
@@ -165,8 +165,8 @@ mod tests {
     #[test]
     fn starts_with_zero_progress() {
         let mut status = LocalModelDownloadStatus::new();
-        let started = status.start("whisper", "small");
-        assert_eq!(started.model_type, "whisper");
+        let started = status.start("llm", "qwen3.5-0.8b");
+        assert_eq!(started.model_type, "llm");
         assert_eq!(started.phase, "downloading");
         assert_eq!(started.progress, 0.0);
         assert_eq!(started.downloaded_bytes, 0);

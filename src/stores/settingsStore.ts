@@ -38,13 +38,13 @@ export interface SettingsState {
   groqApiKey: string;
   openrouterApiKey: string;
   // The Custom (OpenAI-compatible) endpoint's key.
-  cleanupCustomApiKey: string;
+  customApiKey: string;
   setOpenaiApiKey: (key: string) => void;
   setAnthropicApiKey: (key: string) => void;
   setGeminiApiKey: (key: string) => void;
   setGroqApiKey: (key: string) => void;
   setOpenrouterApiKey: (key: string) => void;
-  setCleanupCustomApiKey: (key: string) => void;
+  setCustomApiKey: (key: string) => void;
 
   toneRewriteKey: string;
   setToneRewriteKey: (key: string) => Promise<HotkeyRegistrationResult>;
@@ -145,7 +145,7 @@ const SECRET_IPC_SAVERS = {
   geminiApiKey: "saveGeminiKey",
   groqApiKey: "saveGroqKey",
   openrouterApiKey: "saveOpenrouterKey",
-  cleanupCustomApiKey: "saveCleanupCustomKey",
+  customApiKey: "saveCustomKey",
 } as const;
 
 type SecretStoreKey = keyof typeof SECRET_IPC_SAVERS;
@@ -159,7 +159,7 @@ const secretGetterFor = (storeKey: SecretStoreKey) =>
     | "getGeminiKey"
     | "getGroqKey"
     | "getOpenrouterKey"
-    | "getCleanupCustomKey";
+    | "getCustomKey";
 
 function invalidateApiKeyCaches() {
   ReasoningService.clearApiKeyCache();
@@ -250,13 +250,13 @@ export const useSettingsStore = create<SettingsState>()((set) => ({
   geminiApiKey: "",
   groqApiKey: "",
   openrouterApiKey: "",
-  cleanupCustomApiKey: "",
+  customApiKey: "",
   setOpenaiApiKey: createSecretSetter("openaiApiKey"),
   setAnthropicApiKey: createSecretSetter("anthropicApiKey"),
   setGeminiApiKey: createSecretSetter("geminiApiKey"),
   setGroqApiKey: createSecretSetter("groqApiKey"),
   setOpenrouterApiKey: createSecretSetter("openrouterApiKey"),
-  setCleanupCustomApiKey: createSecretSetter("cleanupCustomApiKey"),
+  setCustomApiKey: createSecretSetter("customApiKey"),
 
   toneRewriteKey: readString("toneRewriteKey", ""),
   setToneRewriteKey: registerToneRewriteHotkey,

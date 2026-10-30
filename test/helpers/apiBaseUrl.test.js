@@ -38,18 +38,6 @@ test("pasted endpoint URLs are reduced to their base — users paste full comple
     "https://api.example.com/v1"
   );
   assert.equal(normalizeBaseUrl("https://api.example.com/v1/models"), "https://api.example.com/v1");
-  assert.equal(
-    normalizeBaseUrl("https://api.example.com/v1/audio/transcriptions"),
-    "https://api.example.com/v1"
-  );
-  assert.equal(
-    normalizeBaseUrl("https://api.example.com/audio/transcriptions"),
-    "https://api.example.com"
-  );
-  assert.equal(
-    normalizeBaseUrl("https://api.example.com/v1/audio/translations"),
-    "https://api.example.com/v1"
-  );
 });
 
 test("a clean base URL passes through unchanged", async () => {

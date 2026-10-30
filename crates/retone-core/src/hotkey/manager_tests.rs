@@ -90,7 +90,7 @@ fn recorder() -> (SlotCallback, Arc<Mutex<Vec<String>>>) {
 #[test]
 fn an_fn_combination_is_rejected_without_registering_its_base_key() {
     let mut m = manager();
-    let result = m.register_slot("dictation", "Fn+A", noop(), true);
+    let result = m.register_slot("slot-a", "Fn+A", noop(), true);
     assert!(!result.success);
     assert_eq!(result.reason.as_deref(), Some("fn_combination_unsupported"));
     assert_eq!(
@@ -104,8 +104,8 @@ fn an_fn_combination_is_rejected_without_registering_its_base_key() {
 fn rejecting_an_fn_combination_preserves_the_previous_binding() {
     let mut m = manager();
     let (callback, fired) = recorder();
-    m.register_slot("dictation", "Control+Shift+A", callback.clone(), true);
-    let result = m.register_slot("dictation", "Fn+A", callback, true);
+    m.register_slot("slot-a", "Control+Shift+A", callback.clone(), true);
+    let result = m.register_slot("slot-a", "Fn+A", callback, true);
     assert!(!result.success);
     assert_eq!(m.backend().keys(), ["Control+Shift+A"]);
     m.backend().fire("Control+Shift+A");
@@ -116,7 +116,7 @@ fn rejecting_an_fn_combination_preserves_the_previous_binding() {
 fn ordinary_hotkeys_register_and_fire_with_the_hotkey_that_fired() {
     let mut m = manager();
     let (callback, fired) = recorder();
-    m.register_slot("dictation", "Control+Shift+A", callback, true);
+    m.register_slot("slot-a", "Control+Shift+A", callback, true);
     m.backend().fire("Control+Shift+A");
     assert_eq!(*fired.lock().unwrap(), ["Control+Shift+A"]);
 }
@@ -126,13 +126,13 @@ fn ordinary_hotkeys_register_and_fire_with_the_hotkey_that_fired() {
 #[test]
 fn atomic_failure_keeps_the_slots_previous_working_hotkeys() {
     let mut m = manager();
-    let first = m.register_slot("meeting", "F7", noop(), true);
+    let first = m.register_slot("slot-b", "F7", noop(), true);
     assert!(first.success);
-    assert_eq!(m.slot_hotkeys("meeting"), ["F7"]);
+    assert_eq!(m.slot_hotkeys("slot-b"), ["F7"]);
 
-    let second = m.register_slot("meeting", "F7,Control+BAD", noop(), true);
+    let second = m.register_slot("slot-b", "F7,Control+BAD", noop(), true);
     assert!(!second.success);
-    assert_eq!(m.slot_hotkeys("meeting"), ["F7"]);
+    assert_eq!(m.slot_hotkeys("slot-b"), ["F7"]);
     assert!(
         m.backend().has("F7"),
         "previous hotkey must stay registered after rollback"
@@ -143,7 +143,7 @@ fn atomic_failure_keeps_the_slots_previous_working_hotkeys() {
 #[test]
 fn non_atomic_keeps_the_working_subset_and_reports_failures() {
     let mut m = manager();
-    let result = m.register_slot("meeting", "F7,Control+BAD", noop(), false);
+    let result = m.register_slot("slot-b", "F7,Control+BAD", noop(), false);
     assert!(result.success);
     assert_eq!(result.hotkeys, ["F7"]);
     assert_eq!(result.failures.len(), 1);
@@ -153,10 +153,10 @@ fn non_atomic_keeps_the_working_subset_and_reports_failures() {
 #[test]
 fn re_registering_a_slot_replaces_its_previous_accelerators() {
     let mut m = manager();
-    m.register_slot("meeting", "F7", noop(), true);
-    let result = m.register_slot("meeting", "F6,F5", noop(), true);
+    m.register_slot("slot-b", "F7", noop(), true);
+    let result = m.register_slot("slot-b", "F6,F5", noop(), true);
     assert!(result.success);
-    assert_eq!(m.slot_hotkeys("meeting"), ["F6", "F5"]);
+    assert_eq!(m.slot_hotkeys("slot-b"), ["F6", "F5"]);
     assert!(
         !m.backend().has("F7"),
         "old accelerator must be unregistered"
@@ -169,29 +169,29 @@ fn re_registering_a_slot_replaces_its_previous_accelerators() {
 #[test]
 fn unregister_slot_releases_every_accelerator_the_slot_registered() {
     let mut m = manager();
-    m.register_slot("meeting", "F7,Control+Alt", noop(), true);
-    m.unregister_slot("meeting");
+    m.register_slot("slot-b", "F7,Control+Alt", noop(), true);
+    m.unregister_slot("slot-b");
     assert!(m.backend().keys().is_empty());
-    assert!(m.slot_hotkeys("meeting").is_empty());
+    assert!(m.slot_hotkeys("slot-b").is_empty());
 }
 
 #[test]
 fn a_combo_freed_by_unregister_slot_can_be_registered_again() {
     let mut m = manager();
-    m.register_slot("meeting", "Control+Alt", noop(), true);
-    m.unregister_slot("meeting");
-    let again = m.register_slot("meeting", "Control+Alt", noop(), true);
+    m.register_slot("slot-b", "Control+Alt", noop(), true);
+    m.unregister_slot("slot-b");
+    let again = m.register_slot("slot-b", "Control+Alt", noop(), true);
     assert!(again.success);
-    assert_eq!(m.slot_hotkeys("meeting"), ["Control+Alt"]);
+    assert_eq!(m.slot_hotkeys("slot-b"), ["Control+Alt"]);
 }
 
 #[test]
 fn unregister_slot_never_releases_an_accelerator_it_does_not_own() {
     let mut m = manager();
-    m.register_slot("meeting", "F7", noop(), true);
+    m.register_slot("slot-b", "F7", noop(), true);
     m.register_slot("cancel", "F8", noop(), true);
     m.backend_mut().unregister_calls.clear();
-    m.unregister_slot("meeting");
+    m.unregister_slot("slot-b");
     assert_eq!(m.backend().unregister_calls, ["F7"]);
     assert_eq!(m.backend().keys(), ["F8"]);
     assert_eq!(m.slot_hotkeys("cancel"), ["F8"]);
@@ -200,19 +200,19 @@ fn unregister_slot_never_releases_an_accelerator_it_does_not_own() {
 #[test]
 fn unregister_slot_skips_hotkeys_a_native_listener_owns() {
     let mut m = manager();
-    m.register_slot("dictation", "F7,RightShift", noop(), true);
+    m.register_slot("slot-a", "F7,RightShift", noop(), true);
     m.backend_mut().unregister_calls.clear();
-    m.unregister_slot("dictation");
+    m.unregister_slot("slot-a");
     assert_eq!(m.backend().unregister_calls, ["F7"]);
 }
 
 #[test]
 fn unregister_slot_on_an_already_cleared_slot_is_a_no_op() {
     let mut m = manager();
-    m.register_slot("meeting", "F7", noop(), true);
-    m.unregister_slot("meeting");
+    m.register_slot("slot-b", "F7", noop(), true);
+    m.unregister_slot("slot-b");
     m.backend_mut().unregister_calls.clear();
-    m.unregister_slot("meeting");
+    m.unregister_slot("slot-b");
     assert!(m.backend().unregister_calls.is_empty());
 }
 

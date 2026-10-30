@@ -24,7 +24,7 @@ export const INFERENCE_SCOPES = {
       provider: "toneRewriteProvider",
       model: "toneRewriteModel",
       cloudBaseUrl: "toneRewriteCloudBaseUrl",
-      customApiKey: "cleanupCustomApiKey",
+      customApiKey: "customApiKey",
       disableThinking: "toneRewriteDisableThinking",
       reasoningEffort: "toneRewriteReasoningEffort",
     },

@@ -44,7 +44,7 @@ pub const SECRETS: [SecretSpec; 6] = [
     },
     SecretSpec {
         env: "CUSTOM_CLEANUP_API_KEY",
-        store_key: "cleanupCustomApiKey",
+        store_key: "customApiKey",
     },
 ];
 

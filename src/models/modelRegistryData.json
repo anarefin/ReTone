@@ -675,7 +675,7 @@
           "name": "Gemma 3 1B",
           "size": "0.81GB",
           "sizeBytes": 806058496,
-          "description": "Ultra-fast Google model, best for short dictation cleanup",
+          "description": "Ultra-fast Google model, best for short rewrites",
           "fileName": "google_gemma-3-1b-it-Q4_K_M.gguf",
           "quantization": "q4_k_m",
           "contextLength": 32768,

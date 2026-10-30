@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import { ChevronDown, Search, X, Check } from "../icons";
-import registry from "../../config/languageRegistry.json";
 import { LIST_SEARCH_THRESHOLD } from "../../config/constants";
 
 export interface LanguageOption {
@@ -11,16 +10,10 @@ export interface LanguageOption {
   flag: string;
 }
 
-const REGISTRY_OPTIONS: LanguageOption[] = registry.languages.map(({ code, label, flag }) => ({
-  value: code,
-  label,
-  flag,
-}));
-
 interface LanguageSelectorProps {
   value: string;
   onChange: (value: string) => void;
-  options?: LanguageOption[];
+  options: LanguageOption[];
   className?: string;
   placeholder?: string;
 }
@@ -33,8 +26,7 @@ export default function LanguageSelector({
   placeholder,
 }: LanguageSelectorProps) {
   const { t } = useTranslation();
-  const items = options ?? REGISTRY_OPTIONS;
-  const showSearch = items.length > LIST_SEARCH_THRESHOLD;
+  const showSearch = options.length > LIST_SEARCH_THRESHOLD;
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -48,12 +40,12 @@ export default function LanguageSelector({
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const filteredLanguages = showSearch
-    ? items.filter(
+    ? options.filter(
         (lang) =>
           lang.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
           lang.value.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : items;
+    : options;
 
   const handleSearchQueryChange = useCallback((value: string) => {
     setSearchQuery(value);
@@ -156,7 +148,7 @@ export default function LanguageSelector({
     }
   };
 
-  const selected = items.find((l) => l.value === value);
+  const selected = options.find((l) => l.value === value);
 
   return (
     <div className={`relative ${className}`} ref={setContainerNode}>

@@ -15,6 +15,7 @@ pub mod payload;
 pub mod providers;
 pub mod session;
 pub mod tray_placement;
+pub mod update_check;
 
 /// The running OS in Node's `process.platform` spelling (`darwin`, `win32`,
 /// `linux`), which the platform policies and the renderer use.

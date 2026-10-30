@@ -8,7 +8,7 @@ const {
   installHookDom,
 } = require("../lib/rendererTestHarness");
 
-const CONFIG = { scope: "transcription", provider: "groq", apiKey: "gsk-a", model: "m" };
+const CONFIG = { scope: "toneRewrite", provider: "groq", apiKey: "gsk-a", model: "m" };
 const PASS = { success: true };
 const REJECTED = { success: false, errorCode: "credentialsRejected", status: 401 };
 

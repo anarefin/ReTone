@@ -68,17 +68,6 @@
       "slotConflict": "此快捷鍵已用於{{slot}}。"
     }
   },
-  "systemSettings": {
-    "microphone": "請開啟系統設定來配置麥克風權限。",
-    "sound": "請開啟系統音效設定（例如 pavucontrol）。",
-    "accessibility": "此平台不支援輔助使用設定。",
-    "systemAudio": "系統音訊設定在此平台上不可用。",
-    "screenRecording": "此平台不提供螢幕錄製設定。",
-    "loginItems": "此平台不支援登入項目設定。"
-  },
-  "windows": {
-    "pttUnavailable": "ReTone 按鍵監聽程式無法使用。"
-  },
   "common": {
     "retry": "重試",
     "reset": "重設",
@@ -107,7 +96,6 @@
           "apiKeyRequired": "測試前請先新增 API Key。",
           "credentialsRejected": "服務商拒絕了這些憑證。",
           "endpointNotFound": "這個端點未提供相容 OpenAI 的模型清單。",
-          "transcriptionEndpointNotFound": "此位址不接受轉錄請求。",
           "modelNotFound": "所選模型無法從此服務商取得。",
           "providerStatus": "服務商回傳了狀態碼 {{status}}。",
           "timeout": "連線測試逾時。",
@@ -169,7 +157,7 @@
     "availableModels": "可用模型",
     "disableThinking": {
       "label": "停用思考輸出",
-      "help": "略過推理權杖以獲得更乾淨的輸出。建議用於清理。某些伺服器會忽略此提示。"
+      "help": "略過推理權杖以獲得更乾淨的輸出。建議用於改寫。某些伺服器會忽略此提示。"
     },
     "keepModelLoaded": {
       "label": "保持模型載入",
@@ -182,23 +170,13 @@
         "copy": "複製技術詳細資料",
         "copyCommand": "複製復原命令"
       }
-    }
-  },
-  "transcription": {
-    "deleteModel": {
-      "title": "刪除模型",
-      "description": "確定要刪除此模型嗎？如果之後要使用，需要重新下載。"
+    },
+    "errors": {
+      "outputTruncated": "AI 模型的輸出長度達到上限，未能完成文字改寫。",
+      "emptyReply": "AI 模型傳回空白回應，沒有產生改寫後的文字。"
     }
   },
   "hooks": {
-    "audioRecording": {
-      "errorDescriptions": {
-        "providerRateLimited": "你的轉錄服務商限制了請求頻率。請稍候再試。",
-        "providerKeyMissing": "尚未為您的轉錄服務商設定 API 金鑰。請在「設定 → 語音轉文字」中新增。",
-        "cleanupTruncated": "AI 模型的輸出長度達到上限，未能完成聽寫清理。",
-        "cleanupEmptyReply": "AI 模型傳回空白回應，沒有產生清理後的文字。"
-      }
-    },
     "hotkeyRegistration": {
       "titles": {
         "notRegistered": "快捷鍵未註冊"
@@ -299,10 +277,7 @@
         "themeDescription": "選擇淺色、深色或跟隨系統",
         "title": "外觀"
       },
-      "hotkey": {
-        "linuxPttPermissionDescription": "執行此指令並重新登入：sudo usermod -aG input $USER",
-        "linuxPttSetupDescription": "您的使用者需要存取鍵盤輸入裝置的權限。"
-      },
+      "hotkey": {},
       "startup": {
         "launchAtLogin": "登入時啟動",
         "launchAtLoginDescription": "登入時在背景啟動 ReTone",
@@ -316,7 +291,25 @@
           "description": "macOS 已將 ReTone 註冊為登入項目，但仍在等待你在「登入項目」中允許它。",
           "action": "開啟登入項目"
         }
+      },
+      "updates": {
+        "title": "更新",
+        "description": "從 GitHub 取得 ReTone 的新版本",
+        "version": "ReTone {{version}}",
+        "idle": "在 GitHub 上檢查是否有新版本",
+        "checking": "正在檢查…",
+        "upToDate": "已是最新版本",
+        "available": "版本 {{version}} 可供使用",
+        "failed": "無法檢查更新。請稍後再試。",
+        "check": "檢查更新",
+        "download": "下載"
       }
+    },
+    "tabs": {
+      "general": "一般",
+      "label": "設定區段",
+      "model": "模型",
+      "retone": "ReTone"
     }
   },
   "models": {
@@ -384,7 +377,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Google 緊湊型 Gemma 4，快速高效",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Google 官方緊湊型 QAT 建置，品質不減",
         "gemma_gemma_3_12b_it_q4_k_m": "Google 中型模型，強推理能力",
-        "gemma_gemma_3_1b_it_q4_k_m": "超快 Google 模型，最適合短語音清理"
+        "gemma_gemma_3_1b_it_q4_k_m": "超快 Google 模型，最適合改寫短文字"
       }
     },
     "errors": {
@@ -392,6 +385,10 @@
       "contextTooLargeGeneric": "內容過長，{{model}} 無法在這台電腦上讀取。請改用雲端模型，或對更短的選取範圍執行該動作。",
       "localServerUnavailable": "無法在這台電腦上啟動 {{model}}。請重試，或改用雲端模型。",
       "localModelBusy": "本機模型仍在處理另一個請求。請等待其完成後再試。"
+    },
+    "deleteModel": {
+      "title": "刪除模型",
+      "description": "確定要刪除此模型嗎？如果之後要使用，需要重新下載。"
     }
   },
   "apiKeyInput": {
@@ -417,7 +414,6 @@
     "rateLimited": "{{provider}} 限制了請求頻率。請稍候再試。",
     "modelNotFound": "{{provider}} 無法識別模型「{{model}}」。",
     "modelNotFoundNoModel": "{{provider}} 無法識別所選的模型。",
-    "payloadTooLarge": "這段錄音對 {{provider}} 來說太大了。",
     "requestTooLarge": "這個請求對 {{provider}} 來說太大了。",
     "badRequest": "{{provider}} 無法處理此請求。",
     "unavailable": "{{provider}} 目前發生問題。請稍後再試。",
@@ -433,7 +429,6 @@
       "rateLimited": "你的伺服器限制了請求頻率。請稍候再試。",
       "modelNotFound": "你的伺服器無法識別模型「{{model}}」。",
       "modelNotFoundNoModel": "你的伺服器無法識別所選的模型。",
-      "payloadTooLarge": "這段錄音對你的伺服器來說太大了。",
       "requestTooLarge": "這個請求對你的伺服器來說太大了。",
       "badRequest": "你的伺服器無法處理此請求。",
       "unavailable": "你的伺服器目前發生問題。請稍後再試。",

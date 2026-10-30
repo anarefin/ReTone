@@ -68,17 +68,6 @@
       "slotConflict": "このホットキーは既に{{slot}}で使用されています。"
     }
   },
-  "systemSettings": {
-    "microphone": "システム設定を開いてマイクの権限を設定してください。",
-    "sound": "システムのサウンド設定を開いてください（例: pavucontrol）。",
-    "accessibility": "このプラットフォームではアクセシビリティ設定を利用できません。",
-    "systemAudio": "システムオーディオの設定はこのプラットフォームでは利用できません。",
-    "screenRecording": "このプラットフォームでは画面収録の設定を利用できません。",
-    "loginItems": "ログイン項目の設定はこのプラットフォームでは利用できません。"
-  },
-  "windows": {
-    "pttUnavailable": "ReTone のキーリスナーを利用できません。"
-  },
   "common": {
     "retry": "再試行",
     "reset": "リセット",
@@ -107,7 +96,6 @@
           "apiKeyRequired": "テストの前に API キーを追加してください。",
           "credentialsRejected": "プロバイダーがこの認証情報を拒否しました。",
           "endpointNotFound": "このエンドポイントは OpenAI 互換のモデル一覧を公開していません。",
-          "transcriptionEndpointNotFound": "このアドレスでは文字起こしを受け付けていません。",
           "modelNotFound": "選択したモデルはこのプロバイダーでは利用できません。",
           "providerStatus": "プロバイダーがステータス {{status}} を返しました。",
           "timeout": "接続テストがタイムアウトしました。",
@@ -169,7 +157,7 @@
     "availableModels": "利用可能なモデル",
     "disableThinking": {
       "label": "思考出力を無効にする",
-      "help": "推論トークンをスキップして出力をクリーンに保ちます。クリーンアップに推奨。一部のサーバーはこのヒントを無視します。"
+      "help": "推論トークンをスキップして出力をクリーンに保ちます。書き換えに推奨。一部のサーバーはこのヒントを無視します。"
     },
     "keepModelLoaded": {
       "label": "モデルを読み込んだままにする",
@@ -182,23 +170,13 @@
         "copy": "技術情報をコピー",
         "copyCommand": "復旧コマンドをコピー"
       }
-    }
-  },
-  "transcription": {
-    "deleteModel": {
-      "title": "モデルを削除",
-      "description": "このモデルを削除してもよろしいですか？再度使用するにはダウンロードし直す必要があります。"
+    },
+    "errors": {
+      "outputTruncated": "AI モデルの出力が上限に達し、テキストの書き換えが完了しませんでした。",
+      "emptyReply": "AI モデルが空の応答を返したため、書き換えたテキストがありません。"
     }
   },
   "hooks": {
-    "audioRecording": {
-      "errorDescriptions": {
-        "providerRateLimited": "文字起こしプロバイダーがリクエストを制限しました。しばらく待ってからもう一度お試しください。",
-        "providerKeyMissing": "文字起こしプロバイダーのAPIキーが設定されていません。設定 → 音声テキスト変換 から追加してください。",
-        "cleanupTruncated": "AI モデルの出力が上限に達し、ディクテーションのクリーンアップが完了しませんでした。",
-        "cleanupEmptyReply": "AI モデルが空の応答を返したため、クリーンアップされたテキストがありません。"
-      }
-    },
     "hotkeyRegistration": {
       "titles": {
         "notRegistered": "ホットキー未登録"
@@ -299,10 +277,7 @@
         "themeDescription": "ライト、ダーク、またはシステムに合わせる",
         "title": "外観"
       },
-      "hotkey": {
-        "linuxPttPermissionDescription": "次のコマンドを実行してログアウト/ログインしてください：sudo usermod -aG input $USER",
-        "linuxPttSetupDescription": "キーボード入力デバイスへのアクセス権が必要です。"
-      },
+      "hotkey": {},
       "startup": {
         "launchAtLogin": "ログイン時に起動",
         "launchAtLoginDescription": "ログイン時に ReTone をバックグラウンドで起動します",
@@ -316,7 +291,25 @@
           "description": "macOS は ReTone をログイン項目として登録しましたが、「ログイン項目」での許可を待っています。",
           "action": "ログイン項目を開く"
         }
+      },
+      "updates": {
+        "title": "アップデート",
+        "description": "GitHub から ReTone の新しいバージョンを入手します",
+        "version": "ReTone {{version}}",
+        "idle": "GitHub で新しいリリースを確認します",
+        "checking": "確認中…",
+        "upToDate": "最新の状態です",
+        "available": "バージョン {{version}} が利用可能です",
+        "failed": "アップデートを確認できませんでした。後でもう一度お試しください。",
+        "check": "アップデートを確認",
+        "download": "ダウンロード"
       }
+    },
+    "tabs": {
+      "general": "一般",
+      "label": "設定セクション",
+      "model": "モデル",
+      "retone": "ReTone"
     }
   },
   "models": {
@@ -384,7 +377,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Google のコンパクトな Gemma 4、高速で効率的",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Google 公式のコンパクトな QAT ビルド、品質を維持",
         "gemma_gemma_3_12b_it_q4_k_m": "Google の中型モデル、強力な推論",
-        "gemma_gemma_3_1b_it_q4_k_m": "超高速 Google モデル、短い口述のクリーンアップに最適"
+        "gemma_gemma_3_1b_it_q4_k_m": "超高速 Google モデル、短いテキストの書き換えに最適"
       }
     },
     "errors": {
@@ -392,6 +385,10 @@
       "contextTooLargeGeneric": "このコンピューターでは長すぎて {{model}} が読み取れません。クラウドモデルを使うか、選択範囲を短くして実行してください。",
       "localServerUnavailable": "このコンピューターでは {{model}} を起動できませんでした。もう一度試すか、クラウドモデルに切り替えてください。",
       "localModelBusy": "ローカルモデルはまだ別のリクエストを処理しています。完了を待ってから、もう一度お試しください。"
+    },
+    "deleteModel": {
+      "title": "モデルを削除",
+      "description": "このモデルを削除してもよろしいですか？再度使用するにはダウンロードし直す必要があります。"
     }
   },
   "apiKeyInput": {
@@ -417,7 +414,6 @@
     "rateLimited": "{{provider}} がリクエストを制限しました。しばらく待ってからもう一度お試しください。",
     "modelNotFound": "{{provider}} はモデル「{{model}}」を認識できません。",
     "modelNotFoundNoModel": "{{provider}} は選択されたモデルを認識できません。",
-    "payloadTooLarge": "この録音は {{provider}} には大きすぎます。",
     "requestTooLarge": "このリクエストは {{provider}} には大きすぎます。",
     "badRequest": "{{provider}} はこのリクエストを処理できませんでした。",
     "unavailable": "{{provider}} で現在問題が発生しています。しばらくしてから再度お試しください。",
@@ -433,7 +429,6 @@
       "rateLimited": "サーバーがリクエストを制限しました。しばらく待ってからもう一度お試しください。",
       "modelNotFound": "サーバーはモデル「{{model}}」を認識できません。",
       "modelNotFoundNoModel": "サーバーは選択されたモデルを認識できません。",
-      "payloadTooLarge": "この録音はサーバーには大きすぎます。",
       "requestTooLarge": "このリクエストはサーバーには大きすぎます。",
       "badRequest": "サーバーはこのリクエストを処理できませんでした。",
       "unavailable": "サーバーで現在問題が発生しています。しばらくしてから再度お試しください。",

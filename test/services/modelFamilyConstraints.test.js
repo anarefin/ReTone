@@ -23,7 +23,7 @@ test("gpt-oss has no reasoning off switch: suppress and cleanup both floor at lo
   const effort = getModelFamilyConstraints("gpt-oss-120b")?.reasoningEffort;
   assert.deepEqual(effort, {
     suppressValue: "low",
-    cleanupValue: "low",
+    transformValue: "low",
     options: ["low", "medium", "high"],
   });
 });

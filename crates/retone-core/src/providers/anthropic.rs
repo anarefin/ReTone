@@ -76,8 +76,8 @@ mod tests {
 
     #[test]
     fn returns_trimmed_text_for_a_single_block() {
-        let data = json!({ "content": [{ "type": "text", "text": "  cleaned up dictation  " }] });
-        assert_eq!(extract_text(&data).as_deref(), Some("cleaned up dictation"));
+        let data = json!({ "content": [{ "type": "text", "text": "  rewritten text  " }] });
+        assert_eq!(extract_text(&data).as_deref(), Some("rewritten text"));
     }
 
     #[test]

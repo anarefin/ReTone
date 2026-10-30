@@ -11,14 +11,8 @@ use std::sync::Mutex;
 
 pub const CACHE_ROOT_ENV: &str = "RETONE_CACHE_ROOT";
 
-/// Only these subdirs move to an overridden root. `models` holds the local
-/// LLMs; the others are caches older releases wrote.
-const RELOCATED_SUBDIRS: [&str; 4] = [
-    "whisper-models",
-    "parakeet-models",
-    "diarization-models",
-    "models",
-];
+/// Only these subdirs move to an overridden root: `models` holds the local LLMs.
+const RELOCATED_SUBDIRS: [&str; 1] = ["models"];
 
 /// The `~/.cache/retone` default.
 pub fn home_cache(home: &Path) -> PathBuf {
@@ -335,27 +329,5 @@ mod tests {
         assert_eq!(resolver.resolve(&home, custom.to_str(), &ops), custom);
         assert!(custom.join("models/m.gguf").exists());
         assert!(!legacy_models.exists());
-    }
-
-    #[test]
-    fn rolls_back_earlier_moves_when_a_later_one_fails() {
-        let temp = tempfile::tempdir().unwrap();
-        let home = temp.path().join("home");
-        let legacy_root = home.join(".cache/retone");
-        write(&legacy_root.join("whisper-models"), "w.bin", "w");
-        let legacy_models = legacy_root.join("models");
-        write(&legacy_models, "m.gguf", "model");
-        let custom = temp.path().join("custom");
-        let ops = CrossVolume {
-            legacy_models: &legacy_models,
-            block_copy: RefCell::new(true),
-        };
-
-        assert_eq!(
-            CacheRoot::new().resolve(&home, custom.to_str(), &ops),
-            legacy_root
-        );
-        assert!(legacy_root.join("whisper-models/w.bin").exists());
-        assert!(!custom.join("whisper-models").exists());
     }
 }

@@ -266,7 +266,7 @@ mod tests {
     }
 
     #[test]
-    fn estimate_over_estimates_a_real_transcript() {
+    fn estimate_over_estimates_a_real_input() {
         let estimate = estimate_tokens(&"a".repeat(85171));
         assert!(estimate > 20473);
         assert!(estimate < 20473 * 2);
@@ -421,7 +421,7 @@ mod tests {
     }
 
     #[test]
-    fn the_reported_48_gb_machine_holds_the_failing_transcript() {
+    fn the_reported_48_gb_machine_holds_the_failing_input() {
         let ceiling = resolve_context_ceiling(qwen_3_5_9b(48.0 * GIB)).ceiling;
         assert_eq!(ceiling, 118272);
         assert!(ceiling > 20514 + 2048);

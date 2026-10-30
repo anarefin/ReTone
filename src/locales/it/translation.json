@@ -68,17 +68,6 @@
       "slotConflict": "Questa scorciatoia è già utilizzata per {{slot}}."
     }
   },
-  "systemSettings": {
-    "microphone": "Apri le impostazioni di sistema per configurare i permessi del microfono.",
-    "sound": "Apri le impostazioni audio di sistema (ad esempio, pavucontrol).",
-    "accessibility": "Le impostazioni di accessibilità non sono disponibili su questa piattaforma.",
-    "systemAudio": "Le impostazioni audio di sistema non sono disponibili su questa piattaforma.",
-    "screenRecording": "Le impostazioni di registrazione dello schermo non sono disponibili su questa piattaforma.",
-    "loginItems": "Le impostazioni degli elementi di login non sono disponibili su questa piattaforma."
-  },
-  "windows": {
-    "pttUnavailable": "Il listener di tasti di ReTone non è disponibile."
-  },
   "common": {
     "retry": "Riprova",
     "reset": "Reimposta",
@@ -107,7 +96,6 @@
           "apiKeyRequired": "Aggiungi una chiave API prima di eseguire il test.",
           "credentialsRejected": "Il provider ha rifiutato queste credenziali.",
           "endpointNotFound": "L’endpoint non espone un elenco di modelli compatibile con OpenAI.",
-          "transcriptionEndpointNotFound": "Questo indirizzo non accetta trascrizioni.",
           "modelNotFound": "Il modello selezionato non è disponibile presso questo provider.",
           "providerStatus": "Il provider ha restituito lo stato {{status}}.",
           "timeout": "Il test di connessione è scaduto.",
@@ -169,7 +157,7 @@
     "availableModels": "Modelli disponibili",
     "disableThinking": {
       "label": "Disattiva output di ragionamento",
-      "help": "Salta i token di ragionamento per un output più pulito. Consigliato per la pulizia. Alcuni server ignorano questo suggerimento."
+      "help": "Salta i token di ragionamento per un output più pulito. Consigliato per le riscritture. Alcuni server ignorano questo suggerimento."
     },
     "keepModelLoaded": {
       "label": "Mantieni il modello caricato",
@@ -182,23 +170,13 @@
         "copy": "Copia dettagli tecnici",
         "copyCommand": "Copia comando di ripristino"
       }
-    }
-  },
-  "transcription": {
-    "deleteModel": {
-      "title": "Elimina modello",
-      "description": "Vuoi davvero eliminare questo modello? Per usarlo di nuovo dovrai riscaricarlo."
+    },
+    "errors": {
+      "outputTruncated": "Il modello IA ha esaurito lo spazio prima di finire di riscrivere il testo.",
+      "emptyReply": "Il modello IA ha restituito una risposta vuota invece del testo riscritto."
     }
   },
   "hooks": {
-    "audioRecording": {
-      "errorDescriptions": {
-        "providerRateLimited": "Il tuo provider di trascrizione ha limitato la richiesta. Attendi un momento e riprova.",
-        "providerKeyMissing": "Nessuna chiave API impostata per il tuo provider di trascrizione. Aggiungila in Impostazioni → Da voce a testo.",
-        "cleanupTruncated": "Il modello IA ha esaurito lo spazio prima di finire la pulizia della dettatura.",
-        "cleanupEmptyReply": "Il modello IA ha restituito una risposta vuota invece della dettatura pulita."
-      }
-    },
     "hotkeyRegistration": {
       "titles": {
         "notRegistered": "Scorciatoia non registrata"
@@ -299,10 +277,7 @@
         "themeDescription": "Scegli chiaro, scuro o in base al sistema",
         "title": "Aspetto"
       },
-      "hotkey": {
-        "linuxPttPermissionDescription": "Esegui questo comando e riavvia la sessione: sudo usermod -aG input $USER",
-        "linuxPttSetupDescription": "Il tuo utente ha bisogno di accesso ai dispositivi di input della tastiera."
-      },
+      "hotkey": {},
       "startup": {
         "launchAtLogin": "Avvia all'accesso",
         "launchAtLoginDescription": "Avvia ReTone in background all'accesso",
@@ -316,7 +291,25 @@
           "description": "macOS ha registrato ReTone come elemento di login, ma attende che tu lo consenta in Elementi login.",
           "action": "Apri Elementi login"
         }
+      },
+      "updates": {
+        "title": "Aggiornamenti",
+        "description": "Ottieni nuove versioni di ReTone da GitHub",
+        "version": "ReTone {{version}}",
+        "idle": "Cerca una versione più recente su GitHub",
+        "checking": "Verifica in corso…",
+        "upToDate": "Hai la versione più recente",
+        "available": "La versione {{version}} è disponibile",
+        "failed": "Impossibile verificare gli aggiornamenti. Riprova più tardi.",
+        "check": "Verifica aggiornamenti",
+        "download": "Scarica"
       }
+    },
+    "tabs": {
+      "general": "Generali",
+      "label": "Sezioni delle impostazioni",
+      "model": "Modello",
+      "retone": "ReTone"
     }
   },
   "models": {
@@ -384,7 +377,7 @@
         "gemma_gemma_4_e2b_it_q4_k_m": "Gemma 4 compatto di Google, veloce ed efficiente",
         "gemma_gemma_4_e2b_it_qat_q4_0": "Build QAT compatta ufficiale di Google, qualità preservata",
         "gemma_gemma_3_12b_it_q4_k_m": "Modello di fascia media di Google, ragionamento solido",
-        "gemma_gemma_3_1b_it_q4_k_m": "Modello Google ultraveloce, ideale per la pulizia di brevi dettature"
+        "gemma_gemma_3_1b_it_q4_k_m": "Modello Google ultraveloce, ideale per riscrivere testi brevi"
       }
     },
     "errors": {
@@ -392,6 +385,10 @@
       "contextTooLargeGeneric": "È troppo lungo perché {{model}} possa leggerlo su questo computer. Prova un modello cloud oppure esegui l’azione su una selezione più breve.",
       "localServerUnavailable": "Impossibile avviare {{model}} su questo computer. Riprova o passa a un modello cloud.",
       "localModelBusy": "Il modello locale sta ancora elaborando un'altra richiesta. Attendi che finisca, poi riprova."
+    },
+    "deleteModel": {
+      "title": "Elimina modello",
+      "description": "Vuoi davvero eliminare questo modello? Per usarlo di nuovo dovrai riscaricarlo."
     }
   },
   "apiKeyInput": {
@@ -417,7 +414,6 @@
     "rateLimited": "{{provider}} ha limitato la richiesta. Attendi un momento e riprova.",
     "modelNotFound": "{{provider}} non riconosce il modello “{{model}}”.",
     "modelNotFoundNoModel": "{{provider}} non riconosce il modello selezionato.",
-    "payloadTooLarge": "Questa registrazione è troppo grande per {{provider}}.",
     "requestTooLarge": "Questa richiesta è troppo grande per {{provider}}.",
     "badRequest": "{{provider}} non è riuscito a elaborare questa richiesta.",
     "unavailable": "{{provider}} sta avendo problemi in questo momento. Riprova a breve.",
@@ -433,7 +429,6 @@
       "rateLimited": "Il tuo server ha limitato la richiesta. Attendi un momento e riprova.",
       "modelNotFound": "Il tuo server non riconosce il modello “{{model}}”.",
       "modelNotFoundNoModel": "Il tuo server non riconosce il modello selezionato.",
-      "payloadTooLarge": "Questa registrazione è troppo grande per il tuo server.",
       "requestTooLarge": "Questa richiesta è troppo grande per il tuo server.",
       "badRequest": "Il tuo server non è riuscito a elaborare questa richiesta.",
       "unavailable": "Il tuo server sta avendo problemi in questo momento. Riprova a breve.",

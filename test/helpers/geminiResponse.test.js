@@ -8,10 +8,10 @@ describe("extractGeminiText", () => {
     const { extractGeminiText } = await load();
     const candidate = {
       content: {
-        parts: [{ text: "  cleaned up transcript  " }],
+        parts: [{ text: "  rewritten text  " }],
       },
     };
-    assert.strictEqual(extractGeminiText(candidate), "cleaned up transcript");
+    assert.strictEqual(extractGeminiText(candidate), "rewritten text");
   });
 
   test("joins multiple text parts into a single string", async () => {
@@ -29,7 +29,7 @@ describe("extractGeminiText", () => {
     const candidate = {
       content: {
         parts: [
-          { thought: true, text: "Let me think about this transcript..." },
+          { thought: true, text: "Let me think about this text..." },
           { text: "Here is the cleaned result." },
         ],
       },

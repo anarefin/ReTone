@@ -153,8 +153,8 @@ export default function LocalModelPicker({
   const handleDelete = useCallback(
     (modelId: string) => {
       showConfirmDialog({
-        title: t("transcription.deleteModel.title"),
-        description: t("transcription.deleteModel.description"),
+        title: t("models.deleteModel.title"),
+        description: t("models.deleteModel.description"),
         onConfirm: () => deleteModel(modelId, loadDownloadedModels),
         variant: "destructive",
       });

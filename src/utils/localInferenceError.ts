@@ -2,9 +2,8 @@
  * Turns a failed local-inference IPC result into an Error the UI can render.
  *
  * The main process reports a machine-readable `code` and `details`; the
- * translation keys live here, on the renderer side, so both surfaces that show
- * these failures — the notes toast and the dictation cleanup toast — get the
- * same wording for free.
+ * translation keys live here, on the renderer side, so every surface that
+ * shows these failures gets the same wording for free.
  *
  * The raw llama.cpp 400 body is never shown to the user verbatim.
  */
@@ -60,7 +59,7 @@ export function buildLocalInferenceError(result: LocalInferenceFailure): LocalIn
   } else if (result.code === "LOCAL_MODEL_BUSY") {
     error.messageKey = "models.errors.localModelBusy";
   } else if (result.code === "OUTPUT_TRUNCATED") {
-    // Same toast the cloud providers raise when a cleanup reply hits the token cap.
+    // Same error the cloud providers raise when a reply hits the token cap.
     error.messageKey = TRUNCATED_OUTPUT_MESSAGE_KEY;
   }
 

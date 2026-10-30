@@ -2,7 +2,7 @@ import type { TFunction } from "i18next";
 import type { TechnicalErrorDetailsData } from "../components/ui/useToast";
 import { SELF_HOSTED_NAME, isProviderSettingsTarget } from "../helpers/providerHttpErrors.js";
 
-export type ProviderSettingsTarget = "speechToText" | "llms" | "noteFormatting";
+export type ProviderSettingsTarget = "llms";
 
 interface DescribableError {
   message?: string;

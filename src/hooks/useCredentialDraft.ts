@@ -5,7 +5,7 @@ type Drafts = Record<string, { value: string; save: (value: string) => void }>;
 
 export interface CredentialCheckReport {
   phase: ConnectionAutoCheck["phase"];
-  /** The fields the check's request carries (Corti's region too), with their values. */
+  /** The fields the check's request carries, with their values. */
   checked: Record<string, string>;
   refused: boolean;
 }
@@ -19,9 +19,9 @@ const refusalKey = (field: string, request: string, value: string) =>
  * check passes; until then it reads the typed value. Each field keeps its own draft.
  *
  * The panel reports its check through `follow`, and an answer settles only drafts that still
- * hold the values the check carried. The fields one check carries are one credential (Corti's
- * ID, secret and tenant): a refusal holds back every typed value it carried, and while any of
- * them is refused none of the credential is saved, until a check of it passes. A field left
+ * hold the values the check carried. The fields one check carries are one credential: a
+ * refusal holds back every typed value it carried, and while any of them is refused none of
+ * the credential is saved, until a check of it passes. A field left
  * while its check runs waits for the answer; if the check stops carrying it first (another
  * provider, a hidden panel), no answer is coming, so it is saved as it stands. Closing
  * Settings saves whatever wasn't refused.

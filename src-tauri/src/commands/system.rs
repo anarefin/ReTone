@@ -8,7 +8,9 @@ use retone_core::app_icon::AppIcon;
 use retone_core::login_item::LoginItemPort;
 use retone_core::login_item::{self, AutoStartState};
 use retone_core::navigation::{UrlOpener, open_external_url, validate_external_url};
+use retone_core::update_check::{self, LATEST_RELEASE_URL, UpdateStatus};
 use serde_json::{Value, json};
+use std::time::Duration;
 use tauri::{AppHandle, State};
 use tauri_plugin_opener::OpenerExt;
 
@@ -33,6 +35,55 @@ pub(crate) fn open_url(app: &AppHandle, url: &str) -> Value {
 #[tauri::command]
 pub fn get_app_version(app: AppHandle) -> String {
     app.package_info().version.to_string()
+}
+
+/// Asks GitHub for the latest published release:
+/// `{ status: "upToDate" | "available" | "failed", currentVersion, latestVersion?, url? }`.
+/// No release yet (404) counts as up to date. Response bodies are never logged.
+#[tauri::command]
+pub async fn check_for_update(app: AppHandle, state: State<'_, AppState>) -> Result<Value, ()> {
+    let current = app.package_info().version.to_string();
+    let failed = |reason: &str| {
+        tracing::warn!(target: "app", reason, "Update check failed");
+        json!({ "status": "failed", "currentVersion": current })
+    };
+    let response = match state
+        .http
+        .follow
+        .get(LATEST_RELEASE_URL)
+        .header("Accept", "application/vnd.github+json")
+        .timeout(Duration::from_secs(10))
+        .send()
+        .await
+    {
+        Ok(response) => response,
+        Err(error) if error.is_timeout() => return Ok(failed("timeout")),
+        Err(_) => return Ok(failed("network")),
+    };
+    let status = response.status();
+    if status == reqwest::StatusCode::NOT_FOUND {
+        return Ok(json!({ "status": "upToDate", "currentVersion": current }));
+    }
+    if !status.is_success() {
+        return Ok(failed(status.as_str()));
+    }
+    let release: Value = match response.json().await {
+        Ok(release) => release,
+        Err(_) => return Ok(failed("invalid json")),
+    };
+    Ok(match update_check::evaluate(&current, &release) {
+        Ok(UpdateStatus::UpToDate) => json!({ "status": "upToDate", "currentVersion": current }),
+        Ok(UpdateStatus::Available { version, url }) => {
+            tracing::info!(target: "app", version, "Update available");
+            json!({
+                "status": "available",
+                "currentVersion": current,
+                "latestVersion": version,
+                "url": url,
+            })
+        }
+        Err(reason) => failed(reason),
+    })
 }
 
 #[tauri::command]

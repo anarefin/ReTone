@@ -4,20 +4,15 @@ const assert = require("node:assert/strict");
 const load = () => import("../../src/helpers/providerHttpErrors.js");
 
 const classify = async (args) =>
-  (await load()).providerHttpError({ provider: "Mistral", surface: "transcription", ...args });
+  (await load()).providerHttpError({ provider: "Mistral", surface: "llm", ...args });
 
-test("401 is an auth failure that points at Speech-to-Text settings", async () => {
+test("401 is an auth failure that points at Language Models settings", async () => {
   const c = await classify({ status: 401, body: '{"detail":"Invalid API Key"}' });
   assert.equal(c.code, "PROVIDER_AUTH_FAILED");
   assert.equal(c.messageKey, "providerErrors.authFailed");
   assert.deepEqual(c.messageParams, { provider: "Mistral" });
-  assert.equal(c.settingsTarget, "speechToText");
-  assert.equal(c.surface, "transcription");
-});
-
-test("LLM surface points fixable errors at Language Models settings", async () => {
-  const c = await classify({ status: 401, body: "", surface: "llm" });
   assert.equal(c.settingsTarget, "llms");
+  assert.equal(c.surface, "llm");
 });
 
 test("400 or 403 carrying an invalid-key signal is an auth failure (Gemini API_KEY_INVALID)", async () => {
@@ -34,7 +29,7 @@ test("400 or 403 carrying an invalid-key signal is an auth failure (Gemini API_K
 test("other 403s are access denied", async () => {
   const c = await classify({ status: 403, body: '{"error":"model not allowed for this project"}' });
   assert.equal(c.code, "PROVIDER_ACCESS_DENIED");
-  assert.equal(c.settingsTarget, "speechToText");
+  assert.equal(c.settingsTarget, "llms");
 });
 
 test("402 and billing-flavoured 400/429 are quota exhaustion", async () => {
@@ -92,8 +87,8 @@ const GEMINI_RATE_LIMIT_BODY = {
 const GROQ_RATE_LIMIT_BODY = {
   error: {
     message:
-      "Rate limit reached for model `whisper-large-v3-turbo` in organization `org_01` service tier `on_demand` on seconds of audio per hour (ASPH): Limit 7200, Used 7190, Requested 30. Please try again in 10s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing",
-    type: "seconds",
+      "Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 11990, Requested 300. Please try again in 10s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing",
+    type: "tokens",
     code: "rate_limit_exceeded",
   },
 };
@@ -101,7 +96,7 @@ const GROQ_RATE_LIMIT_BODY = {
 test("a Gemini free-tier quota 429 stays a rate limit", async () => {
   const c = await classify({ provider: "Gemini", status: 429, body: GEMINI_RATE_LIMIT_BODY });
   assert.equal(c.code, "PROVIDER_RATE_LIMITED");
-  assert.equal(c.messageKey, "hooks.audioRecording.errorDescriptions.providerRateLimited");
+  assert.equal(c.messageKey, "providerErrors.rateLimited");
   assert.equal(c.settingsTarget, undefined);
 });
 
@@ -142,10 +137,10 @@ test("rate-limit 429s from Gemini and Groq are still retried on the AI-model pat
 });
 
 test("404 and model-not-found 400 name the model", async () => {
-  const notFound = await classify({ status: 404, body: "", model: "voxtral-max" });
+  const notFound = await classify({ status: 404, body: "", model: "mistral-large" });
   assert.equal(notFound.code, "PROVIDER_MODEL_NOT_FOUND");
   assert.equal(notFound.messageKey, "providerErrors.modelNotFound");
-  assert.deepEqual(notFound.messageParams, { provider: "Mistral", model: "voxtral-max" });
+  assert.deepEqual(notFound.messageParams, { provider: "Mistral", model: "mistral-large" });
   const badModel = await classify({
     provider: "OpenAI",
     status: 400,
@@ -165,7 +160,7 @@ test("a self-hosted 404 without a model signal is a generic error, not a model e
 test("413, other 4xx, timeouts, 5xx and unknown statuses", async () => {
   assert.equal((await classify({ status: 413, body: "" })).code, "PROVIDER_PAYLOAD_TOO_LARGE");
   for (const status of [400, 415, 422]) {
-    assert.equal((await classify({ status, body: "bad audio" })).code, "PROVIDER_BAD_REQUEST");
+    assert.equal((await classify({ status, body: "bad input" })).code, "PROVIDER_BAD_REQUEST");
   }
   for (const status of [408, 504]) {
     assert.equal((await classify({ status, body: "" })).code, "PROVIDER_TIMEOUT");
@@ -206,24 +201,21 @@ test("keys echoed back in a body are redacted", async () => {
 
 test("providerHttpError builds an Error carrying the classification and a short English message", async () => {
   const { providerHttpError } = await load();
-  const err = providerHttpError({ provider: "Mistral", status: 401, body: "{}", surface: "transcription" });
+  const err = providerHttpError({ provider: "Mistral", status: 401, body: "{}", surface: "llm" });
   assert.ok(err instanceof Error);
   assert.equal(err.message, "Mistral rejected your API key.");
   assert.equal(err.code, "PROVIDER_AUTH_FAILED");
   assert.equal(err.status, 401);
   assert.equal(err.messageKey, "providerErrors.authFailed");
-  assert.equal(err.settingsTarget, "speechToText");
+  assert.equal(err.settingsTarget, "llms");
   assert.equal(err.message.includes("{}"), false);
 });
 
-test("providerError builds key-missing errors per surface", async () => {
+test("providerError builds key-missing errors", async () => {
   const { providerError } = await load();
-  const stt = providerError("API_KEY_MISSING", { provider: "Mistral", surface: "transcription" });
-  assert.equal(stt.code, "API_KEY_MISSING");
-  assert.equal(stt.messageKey, "hooks.audioRecording.errorDescriptions.providerKeyMissing");
-  assert.equal(stt.settingsTarget, "speechToText");
   const llm = providerError("API_KEY_MISSING", { provider: "Anthropic", surface: "llm" });
   assert.equal(llm.messageKey, "providerErrors.keyMissing");
+  assert.equal(llm.code, "API_KEY_MISSING");
   assert.deepEqual(llm.messageParams, { provider: "Anthropic" });
   assert.equal(llm.settingsTarget, "llms");
 });
@@ -265,17 +257,17 @@ test("asProviderError classifies timeouts and network failures", async () => {
 });
 
 // Chromium reports a CORS-blocked HTTP error as "Failed to fetch" too: OpenAI's
-// 401 for a bad sk- key carries no CORS header in the dictation window.
+// 401 for a bad sk- key carries no CORS header.
 test("an online \"Failed to fetch\" points at the key and connection; offline it stays unreachable", async (t) => {
   const { asProviderError } = await load();
-  const ctx = { provider: "OpenAI", surface: "transcription" };
+  const ctx = { provider: "OpenAI", surface: "llm" };
   t.after(() => delete navigator.onLine);
 
   Object.defineProperty(navigator, "onLine", { configurable: true, value: true });
   const online = asProviderError(new TypeError("Failed to fetch"), ctx);
   assert.equal(online.code, "PROVIDER_NO_RESPONSE");
   assert.equal(online.message, "Couldn't get a response from OpenAI. Check your API key and connection.");
-  assert.equal(online.settingsTarget, "speechToText");
+  assert.equal(online.settingsTarget, "llms");
   assert.deepEqual(online.technicalDetails, { provider: "OpenAI" }, "nothing beyond the message");
 
   Object.defineProperty(navigator, "onLine", { configurable: true, value: false });
@@ -284,14 +276,12 @@ test("an online \"Failed to fetch\" points at the key and connection; offline it
   assert.equal(offline.settingsTarget, undefined);
 });
 
-test("rate limits name the provider on the LLM surface and keep the dictation copy on transcription", async () => {
+test("rate limits name the provider", async () => {
   const en = require("../../src/locales/en/translation.json");
   const llm = await classify({ provider: "Anthropic", status: 429, body: "", surface: "llm" });
   assert.equal(llm.code, "PROVIDER_RATE_LIMITED");
   assert.equal(llm.messageKey, "providerErrors.rateLimited");
   assert.deepEqual(llm.messageParams, { provider: "Anthropic" });
-  const transcription = await classify({ status: 429, body: "", surface: "transcription" });
-  assert.equal(transcription.messageKey, "hooks.audioRecording.errorDescriptions.providerRateLimited");
   const { providerHttpError } = await load();
   const error = providerHttpError({ provider: "Anthropic", status: 429, body: "", surface: "llm" });
   assert.equal(error.message, en.providerErrors.rateLimited.replace("{{provider}}", "Anthropic"));
@@ -299,7 +289,7 @@ test("rate limits name the provider on the LLM surface and keep the dictation co
 
 test("asProviderError classifies net::ERR_* rejections and leaves net::ERR_ABORTED alone", async () => {
   const { asProviderError } = await load();
-  const ctx = { provider: "OpenAI", surface: "transcription" };
+  const ctx = { provider: "OpenAI", surface: "llm" };
   for (const message of [
     "net::ERR_INTERNET_DISCONNECTED",
     "net::ERR_NAME_NOT_RESOLVED",
@@ -326,7 +316,7 @@ test("asProviderError leaves classified, cancelled and unrelated errors untouche
   const { asProviderError } = await load();
   const ctx = { provider: "OpenAI", surface: "llm" };
   const truncated = Object.assign(new Error("Model output was truncated"), {
-    messageKey: "hooks.audioRecording.errorDescriptions.cleanupTruncated",
+    messageKey: "reasoning.errors.outputTruncated",
   });
   assert.equal(asProviderError(truncated, ctx), truncated);
   const abort = Object.assign(new Error("aborted"), { name: "AbortError" });
@@ -338,18 +328,13 @@ test("asProviderError leaves classified, cancelled and unrelated errors untouche
 
 test("isProviderSettingsTarget whitelists only the model settings targets", async () => {
   const { isProviderSettingsTarget } = await load();
-  assert.equal(isProviderSettingsTarget("speechToText"), true);
   assert.equal(isProviderSettingsTarget("llms"), true);
-  assert.equal(isProviderSettingsTarget("noteFormatting"), true);
   assert.equal(isProviderSettingsTarget("account"), false);
   assert.equal(isProviderSettingsTarget(undefined), false);
 });
 
-test("a 413 is a recording that's too large for transcription and a request that's too large for an AI model", async () => {
+test("a 413 is a request that's too large for an AI model", async () => {
   const { providerHttpError } = await load();
-  const recording = providerHttpError({ provider: "Mistral", status: 413, body: "", surface: "transcription" });
-  assert.equal(recording.messageKey, "providerErrors.payloadTooLarge");
-  assert.equal(recording.message, "This recording is too large for Mistral.");
   const request = providerHttpError({ provider: "Anthropic", status: 413, body: "", surface: "llm" });
   assert.equal(request.messageKey, "providerErrors.requestTooLarge");
   assert.equal(request.message, "This request is too large for Anthropic.");
@@ -367,26 +352,24 @@ const en = require("../../src/locales/en/translation.json");
 const LOCALES = ["en", "es", "fr", "de", "pt", "it", "ru", "zh-CN", "zh-TW", "ja", "ar"];
 const lookup = (translation, key) => key.split(".").reduce((node, part) => node?.[part], translation);
 
-// Every classification a provider failure can produce, on both surfaces, named and self-hosted.
+// Every classification a provider failure can produce, named and self-hosted.
 async function everyClassification() {
   const { providerHttpError, providerError, PROVIDER_ERROR_CODES: C } = await load();
   const errors = [];
-  for (const surface of ["transcription", "llm"]) {
-    for (const selfHosted of [false, true]) {
-      const base = { provider: "Mistral", surface, selfHosted };
-      for (const status of [401, 403, 402, 429, 413, 400, 500, 504, 418]) {
-        errors.push(providerHttpError({ ...base, status, body: "" }));
-      }
-      errors.push(providerHttpError({ ...base, status: 404, body: "model_not_found", model: "m-1" }));
-      errors.push(providerHttpError({ ...base, status: 404, body: "model_not_found" }));
-      for (const code of [
-        C.TIMEOUT,
-        C.UNREACHABLE,
-        C.NO_RESPONSE,
-        ...(selfHosted ? [] : [C.KEY_MISSING]),
-      ]) {
-        errors.push(providerError(code, base));
-      }
+  for (const selfHosted of [false, true]) {
+    const base = { provider: "Mistral", surface: "llm", selfHosted };
+    for (const status of [401, 403, 402, 429, 413, 400, 500, 504, 418]) {
+      errors.push(providerHttpError({ ...base, status, body: "" }));
+    }
+    errors.push(providerHttpError({ ...base, status: 404, body: "model_not_found", model: "m-1" }));
+    errors.push(providerHttpError({ ...base, status: 404, body: "model_not_found" }));
+    for (const code of [
+      C.TIMEOUT,
+      C.UNREACHABLE,
+      C.NO_RESPONSE,
+      ...(selfHosted ? [] : [C.KEY_MISSING]),
+    ]) {
+      errors.push(providerError(code, base));
     }
   }
   return errors;
@@ -394,8 +377,6 @@ async function everyClassification() {
 
 test("each Error.message is the en translation of its messageKey", async () => {
   for (const error of await everyClassification()) {
-    // The transcription-only hooks keys say "your transcription provider"; their twins name it.
-    if (error.messageKey.startsWith("hooks.")) continue;
     const template = lookup(en, error.messageKey);
     assert.equal(typeof template, "string", `${error.messageKey} is missing from en`);
     const rendered = template.replace(/\{\{(\w+)\}\}/g, (_, name) => error.messageParams[name]);

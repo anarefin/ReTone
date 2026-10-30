@@ -15,7 +15,7 @@ const OTHER_BASE = "https://responses-only.example/v1";
 function makeCtx() {
   return {
     getApiKey: async () => "test-key",
-    getSystemPrompt: () => "Clean the transcript",
+    getSystemPrompt: () => "Rewrite the text",
     getCustomDictionary: () => [],
     getPreferredLanguage: () => "en",
     getUiLanguage: () => "en",
@@ -62,14 +62,14 @@ function installFetchRecorder(t, requests) {
 async function callWithBase(baseUrl) {
   const { openaiProvider } = await load();
   return openaiProvider.call({
-    text: "Clean this transcript please",
+    text: "Rewrite this text please",
     model: "kimi-k2.5",
     agentName: null,
     config: {
       provider: "custom",
       baseUrl,
       customApiKey: "test-key",
-      systemPrompt: "Clean the transcript",
+      systemPrompt: "Rewrite the text",
     },
     ctx: makeCtx(),
   });

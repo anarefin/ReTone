@@ -95,7 +95,7 @@ test("a reply cut off at the token cap gets the cleanup truncation message", () 
   });
 
   assert.equal(error.code, "OUTPUT_TRUNCATED");
-  assert.equal(error.messageKey, "hooks.audioRecording.errorDescriptions.cleanupTruncated");
+  assert.equal(error.messageKey, "reasoning.errors.outputTruncated");
   assert.equal(error.messageParams, undefined);
 });
 

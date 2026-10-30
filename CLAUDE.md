@@ -43,7 +43,8 @@ test/                    renderer tests (node --test)
 ## App Shape
 
 - **Tray app.** Closing the settings window hides it; `ExitRequested` without an exit code is prevented; quitting is from the tray or app menu. `tauri-plugin-single-instance`: a second launch shows settings (it keys on the bundle id, so channels can't run side by side).
-- **Settings window** (`windows.rs`, label `settings`, 760×760, min 560×480): shown after page load with a 3 s fallback; a load watchdog reloads after 1 s and shows `dialog.loadFailure.*` (packaged builds) if it still hasn't loaded 10 s later; a crashed renderer (`on_web_content_process_terminate`) reloads.
+- **Settings window** (`windows.rs`, label `settings`, 760×760, min 560×480): shown after page load with a 3 s fallback; a load watchdog reloads after 1 s and shows `dialog.loadFailure.*` (packaged builds) if it still hasn't loaded 10 s later; a crashed renderer (`on_web_content_process_terminate`) reloads. Content (`SettingsWindow.tsx`) is a left-sidebar tablist (`settings/SettingsSidebar.tsx`), always opening on the first tab: **ReTone** (Accessibility warning, hotkey, picker, options), **Model** (`ReToneModelSection.tsx`), **General** (appearance, startup, updates).
+- **Update check** (`check_for_update` + `retone-core::update_check`, UI `settings/UpdatesSection.tsx`): GETs GitHub `releases/latest`, compares `x.y.z` with the app version and only links to the release page (URL must be under `https://github.com/anarefin/retone/releases/`); nothing is downloaded or installed. Runs when the General tab opens (at most once per 24 h) or on demand; a 404 (no release yet) is up to date.
 - **Picker window** (label `tone-rewrite-picker-<n>`, one label per generation): 280 px wide, frameless, transparent (`macOSPrivateApi`), all workspaces, level screen-saver + 1, content-protected, shadowless, created hidden. `retone-macos::panel` swaps its class to a non-activating `NSPanel` (`RetonePickerPanel`), so showing it makes it key without activating ReTone (macOS 14+ cooperative activation can refuse activation). Hidden and reused, never reloaded per press; destroyed only when the hotkey is cleared or the renderer crashes.
 - Both windows load `index.html`; `AppRouter.jsx` renders the picker for `?tone-rewrite-picker=true`.
 - **Dock** (`dock.rs` + `retone-core::dock_policy`): activation policy Regular/Accessory follows the settings window, driven only by explicit show/hide calls (never window events). Dock `Reopen` shows settings.
@@ -68,7 +69,7 @@ test/                    renderer tests (node --test)
 
 ### Prompts and options
 
-`src/config/prompts/toneRewrite.ts`: built-in tones `professional`, `casual`, `friendly`, `concise`, `fixGrammar`, `banglishToEnglish`, `banglishToBangla`; `toneRewriteOptions` normalized by `normalizeToneRewriteOptions`; 1–9 enabled; custom names ≤ 40 chars, prompts ≤ 2,000; `SHARED_RULES` always appended. Instructions stay English in every locale. Settings UI: `ReToneSection.tsx`, `ReToneOptionRow.tsx`.
+`src/config/prompts/toneRewrite.ts`: built-in tones `professional`, `casual`, `friendly`, `concise`, `fixGrammar`, `banglishToEnglish`, `banglishToBangla`; `toneRewriteOptions` normalized by `normalizeToneRewriteOptions`; 1–9 enabled; custom names ≤ 40 chars, prompts ≤ 2,000; `SHARED_RULES` always appended. Instructions stay English in every locale. Settings UI: `ReToneSection.tsx`, `ReToneOptionRow.tsx`, `ReToneModelSection.tsx`.
 
 ## Inference
 
@@ -111,7 +112,7 @@ test/                    renderer tests (node --test)
 
 ## Settings Storage
 
-- **Renderer localStorage** (per webview origin): `theme`, `uiLanguage`, `toneRewriteKey`, `toneRewriteMode`, `toneRewriteProvider`, `toneRewriteModel`, `toneRewriteCloudBaseUrl`, `toneRewriteDisableThinking` (default true), `toneRewriteReasoningEffort`, `toneRewriteOptions` (JSON), `toneRewriteLivePreview` (default true), `toneRewriteWholeField` (default false), `keepLocalModelLoaded` (default false). API keys never go to localStorage.
+- **Renderer localStorage** (per webview origin): `theme`, `uiLanguage`, `toneRewriteKey`, `toneRewriteMode`, `toneRewriteProvider`, `toneRewriteModel`, `toneRewriteCloudBaseUrl`, `toneRewriteDisableThinking` (default true), `toneRewriteReasoningEffort`, `toneRewriteOptions` (JSON), `toneRewriteLivePreview` (default true), `toneRewriteWholeField` (default false), `keepLocalModelLoaded` (default false), `lastUpdateCheck` (timestamp of the last successful update check). API keys never go to localStorage.
 - **`userData/.env`** (`src-tauri/src/env.rs`, `retone-core::env_file`, line-preserving upserts): `TONE_REWRITE_KEY`, `START_MINIMIZED`, `UI_LANGUAGE`, `APP_ICON`, `LLAMA_GPU_BACKEND`, plus `RETONE_LOG_LEVEL` / `RETONE_CACHE_ROOT` if set by hand.
 - `sync_startup_preferences` pushes `keepLocalModelLoaded` (→ `set_keep_resident`) and `toneRewriteWholeField` (→ controller) from the renderer.
 
@@ -131,8 +132,8 @@ The renderer keeps calling `window.retoneAPI.*`; `src/platform/nativeBridge.ts` 
 
 | Area | Commands / events |
 | --- | --- |
-| Keys | `get_/save_{openai,anthropic,gemini,groq,openrouter,cleanup_custom}_key`, `test_provider_connection`; event `api-key-updated` |
-| System | `get_app_version`, `open_external`, `write_clipboard`, `get_/set_auto_start_enabled`, `get_/set_start_minimized`, `get_/set_app_icon`, `get_/set_ui_language`, `sync_startup_preferences` |
+| Keys | `get_/save_{openai,anthropic,gemini,groq,openrouter,custom}_key`, `test_provider_connection`; event `api-key-updated` |
+| System | `get_app_version`, `check_for_update`, `open_external`, `write_clipboard`, `get_/set_auto_start_enabled`, `get_/set_start_minimized`, `get_/set_app_icon`, `get_/set_ui_language`, `sync_startup_preferences` |
 | Permissions | `check_accessibility_permission`, `open_accessibility_settings`, `open_login_items_settings` |
 | Hotkeys | `set_hotkey_listening_mode`, `get_hotkey_mode_info`; events `globe-key-pressed`, `globe-key-released`, `hotkey-registration-failed` |
 | ReTone | `update_tone_rewrite_hotkey`, `get_tone_rewrite_key`, `tone_rewrite_get_payload`, `tone_rewrite_apply`, `tone_rewrite_close`, `tone_rewrite_set_height`; events `tone-rewrite-show`, `tone-rewrite-reset` |
@@ -182,7 +183,7 @@ Ignored smoke tests (touch real OS state; run by hand): `cargo test -p retone-ma
 - `src-tauri/build.rs` writes a `README.txt` placeholder into an empty `resources/llama-bundle/` so a fresh-clone `cargo build`/`test` passes the resource glob.
 - macOS 12: launch at login is unavailable (`SMAppService` is 13+; looked up at runtime with `AnyClass::get`, so the binary has no static reference to it). The toggle reads off and setting it returns an error.
 - An ad-hoc grant (Accessibility, Input Monitoring, Automation, Keychain ACLs) is pinned to each build's hash: re-grant after installing every new build.
-- **CI** (`.github/workflows/ci.yml`, macos-14): `npm ci`, typecheck, lint, `i18n:check`, `npm test`, `cargo fmt --check`, clippy `-D warnings`, `cargo test --workspace`, `npm run build:mac`, bundle signature checks, upload `ReTone.dmg`. `release.yml` on `v*` tags (tag must equal `package.json` version) reuses `ci.yml` and creates a **draft** release on `anarefin/retone`.
+- **CI** (`.github/workflows/ci.yml`, macos-14): `npm ci`, typecheck, lint, `i18n:check`, `npm test`, `cargo fmt --check`, clippy `-D warnings`, `cargo test --workspace`, `npm run build:mac`, bundle signature checks, upload `ReTone.dmg`. `release.yml` on `v*` tags (tag must equal `package.json` version) reuses `ci.yml` and **publishes** the release (Latest) on `anarefin/retone` with `ReTone-<ver>-arm64.dmg`, its `.sha256` and install notes (see `docs/DEVELOPMENT.md` › Cutting a release).
 
 ## Debugging
 

@@ -40,10 +40,6 @@ export const normalizeBaseUrl = (value?: string | null): string => {
     [/\/responses$/i, ""],
     [/\/v1\/models$/i, "/v1"],
     [/\/models$/i, ""],
-    [/\/v1\/audio\/transcriptions$/i, "/v1"],
-    [/\/audio\/transcriptions$/i, ""],
-    [/\/v1\/audio\/translations$/i, "/v1"],
-    [/\/audio\/translations$/i, ""],
   ];
 
   for (const [pattern, replacement] of suffixReplacements) {

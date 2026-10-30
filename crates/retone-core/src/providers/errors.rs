@@ -43,9 +43,9 @@ fn message_key_for(code: &str) -> &'static str {
         AUTH_FAILED => "providerErrors.authFailed",
         ACCESS_DENIED => "providerErrors.accessDenied",
         QUOTA_EXHAUSTED => "providerErrors.quotaExhausted",
-        RATE_LIMITED => "hooks.audioRecording.errorDescriptions.providerRateLimited",
+        RATE_LIMITED => "providerErrors.rateLimited",
         MODEL_NOT_FOUND => "providerErrors.modelNotFound",
-        PAYLOAD_TOO_LARGE => "providerErrors.payloadTooLarge",
+        PAYLOAD_TOO_LARGE => "providerErrors.requestTooLarge",
         BAD_REQUEST => "providerErrors.badRequest",
         UNAVAILABLE => "providerErrors.unavailable",
         TIMEOUT => "providerErrors.timeout",
@@ -70,7 +70,6 @@ fn english_template(message_key: &str) -> &'static str {
         "providerErrors.modelNotFoundNoModel" => {
             "{{provider}} doesn't recognize the selected model."
         }
-        "providerErrors.payloadTooLarge" => "This recording is too large for {{provider}}.",
         "providerErrors.requestTooLarge" => "This request is too large for {{provider}}.",
         "providerErrors.badRequest" => "{{provider}} couldn't process this request.",
         "providerErrors.unavailable" => {
@@ -100,9 +99,6 @@ fn english_template(message_key: &str) -> &'static str {
         "providerErrors.selfHosted.modelNotFoundNoModel" => {
             "Your server doesn't recognize the selected model."
         }
-        "providerErrors.selfHosted.payloadTooLarge" => {
-            "This recording is too large for your server."
-        }
         "providerErrors.selfHosted.requestTooLarge" => "This request is too large for your server.",
         "providerErrors.selfHosted.badRequest" => "Your server couldn't process this request.",
         "providerErrors.selfHosted.unavailable" => {
@@ -116,12 +112,6 @@ fn english_template(message_key: &str) -> &'static str {
             "Couldn't get a response from your server. Check its API key and that it's running."
         }
         "providerErrors.selfHosted.unknown" => "Your server returned an unexpected error.",
-        "hooks.audioRecording.errorDescriptions.providerRateLimited" => {
-            "{{provider}} rate-limited the request. Wait a moment and try again."
-        }
-        "hooks.audioRecording.errorDescriptions.providerKeyMissing" => {
-            "No API key is set for {{provider}}."
-        }
         _ => "{{provider}} returned an unexpected error.",
     }
 }
@@ -235,7 +225,7 @@ pub struct ErrorContext {
     /// Display name, e.g. "Anthropic".
     pub provider: String,
     pub model: Option<String>,
-    /// `"llm"` or `"transcription"`; ReTone only uses `"llm"`.
+    /// `"llm"`, the only surface ReTone shows errors on.
     pub surface: Option<String>,
     pub self_hosted: bool,
 }
@@ -313,34 +303,14 @@ fn build_classification(
             None => message_key = "providerErrors.modelNotFoundNoModel".into(),
         }
     }
-    let surface = ctx.surface.as_deref();
     if code == KEY_MISSING {
-        message_key = if surface == Some("transcription") {
-            "hooks.audioRecording.errorDescriptions.providerKeyMissing".into()
-        } else {
-            "providerErrors.keyMissing".into()
-        };
-    }
-    if surface == Some("llm") {
-        if code == RATE_LIMITED {
-            message_key = "providerErrors.rateLimited".into();
-        }
-        if code == PAYLOAD_TOO_LARGE {
-            message_key = "providerErrors.requestTooLarge".into();
-        }
+        message_key = "providerErrors.keyMissing".into();
     }
     if ctx.self_hosted && message_key.starts_with("providerErrors.") {
         message_key = message_key.replacen("providerErrors.", "providerErrors.selfHosted.", 1);
     }
-    let settings_target = if FIXABLE.contains(&code) {
-        match surface {
-            Some("transcription") => Some("speechToText"),
-            Some("llm") => Some("llms"),
-            _ => None,
-        }
-    } else {
-        None
-    };
+    let settings_target =
+        (FIXABLE.contains(&code) && ctx.surface.as_deref() == Some("llm")).then_some("llms");
     let mut details = Map::new();
     details.insert("provider".into(), Value::String(provider_name));
     details.extend(technical_details);
@@ -469,20 +439,14 @@ mod tests {
 
     #[test]
     fn auth_failures_point_at_settings() {
-        let c = classify(
-            "Mistral",
-            "transcription",
-            401,
-            r#"{"detail":"Invalid API Key"}"#,
-        );
+        let c = classify("Mistral", "llm", 401, r#"{"detail":"Invalid API Key"}"#);
         assert_eq!(c.code, AUTH_FAILED);
         assert_eq!(c.message_key, "providerErrors.authFailed");
         assert_eq!(
             c.message_params,
             json!({"provider": "Mistral"}).as_object().unwrap().clone()
         );
-        assert_eq!(c.settings_target, Some("speechToText"));
-        assert_eq!(classify("X", "llm", 401, "").settings_target, Some("llms"));
+        assert_eq!(c.settings_target, Some("llms"));
         let gemini = classify(
             "Gemini",
             "llm",
@@ -533,10 +497,10 @@ mod tests {
 
     #[test]
     fn models_statuses_and_self_hosted() {
-        let ctx = ErrorContext::llm("Mistral", Some("voxtral-max"));
+        let ctx = ErrorContext::llm("Mistral", Some("mistral-large"));
         let not_found = provider_http_error(&ctx, 404, "", |_| None);
         assert_eq!(not_found.code, MODEL_NOT_FOUND);
-        assert_eq!(not_found.message_params["model"], "voxtral-max");
+        assert_eq!(not_found.message_params["model"], "mistral-large");
         let bad_model = classify(
             "OpenAI",
             "llm",
@@ -566,7 +530,7 @@ mod tests {
             "providerErrors.requestTooLarge"
         );
         for status in [400, 415, 422] {
-            assert_eq!(classify("X", "llm", status, "bad audio").code, BAD_REQUEST);
+            assert_eq!(classify("X", "llm", status, "bad input").code, BAD_REQUEST);
         }
         for status in [408, 504] {
             assert_eq!(classify("X", "llm", status, "").code, TIMEOUT);
@@ -629,7 +593,7 @@ mod tests {
 
     #[test]
     fn messages_are_short_english_sentences() {
-        let c = classify("Mistral", "transcription", 401, "{}");
+        let c = classify("Mistral", "llm", 401, "{}");
         assert_eq!(c.message, "Mistral rejected your API key.");
         assert!(!c.message.contains("{}"));
         let ctx = ErrorContext::llm("OpenAI", Some("we$&ird-$'model"));
@@ -694,7 +658,7 @@ mod tests {
     fn ipc_fields_keep_every_classified_field_and_drop_unset_ones() {
         let ctx = ErrorContext {
             provider: "Mistral".into(),
-            surface: Some("transcription".into()),
+            surface: Some("llm".into()),
             ..Default::default()
         };
         let error = provider_http_error(&ctx, 401, "", |_| None);
@@ -705,10 +669,10 @@ mod tests {
                 "code": "PROVIDER_AUTH_FAILED",
                 "messageKey": "providerErrors.authFailed",
                 "messageParams": { "provider": "Mistral" },
-                "settingsTarget": "speechToText",
+                "settingsTarget": "llms",
                 "technicalDetails": { "provider": "Mistral", "status": 401 },
                 "status": 401,
-                "surface": "transcription",
+                "surface": "llm",
             })
         );
         assert_eq!(

@@ -47,7 +47,7 @@ fn restore_runs_when_the_clipboard_still_holds_the_pasted_text() {
     h.pasteboard.external_write("previous clipboard");
 
     h.layer
-        .paste_text("dictated text", PasteOptions::default())
+        .paste_text("rewritten text", PasteOptions::default())
         .unwrap();
 
     assert_eq!(
@@ -68,7 +68,7 @@ fn restore_is_skipped_when_another_clipboard_write_wins_the_race() {
     });
 
     h.layer
-        .paste_text("dictated text", PasteOptions::default())
+        .paste_text("rewritten text", PasteOptions::default())
         .unwrap();
 
     assert_eq!(
@@ -86,12 +86,12 @@ fn restore_runs_when_only_the_change_count_moved_but_our_text_is_still_there() {
     h.clock.on_sleep(move |duration| {
         if duration == RESTORE_DELAY {
             // A clipboard manager re-publishes the same text.
-            pasteboard.external_write("dictated text");
+            pasteboard.external_write("rewritten text");
         }
     });
 
     h.layer
-        .paste_text("dictated text", PasteOptions::default())
+        .paste_text("rewritten text", PasteOptions::default())
         .unwrap();
 
     assert_eq!(
@@ -106,7 +106,7 @@ fn fast_paste_restores_after_the_short_macos_delay() {
     h.pasteboard.external_write("previous clipboard");
 
     h.layer
-        .paste_text("dictated text", PasteOptions::default())
+        .paste_text("rewritten text", PasteOptions::default())
         .unwrap();
 
     assert_eq!(h.keys.calls(), vec![KeyCall::Post(Shortcut::Paste)]);
@@ -122,7 +122,7 @@ fn no_restore_when_not_asked() {
 
     h.layer
         .paste_text(
-            "dictated text",
+            "rewritten text",
             PasteOptions {
                 restore_clipboard: false,
                 ..PasteOptions::default()
@@ -130,7 +130,7 @@ fn no_restore_when_not_asked() {
         )
         .unwrap();
 
-    assert_eq!(h.pasteboard.read_text().as_deref(), Some("dictated text"));
+    assert_eq!(h.pasteboard.read_text().as_deref(), Some("rewritten text"));
     assert_eq!(h.clock.sleeps(), vec![PASTE_DELAY]);
 }
 
@@ -143,7 +143,9 @@ fn an_unresolved_layout_leaves_the_text_on_the_clipboard() {
         Err(KeySynthError::LayoutUnresolved),
     ]);
 
-    let result = h.layer.paste_text("dictated text", PasteOptions::default());
+    let result = h
+        .layer
+        .paste_text("rewritten text", PasteOptions::default());
 
     assert_eq!(result, Err(PasteError::LayoutUnresolved));
     assert!(
@@ -161,7 +163,7 @@ fn an_unresolved_layout_leaves_the_text_on_the_clipboard() {
             KeyCall::Post(Shortcut::Paste)
         ]
     );
-    assert_eq!(h.pasteboard.read_text().as_deref(), Some("dictated text"));
+    assert_eq!(h.pasteboard.read_text().as_deref(), Some("rewritten text"));
     assert_eq!(h.pasteboard.restores.load(Ordering::SeqCst), 0);
     assert_eq!(
         h.clock.sleeps(),
@@ -176,7 +178,8 @@ fn an_untrusted_cgevent_paste_falls_back_to_osascript_and_restores() {
     h.keys.queue_posts([Err(KeySynthError::Untrusted)]);
 
     assert_eq!(
-        h.layer.paste_text("dictated text", PasteOptions::default()),
+        h.layer
+            .paste_text("rewritten text", PasteOptions::default()),
         Ok(PasteOutcome::Pasted)
     );
 

@@ -73,7 +73,7 @@ byok_key_commands! {
     get_gemini_key, save_gemini_key => "GEMINI_API_KEY";
     get_groq_key, save_groq_key => "GROQ_API_KEY";
     get_openrouter_key, save_openrouter_key => "OPENROUTER_API_KEY";
-    get_cleanup_custom_key, save_cleanup_custom_key => "CUSTOM_CLEANUP_API_KEY";
+    get_custom_key, save_custom_key => "CUSTOM_CLEANUP_API_KEY";
 }
 
 /// Every panel showing the same credentials and model shares one answer; a

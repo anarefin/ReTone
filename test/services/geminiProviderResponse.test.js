@@ -5,7 +5,7 @@ const load = () => import("../../src/services/ai/inferenceProviders/gemini.ts");
 
 const providerContext = {
   getApiKey: async () => "test-key",
-  getSystemPrompt: () => "Clean the transcript",
+  getSystemPrompt: () => "Rewrite the text",
   getCustomDictionary: () => [],
   getPreferredLanguage: () => "en",
   getUiLanguage: () => "en",
@@ -53,10 +53,10 @@ async function callGemini(
 
   const { geminiProvider } = await load();
   return geminiProvider.call({
-    text: "raw transcript",
+    text: "raw text",
     model,
     agentName: null,
-    config: { systemPrompt: "Clean the transcript", ...config },
+    config: { systemPrompt: "Rewrite the text", ...config },
     ctx: providerContext,
   });
 }
@@ -114,7 +114,7 @@ test("Gemini requests carry no output cap, so thinking cannot starve the reply",
 });
 
 test("a caller's pinned budget does not reintroduce a cap", async (t) => {
-  // Note formatting pins maxTokens for the local path; letting it cap Gemini halved
+  // A caller may pin maxTokens for the local path; letting it cap Gemini halved
   // long summaries.
   const requests = [];
 
